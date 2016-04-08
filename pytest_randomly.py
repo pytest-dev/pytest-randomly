@@ -20,9 +20,17 @@ def pytest_addoption(parser):
                 use time.time()"""
     )
 
+seed = None
+
 
 def pytest_report_header(config):
+    global seed
     if config.option.with_randomly:
         seed = config.option.randomly_seed
         random.seed(seed)
         return "Using --randomly-seed={}".format(seed)
+
+
+def pytest_runtest_setup(item):
+    global seed
+    random.seed(seed)

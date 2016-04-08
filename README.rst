@@ -75,8 +75,8 @@ being used:
 
 .. code-block:: bash
 
-    Using --randomly-seed=1234
-    test_D (abcd_tests.Tests) ... ok
+    platform darwin -- Python 2.7.11, pytest-2.9.1, py-1.4.31, pluggy-0.3.1
+    Using --randomly-seed=1460130750
     ...
 
 To permanently turn it on, you can add the flag to your pytest config, e.g. in
@@ -87,8 +87,8 @@ To permanently turn it on, you can add the flag to your pytest config, e.g. in
     [pytest]
     addopts = --with-randomly
 
-If the tests then fail due to ordering or randomly created data, you can then
-restart them with that seed:
+If the tests fail due to ordering or randomly created data, you can restart
+them with that seed using the flag as suggested:
 
 .. code-block:: bash
 
