@@ -86,5 +86,8 @@ def pytest_report_header(config):
 
 
 def pytest_runtest_setup(item):
+    if not activated:
+        return
+
     if reset_seed:
         _reseed()
