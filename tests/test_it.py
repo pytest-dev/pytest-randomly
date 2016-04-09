@@ -41,24 +41,42 @@ def test_it_reuses_the_same_random_seed_per_test(testdir):
         test_one="""
         import random
 
-        gnum = None
-
         def test_a():
-            global gnum
-            lnum = random.random()
-            if gnum is None:
-                gnum = lnum
-            else:
-                assert lnum == gnum
+            test_a.num = random.random()
+            if hasattr(test_b, 'num'):
+                assert test_a.num == test_b.num
 
         def test_b():
-            global gnum
-            lnum = random.random()
-            if gnum is None:
-                gnum = lnum
-            else:
-                assert lnum == gnum
+            test_b.num = random.random()
+            if hasattr(test_a, 'num'):
+                assert test_b.num == test_a.num
         """
     )
     out = testdir.runpytest('--with-randomly')
+    out.assert_outcomes(passed=2, failed=0)
+
+
+def test_the_same_random_seed_per_test_can_be_turned_off(testdir):
+    testdir.makepyfile(
+        test_one="""
+        import random
+
+        def test_a():
+            test_a.state1 = random.getstate()
+            assert test_a.state1 == random.getstate()  # sanity check
+            assert random.random() >= 0  # mutate state
+            test_a.state2 = random.getstate()
+
+        def test_b():
+            test_b.state = random.getstate()
+            assert test_b.state == random.getstate()  # sanity check
+            assert test_a.state1 != test_b.state
+            assert test_a.state2 == test_b.state
+        """
+    )
+    out = testdir.runpytest(
+        '-v',
+        '--with-randomly', '--randomly-dont-reset-seed',
+        # '--randomly-dont-shuffle-modules', '--randomly-dont-shuffle-cases',
+    )
     out.assert_outcomes(passed=2, failed=0)
