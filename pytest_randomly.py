@@ -38,56 +38,48 @@ def pytest_addoption(parser):
     )
     group._addoption(
         '--randomly-dont-reset-seed', action='store_false',
-        dest='reset_seed', default=True,
+        dest='randomly_reset_seed', default=True,
         help="""Stop pytest-randomly from resetting random.seed() at the
                 start of every test context (e.g. TestCase) and individual
                 test."""
     )
 
 
-activated = False
-seed = None
-reset_seed = None
-random_state = None
+random_states = {}
 
 
-def _reseed():
-    global random_state
-    if random_state is None:
+def _reseed(config):
+    seed = config.getoption('randomly_seed')
+    if seed not in random_states:
         random.seed(seed)
-        random_state = random.getstate()
+        random_states[seed] = random.getstate()
     else:
-        random.setstate(random_state)
+        random.setstate(random_states[seed])
 
     if have_factory_boy:
-        factory_set_random_state(random_state)
+        factory_set_random_state(random_states[seed])
 
     if have_faker:
-        faker_random.setstate(random_state)
+        faker_random.setstate(random_states[seed])
 
 
 def pytest_report_header(config):
-    global activated, reset_seed, seed
-    out = None
-
     if not config.getoption('with_randomly'):
         return
-    activated = True
 
-    seed = config.getoption('randomly_seed')
+    out = None
 
-    reset_seed = config.getoption('reset_seed')
-
-    if reset_seed:
-        _reseed()
+    if config.getoption('randomly_reset_seed'):
+        _reseed(config)
+        seed = config.getoption('randomly_seed')
         out = "Using --randomly-seed={}".format(seed)
 
     return out
 
 
 def pytest_runtest_setup(item):
-    if not activated:
+    if not item.config.getoption('with_randomly'):
         return
 
-    if reset_seed:
-        _reseed()
+    if item.config.getoption('randomly_reset_seed'):
+        _reseed(item.config)
