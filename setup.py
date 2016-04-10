@@ -59,7 +59,7 @@ setup(
     zip_safe=False,
     keywords='pytest, random, randomize, randomise, randomly',
     entry_points={
-        'pytest11': ['pytest_randomly = pytest_randomly'],
+        'pytest11': ['randomly = pytest_randomly'],
     },
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
