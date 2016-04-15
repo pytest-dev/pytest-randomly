@@ -3,6 +3,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import pytest
 import six
+import sys
 
 if six.PY3:
     pytest_plugins = ['pytester']
@@ -80,3 +81,34 @@ def test_the_same_random_seed_per_test_can_be_turned_off(testdir):
         # '--randomly-dont-shuffle-modules', '--randomly-dont-shuffle-cases',
     )
     out.assert_outcomes(passed=2, failed=0)
+
+
+def test_files_reordered(testdir):
+    code = """
+        def test_it():
+            pass
+    """
+    testdir.makepyfile(
+        test_a=code,
+        test_b=code,
+        test_c=code,
+        test_d=code,
+    )
+    args = ['-v', '--with-randomly']
+    if sys.version_info >= (3, 0):  # Python 3 random changes
+        args.append('--randomly-seed=15')
+    else:
+        args.append('--randomly-seed=41')
+
+    out = testdir.runpytest(*args)
+
+    out.assert_outcomes(passed=4, failed=0)
+    assert out.outlines[8:12] == [
+        'test_d.py::test_it PASSED',
+        'test_c.py::test_it PASSED',
+        'test_a.py::test_it PASSED',
+        'test_b.py::test_it PASSED',
+    ]
+
+    print(out)
+    assert 0

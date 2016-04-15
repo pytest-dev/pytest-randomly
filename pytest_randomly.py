@@ -3,6 +3,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import random
 import time
+from collections import defaultdict
 
 # factory-boy
 try:
@@ -83,3 +84,32 @@ def pytest_runtest_setup(item):
 
     if item.config.getoption('randomly_reset_seed'):
         _reseed(item.config)
+
+
+def pytest_collection_modifyitems(session, config, items):
+    if not config.getoption('with_randomly'):
+        return
+
+    if config.getoption('randomly_reset_seed'):
+        _reseed(config)
+
+    modules = []
+    grouped_items = defaultdict(lambda: defaultdict(list))  # module then class
+    for item in items:
+        grouped_items[item.module][item.cls].append(item)
+        if not modules or modules[-1] != item.module:
+            modules.append(item.module)
+
+    new_items = []
+    random.shuffle(modules)
+    for module in modules:
+        module_items = grouped_items[module]
+        module_classes = list(grouped_items[module].keys())
+        random.shuffle(module_classes)
+
+        for cls in module_classes:
+            cls_items = module_items[cls]
+            random.shuffle(cls_items)
+            new_items.extend(cls_items)
+
+    items[:] = new_items
