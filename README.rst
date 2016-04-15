@@ -62,43 +62,33 @@ Install from pip with:
 
     pip install pytest-randomly
 
-Nose will automatically find the plugin.
-
-To activate it on your test run, use the ``--with-randomly`` flag, for example:
-
-.. code-block:: bash
-
-    py.test --with-randomly
-
+Pytest will automatically find the plugin and use it when you run ``py.test``.
 The output will start with an extra line that tells you the random seed that is
 being used:
 
 .. code-block:: bash
 
+    $ py.test
     platform darwin -- Python 2.7.11, pytest-2.9.1, py-1.4.31, pluggy-0.3.1
     Using --randomly-seed=1460130750
     ...
-
-To permanently turn it on, you can add the flag to your pytest config, e.g. in
-``setup.cfg``:
-
-.. code-block:: ini
-
-    [pytest]
-    addopts = --with-randomly
 
 If the tests fail due to ordering or randomly created data, you can restart
 them with that seed using the flag as suggested:
 
 .. code-block:: bash
 
-    py.test --with-randomly --randomly-seed=1234
+    py.test --randomly-seed=1234
 
 You can disable behaviours you don't like with the following flags:
 
-* ``--randomly-dont-shuffle-modules`` - turn off the shuffling of the contents
-  of modules
-* ``--randomly-dont-shuffle-cases`` - turn off the shuffling of test functions
-  inside ``TestCase`` classes
 * ``--randomly-dont-reset-seed`` - turn off the reset of ``random.seed()`` at
   the start of every test
+* ``--randomly-dont-reorganize`` - turn off the shuffling of the order of tests
+
+The plugin appears to Pytest with the name 'randomly'. To disable it
+altogether, you can use the ``-p`` argument, for example:
+
+.. code-block:: sh
+
+    py.test -p no:randomly

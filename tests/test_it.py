@@ -23,14 +23,14 @@ def simpletestdir(testdir):
 
 
 def test_it_reports_a_header_when_not_set(simpletestdir):
-    out = simpletestdir.runpytest('--with-randomly')
+    out = simpletestdir.runpytest()
     assert len([
         x for x in out.outlines if x.startswith('Using --randomly-seed=')
     ]) == 1
 
 
 def test_it_reports_a_header_when_set(simpletestdir):
-    out = simpletestdir.runpytest('--with-randomly', '--randomly-seed=10')
+    out = simpletestdir.runpytest('--randomly-seed=10')
     lines = [x for x in out.outlines if x.startswith('Using --randomly-seed=')]
     assert lines == [
         'Using --randomly-seed=10'
@@ -53,7 +53,7 @@ def test_it_reuses_the_same_random_seed_per_test(testdir):
                 assert test_b.num == test_a.num
         """
     )
-    out = testdir.runpytest('--with-randomly', '--randomly-dont-reorganize')
+    out = testdir.runpytest('--randomly-dont-reorganize')
     out.assert_outcomes(passed=2, failed=0)
 
 
@@ -76,8 +76,7 @@ def test_the_same_random_seed_per_test_can_be_turned_off(testdir):
         """
     )
     out = testdir.runpytest(
-        '--with-randomly', '--randomly-dont-reset-seed',
-        '--randomly-dont-reorganize',
+        '--randomly-dont-reset-seed', '--randomly-dont-reorganize',
     )
     out.assert_outcomes(passed=2, failed=0)
 
@@ -93,7 +92,7 @@ def test_files_reordered(testdir):
         test_c=code,
         test_d=code,
     )
-    args = ['-v', '--with-randomly']
+    args = ['-v']
     if sys.version_info >= (3, 0):  # Python 3 random changes
         args.append('--randomly-seed=15')
     else:

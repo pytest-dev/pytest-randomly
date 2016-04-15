@@ -26,12 +26,6 @@ __version__ = '1.0.0'
 def pytest_addoption(parser):
     group = parser.getgroup('randomly', 'Randomizes tests')
     group._addoption(
-        '--with-randomly', action='store_true', dest='with_randomly',
-        default=False,
-        help="""Activates pytest-randomly to randomize the tests, in order and
-                random.seed(). Defaults to False."""
-    )
-    group._addoption(
         '--randomly-seed', action='store', dest='randomly_seed',
         default=int(time.time()), type=int,
         help="""Set the seed that pytest-randomly uses. Default behaviour:
@@ -70,9 +64,6 @@ def _reseed(config):
 
 
 def pytest_report_header(config):
-    if not config.getoption('with_randomly'):
-        return
-
     out = None
 
     if config.getoption('randomly_reset_seed'):
@@ -84,17 +75,11 @@ def pytest_report_header(config):
 
 
 def pytest_runtest_setup(item):
-    if not item.config.getoption('with_randomly'):
-        return
-
     if item.config.getoption('randomly_reset_seed'):
         _reseed(item.config)
 
 
 def pytest_collection_modifyitems(session, config, items):
-    if not config.getoption('with_randomly'):
-        return
-
     if not config.getoption('randomly_reorganize'):
         return
 
