@@ -3,7 +3,6 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import random
 import time
-from collections import defaultdict
 
 # factory-boy
 try:
@@ -79,6 +78,16 @@ def pytest_runtest_setup(item):
         _reseed(item.config)
 
 
+def pytest_runtest_call(item):
+    if item.config.getoption('randomly_reset_seed'):
+        _reseed(item.config)
+
+
+def pytest_runtest_teardown(item):
+    if item.config.getoption('randomly_reset_seed'):
+        _reseed(item.config)
+
+
 def pytest_collection_modifyitems(session, config, items):
     if not config.getoption('randomly_reorganize'):
         return
@@ -86,23 +95,55 @@ def pytest_collection_modifyitems(session, config, items):
     if config.getoption('randomly_reset_seed'):
         _reseed(config)
 
-    modules = []
-    grouped_items = defaultdict(lambda: defaultdict(list))  # module then class
+    module_items = []
+
+    current_module = None
+    current_items = []
     for item in items:
-        grouped_items[item.module][item.cls].append(item)
-        if not modules or modules[-1] != item.module:
-            modules.append(item.module)
 
-    new_items = []
-    random.shuffle(modules)
-    for module in modules:
-        module_items = grouped_items[module]
-        module_classes = list(grouped_items[module].keys())
-        random.shuffle(module_classes)
+        if current_module is None:
+            current_module = getattr(item, 'module', None)
 
-        for cls in module_classes:
-            cls_items = module_items[cls]
-            random.shuffle(cls_items)
-            new_items.extend(cls_items)
+        if getattr(item, 'module', None) != current_module:
+            module_items.append(shuffle_by_class(current_items))
+            current_items = [item]
+            current_module = item.module
+        else:
+            current_items.append(item)
+    module_items.append(shuffle_by_class(current_items))
 
-    items[:] = new_items
+    random.shuffle(module_items)
+
+    items[:] = reduce_list_of_lists(module_items)
+
+
+def shuffle_by_class(items):
+    class_items = []
+    current_cls = None
+    current_items = []
+
+    for item in items:
+        if current_cls is None:
+            current_cls = getattr(item, 'cls', None)
+
+        if getattr(item, 'cls', None) != current_cls:
+            random.shuffle(current_items)
+            class_items.append(current_items)
+            current_items = [item]
+            current_cls = item.cls
+        else:
+            current_items.append(item)
+
+    random.shuffle(current_items)
+    class_items.append(current_items)
+
+    random.shuffle(class_items)
+
+    return reduce_list_of_lists(class_items)
+
+
+def reduce_list_of_lists(lists):
+    new_list = []
+    for list_ in lists:
+        new_list.extend(list_)
+    return new_list

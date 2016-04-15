@@ -19,9 +19,9 @@ Features
 
 All of these features are on by default but can be disabled with flags.
 
-* Randomly shuffles the submodules, ``TestCase`` classes + test functions when
-  loading a module of tests.
-* Randomly shuffles the test functions inside a ``TestCase`` when loading it.
+* Randomly shuffles the order of test items. This is done first at the level of
+  modules, then at the level of test classes (if you have them), then at the
+  order of functions. This also works with things like doctests.
 * Resets ``random.seed()`` at the start of every test case and test to a fixed
   number - this defaults to ``time.time()`` from the start of your test run,
   but you can pass in ``--randomly-seed`` to repeat a randomness-induced
