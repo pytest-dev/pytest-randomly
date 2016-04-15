@@ -44,6 +44,11 @@ def pytest_addoption(parser):
                 start of every test context (e.g. TestCase) and individual
                 test."""
     )
+    group._addoption(
+        '--randomly-dont-reorganize', action='store_false',
+        dest='randomly_reorganize', default=True,
+        help="Stop pytest-randomly from randomly reorganizing the test order."
+    )
 
 
 random_states = {}
@@ -88,6 +93,9 @@ def pytest_runtest_setup(item):
 
 def pytest_collection_modifyitems(session, config, items):
     if not config.getoption('with_randomly'):
+        return
+
+    if not config.getoption('randomly_reorganize'):
         return
 
     if config.getoption('randomly_reset_seed'):

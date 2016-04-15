@@ -53,7 +53,7 @@ def test_it_reuses_the_same_random_seed_per_test(testdir):
                 assert test_b.num == test_a.num
         """
     )
-    out = testdir.runpytest('--with-randomly')
+    out = testdir.runpytest('--with-randomly', '--randomly-dont-reorganize')
     out.assert_outcomes(passed=2, failed=0)
 
 
@@ -76,9 +76,8 @@ def test_the_same_random_seed_per_test_can_be_turned_off(testdir):
         """
     )
     out = testdir.runpytest(
-        '-v',
         '--with-randomly', '--randomly-dont-reset-seed',
-        # '--randomly-dont-shuffle-modules', '--randomly-dont-shuffle-cases',
+        '--randomly-dont-reorganize',
     )
     out.assert_outcomes(passed=2, failed=0)
 
@@ -109,6 +108,3 @@ def test_files_reordered(testdir):
         'test_a.py::test_it PASSED',
         'test_b.py::test_it PASSED',
     ]
-
-    print(out)
-    assert 0
