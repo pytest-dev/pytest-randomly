@@ -28,7 +28,7 @@ All of these features are on by default but can be disabled with flags.
   but you can pass in ``--randomly-seed`` to repeat a randomness-induced
   failure.
 * If
-  `factory boy <https://factoryboy.readthedocs.org/en/latest/reference.html>`_
+  `factory boy <https://factoryboy.readthedocs.io/en/latest/reference.html>`_
   is installed, its random state is reset at the start of every test. This
   allows for repeatable use of its random 'fuzzy' features.
 * If `faker <https://pypi.python.org/pypi/fake-factory>`_ is installed, its
