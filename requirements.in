@@ -1,0 +1,8 @@
+docutils
+flake8
+isort
+modernize
+multilint
+pytest
+Pygments
+six
