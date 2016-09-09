@@ -67,19 +67,19 @@ def test_it_resets_the_random_seed_at_the_start_of_test_classes(testdir):
             @classmethod
             def setUpClass(cls):
                 super(A, cls).setUpClass()
-                cls.suc_num = random.random()
+                cls.start_state = random.getstate()
 
             def test_it(self):
-                test_num = random.random()
-                assert self.suc_num == test_num
+                assert random.getstate() == self.start_state
+                random.random()
 
             def test_it2(self):
-                test_num = random.random()
-                assert self.suc_num == test_num
+                assert random.getstate() == self.start_state
+                random.random()
 
             @classmethod
             def tearDownClass(cls):
-                assert random.random() == cls.suc_num
+                assert random.getstate() == self.start_state
                 super(A, cls).tearDownClass()
         """
     )
@@ -286,3 +286,23 @@ def test_fixtures_dont_interfere_with_tests_getting_same_random_state(testdir):
     out.assert_outcomes(passed=1)
     out = testdir.runpytest('-m', 'two', *args)
     out.assert_outcomes(passed=1)
+
+
+def test_fixture_state_not_equivalent_to_test_state(testdir):
+    testdir.makepyfile(
+        test_one="""
+        import pytest
+        import random
+
+        @pytest.fixture
+        def fixture_state():
+            state = random.getstate()
+            random.random()
+            return state
+
+        def test_a(fixture_state):
+            assert random.getstate() != fixture_state
+        """
+    )
+    out = testdir.runpytest()
+    out.assert_outcomes(passed=1, failed=0)
