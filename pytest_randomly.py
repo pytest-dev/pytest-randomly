@@ -78,11 +78,6 @@ def pytest_runtest_setup(item):
         _reseed(item.config)
 
 
-def pytest_runtest_call(item):
-    if item.config.getoption('randomly_reset_seed'):
-        _reseed(item.config)
-
-
 def pytest_runtest_teardown(item):
     if item.config.getoption('randomly_reset_seed'):
         _reseed(item.config)
