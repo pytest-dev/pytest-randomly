@@ -248,3 +248,41 @@ def test_doctests_reordered(testdir):
         'test_one.py::test_one.bar PASSED',
         'test_one.py::test_one.foo PASSED',
     ]
+
+
+def test_fixtures_dont_interfere_with_tests_getting_same_random_state(testdir):
+    testdir.makepyfile(
+        test_one="""
+        import random
+
+        import pytest
+
+
+        random.seed(2)
+        state_at_seed_two = random.getstate()
+
+
+        @pytest.fixture(scope='module')
+        def myfixture():
+            return random.random()
+
+
+        @pytest.mark.one()
+        def test_one(myfixture):
+            assert random.getstate() == state_at_seed_two
+
+
+        @pytest.mark.two()
+        def test_two(myfixture):
+            assert random.getstate() == state_at_seed_two
+        """
+    )
+    args = ['--randomly-seed=2']
+
+    out = testdir.runpytest(*args)
+    out.assert_outcomes(passed=2)
+
+    out = testdir.runpytest('-m', 'one', *args)
+    out.assert_outcomes(passed=1)
+    out = testdir.runpytest('-m', 'two', *args)
+    out.assert_outcomes(passed=1)
