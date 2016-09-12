@@ -47,8 +47,8 @@ def pytest_addoption(parser):
 random_states = {}
 
 
-def _reseed(config):
-    seed = config.getoption('randomly_seed')
+def _reseed(config, offset=0):
+    seed = config.getoption('randomly_seed') + offset
     if seed not in random_states:
         random.seed(seed)
         random_states[seed] = random.getstate()
@@ -75,7 +75,7 @@ def pytest_report_header(config):
 
 def pytest_runtest_setup(item):
     if item.config.getoption('randomly_reset_seed'):
-        _reseed(item.config)
+        _reseed(item.config, -1)
 
 
 def pytest_runtest_call(item):
@@ -85,7 +85,7 @@ def pytest_runtest_call(item):
 
 def pytest_runtest_teardown(item):
     if item.config.getoption('randomly_reset_seed'):
-        _reseed(item.config)
+        _reseed(item.config, 1)
 
 
 def pytest_collection_modifyitems(session, config, items):

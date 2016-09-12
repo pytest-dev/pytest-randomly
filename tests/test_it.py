@@ -64,26 +64,65 @@ def test_it_resets_the_random_seed_at_the_start_of_test_classes(testdir):
 
 
         class A(TestCase):
+
             @classmethod
             def setUpClass(cls):
                 super(A, cls).setUpClass()
                 cls.suc_num = random.random()
+                assert cls.suc_num == getattr(B, 'suc_num', cls.suc_num)
 
-            def test_it(self):
-                test_num = random.random()
-                assert self.suc_num == test_num
+            def test_fake(self):
+                assert True
 
-            def test_it2(self):
-                test_num = random.random()
-                assert self.suc_num == test_num
+
+        class B(TestCase):
+
+            @classmethod
+            def setUpClass(cls):
+                super(B, cls).setUpClass()
+                cls.suc_num = random.random()
+                assert cls.suc_num == getattr(A, 'suc_num', cls.suc_num)
+
+            def test_fake(self):
+                assert True
+        """
+    )
+    out = testdir.runpytest()
+    out.assert_outcomes(passed=2, failed=0)
+
+
+def test_it_resets_the_random_seed_at_the_end_of_test_classes(testdir):
+    testdir.makepyfile(
+        test_one="""
+        import random
+        from unittest import TestCase
+
+
+        class A(TestCase):
+
+            def test_fake(self):
+                assert True
 
             @classmethod
             def tearDownClass(cls):
-                assert random.random() == cls.suc_num
                 super(A, cls).tearDownClass()
+                cls.suc_num = random.random()
+                assert cls.suc_num == getattr(B, 'suc_num', cls.suc_num)
+
+
+        class B(TestCase):
+
+            def test_fake(self):
+                assert True
+
+            @classmethod
+            def tearDownClass(cls):
+                super(B, cls).tearDownClass()
+                cls.suc_num = random.random()
+                assert cls.suc_num == getattr(A, 'suc_num', cls.suc_num)
         """
     )
-    out = testdir.runpytest('--randomly-dont-reorganize')
+    out = testdir.runpytest()
     out.assert_outcomes(passed=2, failed=0)
 
 
@@ -248,6 +287,27 @@ def test_doctests_reordered(testdir):
         'test_one.py::test_one.bar PASSED',
         'test_one.py::test_one.foo PASSED',
     ]
+
+
+def test_fixtures_get_different_random_state_to_tests(testdir):
+    testdir.makepyfile(
+        test_one="""
+        import random
+
+        import pytest
+
+
+        @pytest.fixture()
+        def myfixture():
+            return random.getstate()
+
+
+        def test_one(myfixture):
+            assert myfixture != random.getstate()
+        """
+    )
+    out = testdir.runpytest()
+    out.assert_outcomes(passed=1)
 
 
 def test_fixtures_dont_interfere_with_tests_getting_same_random_state(testdir):
