@@ -19,7 +19,7 @@ except ImportError:
     have_faker = False
 
 
-__version__ = '1.0.0'
+__version__ = '1.1.0'
 
 
 def pytest_addoption(parser):

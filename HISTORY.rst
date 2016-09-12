@@ -7,6 +7,10 @@ Pending Release
 ---------------
 
 * New release notes here
+
+1.1.0 (2016-09-12)
+------------------
+
 * Offset the random seed during test setup and teardown. This is to avoid the
   awkward situation where test setup generates a random object, then the test
   generates a second one, but due to the re-seeding, they end up being always
