@@ -64,7 +64,7 @@ setup(
         'pytest11': ['randomly = pytest_randomly'],
     },
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
+        'Development Status :: 5 - Production/Stable',
         'Framework :: Pytest',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',
