@@ -68,7 +68,7 @@ def pytest_report_header(config):
     if config.getoption('randomly_reset_seed'):
         _reseed(config)
         seed = config.getoption('randomly_seed')
-        out = "Using --randomly-seed={}".format(seed)
+        out = "Using --randomly-seed={0}".format(seed)
 
     return out
 

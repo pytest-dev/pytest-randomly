@@ -6,7 +6,7 @@ History
 Pending Release
 ---------------
 
-* New release notes here
+* Add Python 2.6 compatibility
 
 1.1.0 (2016-09-12)
 ------------------
