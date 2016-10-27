@@ -7,6 +7,10 @@ Pending Release
 ---------------
 
 * New release notes here
+
+1.1.2 (2016-10-27)
+------------------
+
 * Reset the random state for NumPy too.
 
 1.1.1 (2016-09-16)
