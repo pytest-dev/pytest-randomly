@@ -18,6 +18,13 @@ try:
 except ImportError:
     have_faker = False
 
+# numpy
+try:
+    from numpy import random as np_random
+    have_numpy = True
+except ImportError:
+    have_numpy = False
+
 
 __version__ = '1.1.1'
 
@@ -45,6 +52,7 @@ def pytest_addoption(parser):
 
 
 random_states = {}
+np_random_states = {}
 
 
 def _reseed(config, offset=0):
@@ -60,6 +68,13 @@ def _reseed(config, offset=0):
 
     if have_faker:
         faker_random.setstate(random_states[seed])
+
+    if have_numpy:
+        if seed not in np_random_states:
+            np_random.seed(seed)
+            np_random_states[seed] = np_random.get_state()
+        else:
+            np_random.set_state(np_random_states[seed])
 
 
 def pytest_report_header(config):

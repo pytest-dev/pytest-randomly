@@ -350,3 +350,20 @@ def test_fixtures_dont_interfere_with_tests_getting_same_random_state(testdir):
     out.assert_outcomes(passed=1)
     out = testdir.runpytest('-m', 'two', *args)
     out.assert_outcomes(passed=1)
+
+
+def test_numpy(testdir):
+    testdir.makepyfile(
+        test_one="""
+        import numpy as np
+
+        def test_one():
+            assert np.random.rand() == 0.417022004702574
+
+        def test_two():
+            assert np.random.rand() == 0.417022004702574
+        """
+    )
+
+    out = testdir.runpytest('--randomly-seed=1')
+    out.assert_outcomes(passed=2)

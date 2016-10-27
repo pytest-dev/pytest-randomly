@@ -3,6 +3,7 @@ flake8
 isort
 modernize
 multilint
+numpy
 pytest
 Pygments
 six
