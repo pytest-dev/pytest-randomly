@@ -1,8 +1,6 @@
 # -*- encoding:utf-8 -*-
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-import sys
-
 import pytest
 import six
 
@@ -58,8 +56,6 @@ def test_it_reuses_the_same_random_seed_per_test(testdir):
     out.assert_outcomes(passed=2, failed=0)
 
 
-@pytest.mark.skipif(sys.version_info[:2] <= (2, 6),
-                    reason='setUpClass is only in Python 2.7+')
 def test_it_resets_the_random_seed_at_the_start_of_test_classes(testdir):
     testdir.makepyfile(
         test_one="""
