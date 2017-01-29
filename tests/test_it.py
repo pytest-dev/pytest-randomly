@@ -289,6 +289,29 @@ def test_doctests_reordered(testdir):
     ]
 
 
+def test_doctests_in_txt_files_reordered(testdir):
+    testdir.tmpdir.join('test.txt').write('''\
+        >>> 2 + 2
+        4
+        ''')
+    testdir.tmpdir.join('test2.txt').write('''\
+        >>> 2 - 2
+        0
+        ''')
+    args = ['-v']
+    if six.PY3:  # Python 3 random changes
+        args.append('--randomly-seed=1')
+    else:
+        args.append('--randomly-seed=4')
+
+    out = testdir.runpytest(*args)
+    out.assert_outcomes(passed=2)
+    assert out.outlines[8:10] == [
+        'test2.txt::test2.txt PASSED',
+        'test.txt::test.txt PASSED',
+    ]
+
+
 def test_fixtures_get_different_random_state_to_tests(testdir):
     testdir.makepyfile(
         test_one="""
