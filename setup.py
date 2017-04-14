@@ -4,10 +4,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import re
 
-try:
-    from setuptools import setup
-except ImportError:
-    from distutils.core import setup
+from setuptools import setup
 
 
 def get_version(filename):
