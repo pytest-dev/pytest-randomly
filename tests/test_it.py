@@ -178,6 +178,35 @@ def test_files_reordered(testdir):
     ]
 
 
+def test_files_reordered_when_seed_not_reset(testdir):
+    code = """
+        def test_it():
+            pass
+    """
+    testdir.makepyfile(
+        test_a=code,
+        test_b=code,
+        test_c=code,
+        test_d=code,
+    )
+    args = ['-v']
+    if six.PY3:  # Python 3 random changes
+        args.append('--randomly-seed=15')
+    else:
+        args.append('--randomly-seed=41')
+
+    args.append('--randomly-dont-reset-seed')
+    out = testdir.runpytest(*args)
+
+    out.assert_outcomes(passed=4, failed=0)
+    assert out.outlines[8:12] == [
+        'test_d.py::test_it PASSED',
+        'test_c.py::test_it PASSED',
+        'test_a.py::test_it PASSED',
+        'test_b.py::test_it PASSED',
+    ]
+
+
 def test_classes_reordered(testdir):
     testdir.makepyfile(
         test_one="""
