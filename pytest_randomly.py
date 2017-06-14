@@ -78,12 +78,9 @@ def _reseed(config, offset=0):
 
 
 def pytest_report_header(config):
-    out = None
-
-    if config.getoption('randomly_reset_seed'):
-        _reseed(config)
-        seed = config.getoption('randomly_seed')
-        out = "Using --randomly-seed={0}".format(seed)
+    _reseed(config)
+    seed = config.getoption('randomly_seed')
+    out = "Using --randomly-seed={0}".format(seed)
 
     return out
 
@@ -106,9 +103,6 @@ def pytest_runtest_teardown(item):
 def pytest_collection_modifyitems(session, config, items):
     if not config.getoption('randomly_reorganize'):
         return
-
-    if config.getoption('randomly_reset_seed'):
-        _reseed(config)
 
     module_items = []
 

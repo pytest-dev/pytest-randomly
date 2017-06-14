@@ -8,6 +8,7 @@ Pending Release
 
 * New release notes here
 * Dropped Python 2.6 compatibility, as upstream dependency NumPy did.
+* Always print the current random seed, even if not resetting it, so tests can be reproduced in case of failure
 
 1.1.2 (2016-10-27)
 ------------------
