@@ -1,5 +1,6 @@
 docutils
 flake8
+faker
 isort
 modernize
 multilint

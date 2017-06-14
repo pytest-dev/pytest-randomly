@@ -386,3 +386,22 @@ def test_numpy(testdir):
 
     out = testdir.runpytest('--randomly-seed=1')
     out.assert_outcomes(passed=2)
+
+
+def test_faker(testdir):
+    testdir.makepyfile(
+        test_one="""
+        from faker import Faker
+
+        fake = Faker()
+
+        def test_one():
+            assert fake.name() == 'Ryan Gallagher'
+
+        def test_two():
+            assert fake.name() == 'Ryan Gallagher'
+        """
+    )
+
+    out = testdir.runpytest('--randomly-seed=1')
+    out.assert_outcomes(passed=2)
