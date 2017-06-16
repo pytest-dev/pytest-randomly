@@ -7,6 +7,10 @@ Pending Release
 ---------------
 
 * New release notes here
+
+1.2.0 (2017-06-16)
+------------------
+
 * Dropped Python 2.6 compatibility, as upstream dependency NumPy did.
 * Reset and output the seed at the start of the test run when
   ``--randomly-dont-reset-seed`` is set, to allow the reorganization of tests
