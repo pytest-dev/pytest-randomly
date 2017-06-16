@@ -11,7 +11,7 @@ try:
 except ImportError:
     have_factory_boy = False
 
-# fake-factory
+# faker
 try:
     from faker.generator import random as faker_random
     have_faker = True
