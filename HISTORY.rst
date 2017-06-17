@@ -7,6 +7,7 @@ Pending Release
 ---------------
 
 * New release notes here
+* Fix collection to be deterministically shuffled again, regression in 1.2.0.
 
 1.2.0 (2017-06-16)
 ------------------

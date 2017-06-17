@@ -102,6 +102,8 @@ def pytest_collection_modifyitems(session, config, items):
     if not config.getoption('randomly_reorganize'):
         return
 
+    _reseed(config)
+
     module_items = []
 
     current_module = None

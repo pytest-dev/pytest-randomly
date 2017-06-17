@@ -286,6 +286,77 @@ def test_class_test_methods_reordered(testdir):
     ]
 
 
+def test_test_functions_reordered(testdir):
+    testdir.makepyfile(
+        test_one="""
+        def test_a():
+            pass
+
+        def test_b():
+            pass
+
+        def test_c():
+            pass
+
+        def test_d():
+            pass
+        """
+    )
+    args = ['-v']
+    if six.PY3:  # Python 3 random changes
+        args.append('--randomly-seed=15')
+    else:
+        args.append('--randomly-seed=41')
+
+    out = testdir.runpytest(*args)
+
+    out.assert_outcomes(passed=4, failed=0)
+    assert out.outlines[8:12] == [
+        'test_one.py::test_d PASSED',
+        'test_one.py::test_c PASSED',
+        'test_one.py::test_a PASSED',
+        'test_one.py::test_b PASSED',
+    ]
+
+
+def test_test_functions_reordered_when_randomness_in_module(testdir):
+    testdir.makepyfile(
+        test_one="""
+        import random
+        import time
+
+        random.seed(time.time() * 100)
+
+        def test_a():
+            pass
+
+        def test_b():
+            pass
+
+        def test_c():
+            pass
+
+        def test_d():
+            pass
+        """
+    )
+    args = ['-v']
+    if six.PY3:  # Python 3 random changes
+        args.append('--randomly-seed=15')
+    else:
+        args.append('--randomly-seed=41')
+
+    out = testdir.runpytest(*args)
+
+    out.assert_outcomes(passed=4, failed=0)
+    assert out.outlines[8:12] == [
+        'test_one.py::test_d PASSED',
+        'test_one.py::test_c PASSED',
+        'test_one.py::test_a PASSED',
+        'test_one.py::test_b PASSED',
+    ]
+
+
 def test_doctests_reordered(testdir):
     testdir.makepyfile(
         test_one="""
