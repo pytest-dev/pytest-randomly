@@ -8,12 +8,9 @@ from setuptools import setup
 
 
 def get_version(filename):
-    """
-    Return package version as listed in `__version__` in `filename`.
-    """
     with codecs.open(filename, 'r', 'utf-8') as fp:
-        init_py = fp.read()
-    return re.search("__version__ = ['\"]([^'\"]+)['\"]", init_py).group(1)
+        contents = fp.read()
+    return re.search(r"__version__ = ['\"]([^'\"]+)['\"]", contents).group(1)
 
 
 version = get_version('pytest_randomly.py')
