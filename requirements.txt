@@ -8,7 +8,7 @@ configparser==3.5.0       # via flake8
 docutils==0.13.1
 enum34==1.1.6             # via flake8
 faker==0.7.18
-flake8==3.3.0
+flake8==3.4.1
 ipaddress==1.0.18         # via faker
 isort==4.2.15
 mccabe==0.6.1             # via flake8
