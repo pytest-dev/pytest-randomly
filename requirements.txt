@@ -5,10 +5,13 @@
 #    pip-compile --output-file requirements.txt requirements.in
 #
 configparser==3.5.0       # via flake8
+dnspython==1.15.0         # via email-validator
 docutils==0.14
+email-validator==1.0.2    # via faker
 enum34==1.1.6             # via flake8
-faker==0.7.18
+faker==0.8.0
 flake8==3.4.1
+idna==2.6                 # via email-validator
 ipaddress==1.0.18         # via faker
 isort==4.2.15
 mccabe==0.6.1             # via flake8
@@ -22,3 +25,4 @@ pygments==2.2.0
 pytest==3.2.1
 python-dateutil==2.6.1    # via faker
 six==1.10.0
+ukpostcodeparser==1.1.1   # via faker
