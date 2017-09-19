@@ -24,4 +24,4 @@ pyflakes==1.5.0           # via flake8
 pygments==2.2.0
 pytest==3.2.2
 python-dateutil==2.6.1    # via faker
-six==1.10.0
+six==1.11.0
