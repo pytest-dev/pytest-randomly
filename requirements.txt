@@ -7,7 +7,7 @@
 configparser==3.5.0       # via flake8
 docutils==0.14
 enum34==1.1.6             # via flake8
-faker==0.8.4
+faker==0.8.5
 flake8==3.4.1
 ipaddress==1.0.18         # via faker
 isort==4.2.15
@@ -22,3 +22,4 @@ pygments==2.2.0
 pytest==3.2.3
 python-dateutil==2.6.1    # via faker
 six==1.11.0
+unidecode==0.4.21         # via faker
