@@ -108,7 +108,7 @@ def pytest_collection_modifyitems(session, config, items):
         return
 
     if config.getoption('randomly_force_reorganize'):
-        offset = time.time()
+        offset = int(time.time())
     else:
         offset = 0
 
