@@ -505,3 +505,33 @@ def test_faker(testdir):
 
     out = testdir.runpytest('--randomly-seed=1')
     out.assert_outcomes(passed=2)
+
+
+def test_files_reordered_with_force_reorder(testdir):
+    code = """
+        def test_it():
+            pass
+    """
+    testdir.makepyfile(
+        test_a=code,
+        test_b=code,
+        test_c=code,
+        test_d=code,
+    )
+    args = ['-v']
+
+    if six.PY3:  # Python 3 random changes
+        args.append('--randomly-seed=15')
+    else:
+        args.append('--randomly-seed=41')
+
+    # first run
+    out = testdir.runpytest(*args)
+    out.assert_outcomes(passed=4, failed=0)
+
+    # second run with force flag
+    args.append('--randomly-force-reorganize')
+    out2 = testdir.runpytest(*args)
+    out.assert_outcomes(passed=4, failed=0)
+
+    assert out.outlines[8:12] != out2.outlines[8:12]
