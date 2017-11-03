@@ -113,10 +113,11 @@ def pytest_collection_modifyitems(session, config, items):
         if current_module is None:
             current_module = getattr(item, 'module', None)
 
-        if getattr(item, 'module', None) != current_module:
+        item_module = getattr(item, 'module', None)
+        if item_module != current_module:
             module_items.append(shuffle_by_class(current_items))
             current_items = [item]
-            current_module = item.module
+            current_module = item_module
         else:
             current_items.append(item)
     module_items.append(shuffle_by_class(current_items))

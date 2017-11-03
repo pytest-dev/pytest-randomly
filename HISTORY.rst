@@ -7,6 +7,8 @@ Pending Release
 ---------------
 
 * New release notes here
+* Fix collection to not sometimes crash when encoutering pytest ``Item``\s
+  without a module.
 
 1.2.1 (2017-06-17)
 ------------------
