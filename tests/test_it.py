@@ -389,6 +389,48 @@ def test_doctests_reordered(testdir):
     ]
 
 
+def test_it_works_with_the_simplest_test_items(testdir):
+    testdir.makepyfile(
+        conftest="""
+        import pytest
+
+
+        class MyCollector(pytest.Collector):
+            def __init__(self, fspath, items, **kwargs):
+                super(MyCollector, self).__init__(fspath, **kwargs)
+                self.items = items
+
+            def collect(self):
+                return self.items
+
+
+        class NoOpItem(pytest.Item):
+            def __init__(self, path, parent, module=None):
+                super(NoOpItem, self).__init__(path, parent)
+                if module is not None:
+                    self.module = module
+
+            def runtest(self):
+                pass
+
+
+        def pytest_collect_file(path, parent):
+            return MyCollector(
+                fspath=str(path),
+                items=[
+                NoOpItem(str(path), parent, 'foo'),
+                NoOpItem(str(path), parent),
+                ],
+                parent=parent,
+            )
+        """
+    )
+    args = ['-v']
+
+    out = testdir.runpytest(*args)
+    out.assert_outcomes(passed=2)
+
+
 def test_doctests_in_txt_files_reordered(testdir):
     testdir.tmpdir.join('test.txt').write('''\
         >>> 2 + 2
