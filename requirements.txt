@@ -22,4 +22,4 @@ pygments==2.2.0
 pytest==3.2.3
 python-dateutil==2.6.1    # via faker
 six==1.11.0
-text-unidecode==1.0       # via faker
+text-unidecode==1.1       # via faker
