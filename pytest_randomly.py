@@ -31,7 +31,7 @@ except ImportError:
     have_numpy = False
 
 
-__version__ = '1.2.2'
+__version__ = '1.2.3'
 
 
 def pytest_addoption(parser):
