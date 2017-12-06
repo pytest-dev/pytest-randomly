@@ -46,6 +46,10 @@ def test_it_reports_a_header_when_set(simpletestdir):
 
 
 def test_it_reuses_the_same_random_seed_per_test(ourtestdir):
+    """
+    Run a pair of tests that generate the a number and then assert they got
+    what the other did.
+    """
     ourtestdir.makepyfile(
         test_one="""
         import random
@@ -525,6 +529,10 @@ def test_fixtures_dont_interfere_with_tests_getting_same_random_state(ourtestdir
 
 
 def test_factory_boy(ourtestdir):
+    """
+    Rather than set up factories etc., just check the random generator it uses
+    is set between two tests to output the same number.
+    """
     ourtestdir.makepyfile(
         test_one="""
         from factory.random import randgen
