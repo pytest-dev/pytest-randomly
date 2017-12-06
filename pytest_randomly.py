@@ -6,10 +6,15 @@ import time
 
 # factory-boy
 try:
-    from factory.fuzzy import set_random_state as factory_set_random_state
+    from factory.random import set_random_state as factory_set_random_state
     have_factory_boy = True
 except ImportError:
-    have_factory_boy = False
+    # old versions
+    try:
+        from factory.fuzzy import set_random_state as factory_set_random_state
+        have_factory_boy = True
+    except ImportError:
+        have_factory_boy = False
 
 # faker
 try:

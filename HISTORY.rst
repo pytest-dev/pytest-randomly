@@ -7,6 +7,7 @@ Pending Release
 ---------------
 
 * New release notes here
+* Fix ``DeprecationWarning`` with recent versions of ``factory_boy``.
 
 1.2.2 (2017-11-03)
 ------------------

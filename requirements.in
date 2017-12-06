@@ -1,10 +1,11 @@
 docutils
-flake8
+factory_boy
 faker
+flake8
 isort
 modernize
 multilint
 numpy
+pygments
 pytest
-Pygments
 six
