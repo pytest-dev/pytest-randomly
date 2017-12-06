@@ -1,5 +1,6 @@
 docutils
 flake8
+factory_boy
 faker
 isort
 modernize

@@ -524,16 +524,20 @@ def test_fixtures_dont_interfere_with_tests_getting_same_random_state(ourtestdir
     out.assert_outcomes(passed=1)
 
 
-def test_numpy(ourtestdir):
+def test_factory_boy(ourtestdir):
     ourtestdir.makepyfile(
         test_one="""
-        import numpy as np
+        from factory.random import randgen
 
-        def test_one():
-            assert np.random.rand() == 0.417022004702574
+        def test_a():
+            test_a.num = randgen.random()
+            if hasattr(test_b, 'num'):
+                assert test_a.num == test_b.num
 
-        def test_two():
-            assert np.random.rand() == 0.417022004702574
+        def test_b():
+            test_b.num = randgen.random()
+            if hasattr(test_a, 'num'):
+                assert test_b.num == test_a.num
         """
     )
 
@@ -553,6 +557,23 @@ def test_faker(ourtestdir):
 
         def test_two():
             assert fake.name() == 'Ryan Gallagher'
+        """
+    )
+
+    out = ourtestdir.runpytest('--randomly-seed=1')
+    out.assert_outcomes(passed=2)
+
+
+def test_numpy(ourtestdir):
+    ourtestdir.makepyfile(
+        test_one="""
+        import numpy as np
+
+        def test_one():
+            assert np.random.rand() == 0.417022004702574
+
+        def test_two():
+            assert np.random.rand() == 0.417022004702574
         """
     )
 
