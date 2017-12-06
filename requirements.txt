@@ -4,22 +4,25 @@
 #
 #    pip-compile --output-file requirements.txt requirements.in
 #
+attrs==17.3.0             # via pytest
 configparser==3.5.0       # via flake8
 docutils==0.14
 enum34==1.1.6             # via flake8
 faker==0.8.7
 flake8==3.5.0
+funcsigs==1.0.2           # via pytest
 ipaddress==1.0.18         # via faker
 isort==4.2.15
 mccabe==0.6.1             # via flake8
 modernize==0.5
 multilint==2.2.0
 numpy==1.13.3
+pluggy==0.6.0             # via pytest
 py==1.5.2                 # via pytest
 pycodestyle==2.3.1        # via flake8
 pyflakes==1.6.0           # via flake8
 pygments==2.2.0
-pytest==3.2.5
+pytest==3.3.1
 python-dateutil==2.6.1    # via faker
 six==1.11.0
 text-unidecode==1.1       # via faker
