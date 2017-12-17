@@ -2,13 +2,13 @@
 pytest-randomly
 ===============
 
-.. image:: https://img.shields.io/travis/adamchainz/pytest-randomly.svg
-        :target: https://travis-ci.org/adamchainz/pytest-randomly
+.. image:: https://img.shields.io/travis/pytest-dev/pytest-randomly.svg
+        :target: https://travis-ci.org/pytest-dev/pytest-randomly
 
 .. image:: https://img.shields.io/pypi/v/pytest-randomly.svg
         :target: https://pypi.python.org/pypi/pytest-randomly
 
-.. figure:: https://raw.githubusercontent.com/adamchainz/pytest-randomly/master/logo.png
+.. figure:: https://raw.githubusercontent.com/pytest-dev/pytest-randomly/master/logo.png
    :scale: 50%
    :alt: Randomness power.
 

@@ -34,7 +34,7 @@ setup(
     long_description=readme + '\n\n' + history,
     author="Adam Johnson",
     author_email='me@adamj.eu',
-    url='https://github.com/adamchainz/pytest-randomly',
+    url='https://github.com/pytest-dev/pytest-randomly',
     py_modules=['pytest_randomly'],
     include_package_data=True,
     install_requires=requirements,
