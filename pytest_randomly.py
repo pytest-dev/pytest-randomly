@@ -54,6 +54,11 @@ def pytest_addoption(parser):
         dest='randomly_reorganize', default=True,
         help="Stop pytest-randomly from randomly reorganizing the test order."
     )
+    group._addoption(
+        '--randomly-force-reorganize', action='store_true',
+        dest='randomly_force_reorganize', default=False,
+        help="Force pytest-randomly to randomly reorganize the test order despite of randomly-seed."
+    )
 
 
 random_states = {}
@@ -107,7 +112,12 @@ def pytest_collection_modifyitems(session, config, items):
     if not config.getoption('randomly_reorganize'):
         return
 
-    _reseed(config)
+    if config.getoption('randomly_force_reorganize'):
+        offset = int(time.time())
+    else:
+        offset = 0
+
+    _reseed(config, offset)
 
     module_items = []
 
