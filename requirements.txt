@@ -12,7 +12,7 @@ factory-boy==2.9.2
 faker==0.8.7
 flake8==3.5.0
 funcsigs==1.0.2           # via pytest
-ipaddress==1.0.18         # via faker
+ipaddress==1.0.19         # via faker
 isort==4.2.15
 mccabe==0.6.1             # via flake8
 modernize==0.5
