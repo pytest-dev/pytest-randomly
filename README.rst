@@ -34,6 +34,8 @@ All of these features are on by default but can be disabled with flags.
 * If `faker <https://pypi.python.org/pypi/faker>`_ is installed, its random
   state is reset at the start of every test. This is also for repeatable fuzzy
   data in tests - factory boy uses faker for lots of data.
+* If `numpy <http://www.numpy.org/>`_ is installed, its random state is reset
+  at the start of every test.
 
 About
 -----
@@ -63,13 +65,13 @@ Install from pip with:
 
     pip install pytest-randomly
 
-Pytest will automatically find the plugin and use it when you run ``py.test``.
+Pytest will automatically find the plugin and use it when you run ``pytest``.
 The output will start with an extra line that tells you the random seed that is
 being used:
 
 .. code-block:: bash
 
-    $ py.test
+    $ pytest
     platform darwin -- Python 2.7.11, pytest-2.9.1, py-1.4.31, pluggy-0.3.1
     Using --randomly-seed=1460130750
     ...
@@ -79,7 +81,15 @@ them with that seed using the flag as suggested:
 
 .. code-block:: bash
 
-    py.test --randomly-seed=1234
+    pytest --randomly-seed=1234
+
+Since the ordering is by module, then by class, you can debug inter-test
+pollution failures by narrowing down which tests are being run to find the bad
+interaction by rerunning just the module/class:
+
+.. code-block:: bash
+
+    pytest --randomly-seed=1234 tests/module_that_failed/
 
 You can disable behaviours you don't like with the following flags:
 
@@ -92,4 +102,4 @@ altogether, you can use the ``-p`` argument, for example:
 
 .. code-block:: sh
 
-    py.test -p no:randomly
+    pytest -p no:randomly
