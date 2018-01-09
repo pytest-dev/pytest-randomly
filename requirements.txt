@@ -15,7 +15,7 @@ funcsigs==1.0.2           # via pytest
 ipaddress==1.0.19         # via faker
 isort==4.2.15
 mccabe==0.6.1             # via flake8
-modernize==0.5
+modernize==0.6
 multilint==2.2.0
 numpy==1.14.0
 pluggy==0.6.0             # via pytest
