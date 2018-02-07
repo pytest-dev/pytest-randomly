@@ -12,8 +12,9 @@ factory-boy==2.10.0
 faker==0.8.10
 flake8==3.5.0
 funcsigs==1.0.2           # via pytest
+futures==3.1.1
 ipaddress==1.0.19         # via faker
-isort==4.2.15
+isort==4.3.3
 mccabe==0.6.1             # via flake8
 modernize==0.6
 multilint==2.2.0
