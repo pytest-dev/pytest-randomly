@@ -9,7 +9,7 @@ configparser==3.5.0       # via flake8
 docutils==0.14
 enum34==1.1.6             # via flake8
 factory-boy==2.10.0
-faker==0.8.12
+faker==0.8.13
 flake8==3.5.0
 funcsigs==1.0.2           # via pytest
 futures==3.1.1
