@@ -26,6 +26,6 @@ pycodestyle==2.3.1        # via flake8
 pyflakes==1.6.0           # via flake8
 pygments==2.2.0
 pytest==3.5.1
-python-dateutil==2.7.2    # via faker
+python-dateutil==2.7.3    # via faker
 six==1.11.0
 text-unidecode==1.2       # via faker
