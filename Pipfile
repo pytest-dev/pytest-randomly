@@ -18,6 +18,3 @@ six = "*"
 factory_boy = "*"
 Faker = "*"
 Pygments = "*"
-
-[requires]
-python_version = "2.7"

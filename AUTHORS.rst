@@ -11,4 +11,4 @@ Contributors
 ------------
 
 * Grégory Starck <g.starck@gmail.com>
-* Nikita Sobolevn <mail@sobolevn.me>
+* Nikita Sobolev <mail@sobolevn.me>
