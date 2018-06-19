@@ -1,0 +1,23 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+
+[dev-packages]
+docutils = "*"
+"flake8" = "*"
+futures = "<3.2.0"
+isort = "*"
+modernize = "*"
+multilint = "*"
+numpy = "*"
+pytest = "*"
+six = "*"
+factory_boy = "*"
+Faker = "*"
+Pygments = "*"
+
+[requires]
+python_version = "2.7"

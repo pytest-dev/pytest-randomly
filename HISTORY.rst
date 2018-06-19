@@ -6,7 +6,7 @@ History
 Pending Release
 ---------------
 
-* New release notes here
+* Switching to ``pipenv``
 
 1.2.3 (2017-12-06)
 ------------------
