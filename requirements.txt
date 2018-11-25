@@ -26,8 +26,8 @@ pluggy==0.8.0             # via pytest
 py==1.7.0                 # via pytest
 pycodestyle==2.4.0        # via flake8
 pyflakes==2.0.0           # via flake8
-pygments==2.2.0
-pytest==4.0.0
+pygments==2.3.0
+pytest==4.0.1
 python-dateutil==2.7.5    # via faker
 scandir==1.9.0            # via pathlib2
 six==1.11.0
