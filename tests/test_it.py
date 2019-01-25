@@ -16,6 +16,14 @@ def ourtestdir(testdir):
         '[pytest]\n'
         'console_output_style = classic'
     )
+
+    # Change from default running pytest in-process to running in a subprocess
+    # because numpy imports break with weird:
+    #   File ".../site-packages/numpy/core/overrides.py", line 204, in decorator
+    # add_docstring(implementation, dispatcher.__doc__)
+    # RuntimeError: empty_like method already has a docstring
+    testdir._runpytest_method = testdir.runpytest_subprocess
+
     yield testdir
 
 
