@@ -6,11 +6,11 @@
 #
 atomicwrites==1.2.1       # via pytest
 attrs==18.2.0             # via pytest
-configparser==3.5.0       # via flake8
+configparser==3.7.1       # via flake8
 docutils==0.14
 enum34==1.1.6             # via flake8
 factory-boy==2.11.1
-faker==1.0.1
+faker==1.0.2
 flake8==3.6.0
 funcsigs==1.0.2           # via pytest
 futures==3.1.1
