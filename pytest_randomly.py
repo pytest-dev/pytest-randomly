@@ -37,6 +37,10 @@ __version__ = '1.2.3'
 def pytest_addoption(parser):
     group = parser.getgroup('randomly', 'Randomizes tests')
     group._addoption(
+        '--randomly-repeat-last', action='store_true', dest='randomly_repeat_last',
+        help="""Set the seed to the previous run's seed."""
+    )
+    group._addoption(
         '--randomly-seed', action='store', dest='randomly_seed',
         default=int(time.time()), type=int,
         help="""Set the seed that pytest-randomly uses. Default behaviour:
@@ -80,6 +84,15 @@ def _reseed(config, offset=0):
             np_random_states[seed] = np_random.get_state()
         else:
             np_random.set_state(np_random_states[seed])
+
+
+def pytest_configure(config):
+    if config.option.randomly_repeat_last and config.cache.get('last_seed', None):
+        seed = config.cache.get('last_seed', None)
+    else:
+        seed = config.getoption('randomly_seed')
+    config.cache.set('last_seed', seed)
+    config.option.randomly_seed = seed
 
 
 def pytest_report_header(config):
