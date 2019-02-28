@@ -65,6 +65,8 @@ Install from pip with:
 
     pip install pytest-randomly
 
+Python 3.4+ supported.
+
 Pytest will automatically find the plugin and use it when you run ``pytest``.
 The output will start with an extra line that tells you the random seed that is
 being used:

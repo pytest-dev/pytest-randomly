@@ -1,13 +1,6 @@
-# -*- encoding:utf-8 -*-
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 import pytest
-import six
 
-if six.PY3:
-    pytest_plugins = ['pytester']
-else:
-    pytest_plugins = [b'pytester']
+pytest_plugins = ['pytester']
 
 
 @pytest.fixture
@@ -182,11 +175,7 @@ def test_files_reordered(ourtestdir):
         test_c=code,
         test_d=code,
     )
-    args = ['-v']
-    if six.PY3:  # Python 3 random changes
-        args.append('--randomly-seed=15')
-    else:
-        args.append('--randomly-seed=41')
+    args = ['-v', '--randomly-seed=15']
 
     out = ourtestdir.runpytest(*args)
 
@@ -210,11 +199,7 @@ def test_files_reordered_when_seed_not_reset(ourtestdir):
         test_c=code,
         test_d=code,
     )
-    args = ['-v']
-    if six.PY3:  # Python 3 random changes
-        args.append('--randomly-seed=15')
-    else:
-        args.append('--randomly-seed=41')
+    args = ['-v', '--randomly-seed=15']
 
     args.append('--randomly-dont-reset-seed')
     out = ourtestdir.runpytest(*args)
@@ -254,11 +239,7 @@ def test_classes_reordered(ourtestdir):
                 pass
         """
     )
-    args = ['-v']
-    if six.PY3:  # Python 3 random changes
-        args.append('--randomly-seed=15')
-    else:
-        args.append('--randomly-seed=41')
+    args = ['-v', '--randomly-seed=15']
 
     out = ourtestdir.runpytest(*args)
 
@@ -290,11 +271,7 @@ def test_class_test_methods_reordered(ourtestdir):
                 pass
         """
     )
-    args = ['-v']
-    if six.PY3:  # Python 3 random changes
-        args.append('--randomly-seed=15')
-    else:
-        args.append('--randomly-seed=41')
+    args = ['-v', '--randomly-seed=15']
 
     out = ourtestdir.runpytest(*args)
 
@@ -323,11 +300,7 @@ def test_test_functions_reordered(ourtestdir):
             pass
         """
     )
-    args = ['-v']
-    if six.PY3:  # Python 3 random changes
-        args.append('--randomly-seed=15')
-    else:
-        args.append('--randomly-seed=41')
+    args = ['-v', '--randomly-seed=15']
 
     out = ourtestdir.runpytest(*args)
 
@@ -361,11 +334,7 @@ def test_test_functions_reordered_when_randomness_in_module(ourtestdir):
             pass
         """
     )
-    args = ['-v']
-    if six.PY3:  # Python 3 random changes
-        args.append('--randomly-seed=15')
-    else:
-        args.append('--randomly-seed=41')
+    args = ['-v', '--randomly-seed=15']
 
     out = ourtestdir.runpytest(*args)
 
@@ -396,11 +365,7 @@ def test_doctests_reordered(ourtestdir):
             return 9002
         """
     )
-    args = ['-v', '--doctest-modules']
-    if six.PY3:  # Python 3 random changes
-        args.append('--randomly-seed=5')
-    else:
-        args.append('--randomly-seed=2')
+    args = ['-v', '--doctest-modules', '--randomly-seed=5']
 
     out = ourtestdir.runpytest(*args)
     out.assert_outcomes(passed=2)
@@ -463,11 +428,7 @@ def test_doctests_in_txt_files_reordered(ourtestdir):
         >>> 2 - 2
         0
         ''')
-    args = ['-v']
-    if six.PY3:  # Python 3 random changes
-        args.append('--randomly-seed=1')
-    else:
-        args.append('--randomly-seed=4')
+    args = ['-v', '--randomly-seed=1']
 
     out = ourtestdir.runpytest(*args)
     out.assert_outcomes(passed=2)
