@@ -28,7 +28,7 @@ except ImportError:
     have_numpy = False
 
 
-__version__ = '1.2.3'
+__version__ = '2.0.0'
 
 
 def pytest_addoption(parser):
