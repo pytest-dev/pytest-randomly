@@ -8,6 +8,9 @@ Pending Release
 
 .. Insert new release notes below this line
 
+2.1.0 (2019-03-01)
+------------------
+
 * Add the option ``--randomly-seed=last`` to reuse the last used value for the
   seed.
 
