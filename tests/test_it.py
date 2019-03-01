@@ -70,6 +70,40 @@ def test_it_reuses_the_same_random_seed_per_test(ourtestdir):
     out.assert_outcomes(passed=2, failed=0)
 
 
+def test_it_reuses_the_prev_run_seed(ourtestdir):
+    """
+    Run a test that exercises the randomly-repeat-last option.
+    """
+    ourtestdir.makepyfile(
+        test_one="""
+        def test_a():
+            pass
+        """
+    )
+    out = ourtestdir.runpytest('--randomly-seed=33')
+    out.assert_outcomes(passed=1, failed=0)
+    out.stdout.fnmatch_lines(['Using --randomly-seed=33'])
+    ourtestdir.makepyfile(
+        test_one="""
+        def test_a():
+            pass
+        """
+    )
+    out = ourtestdir.runpytest('--randomly-repeat-last')
+    out.assert_outcomes(passed=1, failed=0)
+    out.stdout.fnmatch_lines(['Using --randomly-seed=33'])
+    ourtestdir.makepyfile(
+        test_one="""
+        def test_a():
+            pass
+        """
+    )
+    out = ourtestdir.runpytest()
+    out.assert_outcomes(passed=1, failed=0)
+    for line in out.outlines:
+        assert 'Using --randomly-seed=33' not in line
+
+
 def test_it_resets_the_random_seed_at_the_start_of_test_classes(ourtestdir):
     ourtestdir.makepyfile(
         test_one="""
