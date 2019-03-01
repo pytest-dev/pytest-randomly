@@ -85,6 +85,12 @@ them with that seed using the flag as suggested:
 
     pytest --randomly-seed=1234
 
+Or more conveniently, use the special value ``last``:
+
+.. code-block:: bash
+
+    pytest --randomly-seed=last
+
 Since the ordering is by module, then by class, you can debug inter-test
 pollution failures by narrowing down which tests are being run to find the bad
 interaction by rerunning just the module/class:

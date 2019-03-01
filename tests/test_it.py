@@ -70,10 +70,23 @@ def test_it_reuses_the_same_random_seed_per_test(ourtestdir):
     out.assert_outcomes(passed=2, failed=0)
 
 
-def test_it_reuses_the_prev_run_seed(ourtestdir):
-    """
-    Run a test that exercises the randomly-repeat-last option.
-    """
+def test_using_last_seed(ourtestdir):
+    ourtestdir.makepyfile(
+        test_one="""
+        def test_a():
+            pass
+        """
+    )
+    out = ourtestdir.runpytest()
+    out.assert_outcomes(passed=1, failed=0)
+    seed_line = [x for x in out.stdout.lines if x.startswith('Using --randomly-seed=')][0]
+
+    out = ourtestdir.runpytest('--randomly-seed=last')
+    out.assert_outcomes(passed=1, failed=0)
+    out.stdout.fnmatch_lines([seed_line])
+
+
+def test_using_last_explicit_seed(ourtestdir):
     ourtestdir.makepyfile(
         test_one="""
         def test_a():
@@ -83,25 +96,24 @@ def test_it_reuses_the_prev_run_seed(ourtestdir):
     out = ourtestdir.runpytest('--randomly-seed=33')
     out.assert_outcomes(passed=1, failed=0)
     out.stdout.fnmatch_lines(['Using --randomly-seed=33'])
-    ourtestdir.makepyfile(
-        test_one="""
-        def test_a():
-            pass
-        """
-    )
-    out = ourtestdir.runpytest('--randomly-repeat-last')
+
+    out = ourtestdir.runpytest('--randomly-seed=last')
     out.assert_outcomes(passed=1, failed=0)
     out.stdout.fnmatch_lines(['Using --randomly-seed=33'])
+
+
+def test_passing_nonsense_for_randomly_seed(ourtestdir):
     ourtestdir.makepyfile(
         test_one="""
         def test_a():
             pass
         """
     )
-    out = ourtestdir.runpytest()
-    out.assert_outcomes(passed=1, failed=0)
-    for line in out.outlines:
-        assert 'Using --randomly-seed=33' not in line
+    out = ourtestdir.runpytest('--randomly-seed=invalidvalue')
+    assert out.ret != 0
+    out.stderr.fnmatch_lines([
+        "pytest.py: error: argument --randomly-seed: 'invalidvalue' is not an integer or the string 'last'"
+    ])
 
 
 def test_it_resets_the_random_seed_at_the_start_of_test_classes(ourtestdir):

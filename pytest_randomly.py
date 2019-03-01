@@ -1,3 +1,4 @@
+import argparse
 import random
 import time
 
@@ -31,17 +32,29 @@ except ImportError:
 __version__ = '2.0.0'
 
 
+default_seed = int(time.time())
+
+
+def seed_type(string):
+    if string == 'last':
+        return string
+    try:
+        return int(string)
+    except ValueError:
+        raise argparse.ArgumentTypeError(
+            "{} is not an integer or the string 'last'".format(repr(string))
+        )
+
+
 def pytest_addoption(parser):
     group = parser.getgroup('randomly', 'Randomizes tests')
     group._addoption(
-        '--randomly-repeat-last', action='store_true', dest='randomly_repeat_last',
-        help="""Set the seed to the previous run's seed."""
-    )
-    group._addoption(
         '--randomly-seed', action='store', dest='randomly_seed',
-        default=int(time.time()), type=int,
-        help="""Set the seed that pytest-randomly uses. Default behaviour:
-                use time.time()"""
+        default=str(default_seed), type=seed_type,
+        help="""Set the seed that pytest-randomly uses (int), or pass the
+                special value 'last' to reuse the seed from the previous run.
+                Default behaviour: use int(time.time()), so the seed is
+                different on each run."""
     )
     group._addoption(
         '--randomly-dont-reset-seed', action='store_false',
@@ -83,18 +96,15 @@ def _reseed(config, offset=0):
             np_random.set_state(np_random_states[seed])
 
 
-def pytest_configure(config):
-    if config.option.randomly_repeat_last and config.cache.get('last_seed', None):
-        seed = config.cache.get('last_seed', None)
-    else:
-        seed = config.getoption('randomly_seed')
-    config.cache.set('last_seed', seed)
-    config.option.randomly_seed = seed
-
-
 def pytest_report_header(config):
+    seed_value = config.getoption('randomly_seed')
+    if seed_value == 'last':
+        seed = config.cache.get('randomly_seed', default_seed)
+    else:
+        seed = seed_value
+    config.cache.set('randomly_seed', seed)
+    config.option.randomly_seed = seed
     _reseed(config)
-    seed = config.getoption('randomly_seed')
     return "Using --randomly-seed={0}".format(seed)
 
 
