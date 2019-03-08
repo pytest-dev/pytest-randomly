@@ -54,7 +54,8 @@ factory boy's fuzzy values. This is good for ensuring that tests specify the
 data they need and that the tested system is not affected by any data that is
 filled in randomly due to not being specified.
 
-This plugin is a Pytest port of my plugin for nose, ``nose-randomly``.
+This plugin is a Pytest port of my plugin for nose, ``nose-randomly``. I've
+written a `blog post on its history <https://adamj.eu/tech/2018/01/08/pytest-randomly-history/>`_.
 
 Usage
 -----
