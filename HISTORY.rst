@@ -8,6 +8,8 @@ Pending Release
 
 .. Insert new release notes below this line
 
+* Fix including tests in sdist after re-arrangement in 2.1.0.
+
 2.1.0 (2019-03-01)
 ------------------
 
