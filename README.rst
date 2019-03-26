@@ -66,7 +66,7 @@ Install from pip with:
 
     pip install pytest-randomly
 
-Python 3.4+ supported.
+Python 3.5-3.7 supported.
 
 Pytest will automatically find the plugin and use it when you run ``pytest``.
 The output will start with an extra line that tells you the random seed that is
@@ -75,8 +75,9 @@ being used:
 .. code-block:: bash
 
     $ pytest
-    platform darwin -- Python 2.7.11, pytest-2.9.1, py-1.4.31, pluggy-0.3.1
-    Using --randomly-seed=1460130750
+    ...
+    platform darwin -- Python 3.7.2, pytest-4.3.1, py-1.8.0, pluggy-0.9.0
+    Using --randomly-seed=1553614239
     ...
 
 If the tests fail due to ordering or randomly created data, you can restart
