@@ -32,7 +32,7 @@ setup(
     install_requires=[
         'pytest',
     ],
-    python_requires='>=3.4',
+    python_requires='>=3.5',
     license="BSD",
     zip_safe=False,
     keywords='pytest, random, randomize, randomise, randomly',
