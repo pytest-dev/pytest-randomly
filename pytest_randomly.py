@@ -2,6 +2,8 @@ import argparse
 import random
 import time
 
+from pytest import Collector
+
 # factory-boy
 try:
     from factory.random import set_random_state as factory_set_random_state
@@ -135,10 +137,14 @@ def pytest_collection_modifyitems(session, config, items):
     current_items = []
     for item in items:
 
-        if current_module is None:
-            current_module = getattr(item, 'module', None)
+        try:
+            item_module = getattr(item, 'module', None)
+        except (ImportError, Collector.CollectError):
+            item_module = None
 
-        item_module = getattr(item, 'module', None)
+        if current_module is None:
+            current_module = item_module
+
         if item_module != current_module:
             module_items.append(shuffle_by_class(current_items))
             current_items = [item]

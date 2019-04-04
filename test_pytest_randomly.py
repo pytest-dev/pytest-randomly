@@ -602,3 +602,17 @@ def test_numpy(ourtestdir):
 
     out = ourtestdir.runpytest('--randomly-seed=1')
     out.assert_outcomes(passed=2)
+
+
+def test_failing_import(testdir):
+    """Test with pytest raising CollectError or ImportError.
+
+    This happens when trying to access item.module during
+    pytest_collection_modifyitems.
+    """
+    modcol = testdir.getmodulecol("import alksdjalskdjalkjals")
+    assert modcol.instance is None
+
+    modcol = testdir.getmodulecol("pytest_plugins='xasdlkj',")
+    with pytest.raises(ImportError):
+        modcol.obj
