@@ -15,14 +15,14 @@ isort==4.3.17
 mccabe==0.6.1             # via flake8
 more-itertools==7.0.0     # via pytest
 multilint==2.4.0
-numpy==1.16.2
+numpy==1.16.3
 pathlib2==2.3.3           # via pytest
 pluggy==0.9.0             # via pytest
 py==1.8.0                 # via pytest
 pycodestyle==2.5.0        # via flake8
 pyflakes==2.1.1           # via flake8
 pygments==2.3.1
-pytest==4.4.0
+pytest==4.4.1
 python-dateutil==2.8.0    # via faker
 six==1.12.0               # via faker, multilint, pathlib2, pytest, python-dateutil
 text-unidecode==1.2       # via faker
