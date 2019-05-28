@@ -7,3 +7,4 @@ multilint
 numpy
 pygments
 pytest
+twine
