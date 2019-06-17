@@ -2,6 +2,7 @@ import argparse
 import random
 import time
 
+import pkg_resources
 from pytest import Collector
 
 # factory-boy
@@ -107,6 +108,11 @@ def _reseed(config, offset=0):
             np_random_states[seed] = np_random.get_state()
         else:
             np_random.set_state(np_random_states[seed])
+
+    # Find any dynamically registered entry points
+    for entry_point in pkg_resources.iter_entry_points('pytest_randomly.random_seeder'):
+        plugin_seeder = entry_point.load()
+        plugin_seeder(seed)
 
 
 def pytest_report_header(config):
