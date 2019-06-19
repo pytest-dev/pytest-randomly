@@ -8,6 +8,9 @@ pytest-randomly
 .. image:: https://img.shields.io/pypi/v/pytest-randomly.svg
         :target: https://pypi.python.org/pypi/pytest-randomly
 
+.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
+    :target: https://github.com/python/black
+
 .. figure:: https://raw.githubusercontent.com/pytest-dev/pytest-randomly/master/logo.png
    :scale: 50%
    :alt: Randomness power.

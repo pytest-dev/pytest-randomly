@@ -1,13 +1,12 @@
 import pytest
 
-pytest_plugins = ['pytester']
+pytest_plugins = ["pytester"]
 
 
 @pytest.fixture
 def ourtestdir(testdir):
-    testdir.tmpdir.join('pytest.ini').write(
-        '[pytest]\n'
-        'console_output_style = classic'
+    testdir.tmpdir.join("pytest.ini").write(
+        "[pytest]\n" "console_output_style = classic"
     )
 
     # Change from default running pytest in-process to running in a subprocess
@@ -33,17 +32,13 @@ def simpletestdir(ourtestdir):
 
 def test_it_reports_a_header_when_not_set(simpletestdir):
     out = simpletestdir.runpytest()
-    assert len([
-        x for x in out.outlines if x.startswith('Using --randomly-seed=')
-    ]) == 1
+    assert len([x for x in out.outlines if x.startswith("Using --randomly-seed=")]) == 1
 
 
 def test_it_reports_a_header_when_set(simpletestdir):
-    out = simpletestdir.runpytest('--randomly-seed=10')
-    lines = [x for x in out.outlines if x.startswith('Using --randomly-seed=')]
-    assert lines == [
-        'Using --randomly-seed=10'
-    ]
+    out = simpletestdir.runpytest("--randomly-seed=10")
+    lines = [x for x in out.outlines if x.startswith("Using --randomly-seed=")]
+    assert lines == ["Using --randomly-seed=10"]
 
 
 def test_it_reuses_the_same_random_seed_per_test(ourtestdir):
@@ -66,7 +61,7 @@ def test_it_reuses_the_same_random_seed_per_test(ourtestdir):
                 assert test_b.num == test_a.num
         """
     )
-    out = ourtestdir.runpytest('--randomly-dont-reorganize')
+    out = ourtestdir.runpytest("--randomly-dont-reorganize")
     out.assert_outcomes(passed=2, failed=0)
 
 
@@ -79,9 +74,11 @@ def test_using_last_seed(ourtestdir):
     )
     out = ourtestdir.runpytest()
     out.assert_outcomes(passed=1, failed=0)
-    seed_line = [x for x in out.stdout.lines if x.startswith('Using --randomly-seed=')][0]
+    seed_line = [x for x in out.stdout.lines if x.startswith("Using --randomly-seed=")][
+        0
+    ]
 
-    out = ourtestdir.runpytest('--randomly-seed=last')
+    out = ourtestdir.runpytest("--randomly-seed=last")
     out.assert_outcomes(passed=1, failed=0)
     out.stdout.fnmatch_lines([seed_line])
 
@@ -93,13 +90,13 @@ def test_using_last_explicit_seed(ourtestdir):
             pass
         """
     )
-    out = ourtestdir.runpytest('--randomly-seed=33')
+    out = ourtestdir.runpytest("--randomly-seed=33")
     out.assert_outcomes(passed=1, failed=0)
-    out.stdout.fnmatch_lines(['Using --randomly-seed=33'])
+    out.stdout.fnmatch_lines(["Using --randomly-seed=33"])
 
-    out = ourtestdir.runpytest('--randomly-seed=last')
+    out = ourtestdir.runpytest("--randomly-seed=last")
     out.assert_outcomes(passed=1, failed=0)
-    out.stdout.fnmatch_lines(['Using --randomly-seed=33'])
+    out.stdout.fnmatch_lines(["Using --randomly-seed=33"])
 
 
 def test_passing_nonsense_for_randomly_seed(ourtestdir):
@@ -109,11 +106,16 @@ def test_passing_nonsense_for_randomly_seed(ourtestdir):
             pass
         """
     )
-    out = ourtestdir.runpytest('--randomly-seed=invalidvalue')
+    out = ourtestdir.runpytest("--randomly-seed=invalidvalue")
     assert out.ret != 0
-    out.stderr.fnmatch_lines([
-        "pytest.py: error: argument --randomly-seed: 'invalidvalue' is not an integer or the string 'last'"
-    ])
+    out.stderr.fnmatch_lines(
+        [
+            (
+                "pytest.py: error: argument --randomly-seed: 'invalidvalue' "
+                + "is not an integer or the string 'last'"
+            )
+        ]
+    )
 
 
 def test_it_resets_the_random_seed_at_the_start_of_test_classes(ourtestdir):
@@ -205,7 +207,7 @@ def test_the_same_random_seed_per_test_can_be_turned_off(ourtestdir):
         """
     )
     out = ourtestdir.runpytest(
-        '--randomly-dont-reset-seed', '--randomly-dont-reorganize',
+        "--randomly-dont-reset-seed", "--randomly-dont-reorganize"
     )
     out.assert_outcomes(passed=2, failed=0)
 
@@ -215,22 +217,17 @@ def test_files_reordered(ourtestdir):
         def test_it():
             pass
     """
-    ourtestdir.makepyfile(
-        test_a=code,
-        test_b=code,
-        test_c=code,
-        test_d=code,
-    )
-    args = ['-v', '--randomly-seed=15']
+    ourtestdir.makepyfile(test_a=code, test_b=code, test_c=code, test_d=code)
+    args = ["-v", "--randomly-seed=15"]
 
     out = ourtestdir.runpytest(*args)
 
     out.assert_outcomes(passed=4, failed=0)
     assert out.outlines[8:12] == [
-        'test_d.py::test_it PASSED',
-        'test_c.py::test_it PASSED',
-        'test_a.py::test_it PASSED',
-        'test_b.py::test_it PASSED',
+        "test_d.py::test_it PASSED",
+        "test_c.py::test_it PASSED",
+        "test_a.py::test_it PASSED",
+        "test_b.py::test_it PASSED",
     ]
 
 
@@ -239,23 +236,18 @@ def test_files_reordered_when_seed_not_reset(ourtestdir):
         def test_it():
             pass
     """
-    ourtestdir.makepyfile(
-        test_a=code,
-        test_b=code,
-        test_c=code,
-        test_d=code,
-    )
-    args = ['-v', '--randomly-seed=15']
+    ourtestdir.makepyfile(test_a=code, test_b=code, test_c=code, test_d=code)
+    args = ["-v", "--randomly-seed=15"]
 
-    args.append('--randomly-dont-reset-seed')
+    args.append("--randomly-dont-reset-seed")
     out = ourtestdir.runpytest(*args)
 
     out.assert_outcomes(passed=4, failed=0)
     assert out.outlines[8:12] == [
-        'test_d.py::test_it PASSED',
-        'test_c.py::test_it PASSED',
-        'test_a.py::test_it PASSED',
-        'test_b.py::test_it PASSED',
+        "test_d.py::test_it PASSED",
+        "test_c.py::test_it PASSED",
+        "test_a.py::test_it PASSED",
+        "test_b.py::test_it PASSED",
     ]
 
 
@@ -285,16 +277,16 @@ def test_classes_reordered(ourtestdir):
                 pass
         """
     )
-    args = ['-v', '--randomly-seed=15']
+    args = ["-v", "--randomly-seed=15"]
 
     out = ourtestdir.runpytest(*args)
 
     out.assert_outcomes(passed=4, failed=0)
     assert out.outlines[8:12] == [
-        'test_one.py::D::test_d PASSED',
-        'test_one.py::C::test_c PASSED',
-        'test_one.py::A::test_a PASSED',
-        'test_one.py::B::test_b PASSED',
+        "test_one.py::D::test_d PASSED",
+        "test_one.py::C::test_c PASSED",
+        "test_one.py::A::test_a PASSED",
+        "test_one.py::B::test_b PASSED",
     ]
 
 
@@ -317,16 +309,16 @@ def test_class_test_methods_reordered(ourtestdir):
                 pass
         """
     )
-    args = ['-v', '--randomly-seed=15']
+    args = ["-v", "--randomly-seed=15"]
 
     out = ourtestdir.runpytest(*args)
 
     out.assert_outcomes(passed=4, failed=0)
     assert out.outlines[8:12] == [
-        'test_one.py::T::test_d PASSED',
-        'test_one.py::T::test_c PASSED',
-        'test_one.py::T::test_a PASSED',
-        'test_one.py::T::test_b PASSED',
+        "test_one.py::T::test_d PASSED",
+        "test_one.py::T::test_c PASSED",
+        "test_one.py::T::test_a PASSED",
+        "test_one.py::T::test_b PASSED",
     ]
 
 
@@ -346,16 +338,16 @@ def test_test_functions_reordered(ourtestdir):
             pass
         """
     )
-    args = ['-v', '--randomly-seed=15']
+    args = ["-v", "--randomly-seed=15"]
 
     out = ourtestdir.runpytest(*args)
 
     out.assert_outcomes(passed=4, failed=0)
     assert out.outlines[8:12] == [
-        'test_one.py::test_d PASSED',
-        'test_one.py::test_c PASSED',
-        'test_one.py::test_a PASSED',
-        'test_one.py::test_b PASSED',
+        "test_one.py::test_d PASSED",
+        "test_one.py::test_c PASSED",
+        "test_one.py::test_a PASSED",
+        "test_one.py::test_b PASSED",
     ]
 
 
@@ -380,16 +372,16 @@ def test_test_functions_reordered_when_randomness_in_module(ourtestdir):
             pass
         """
     )
-    args = ['-v', '--randomly-seed=15']
+    args = ["-v", "--randomly-seed=15"]
 
     out = ourtestdir.runpytest(*args)
 
     out.assert_outcomes(passed=4, failed=0)
     assert out.outlines[8:12] == [
-        'test_one.py::test_d PASSED',
-        'test_one.py::test_c PASSED',
-        'test_one.py::test_a PASSED',
-        'test_one.py::test_b PASSED',
+        "test_one.py::test_d PASSED",
+        "test_one.py::test_c PASSED",
+        "test_one.py::test_a PASSED",
+        "test_one.py::test_b PASSED",
     ]
 
 
@@ -411,13 +403,13 @@ def test_doctests_reordered(ourtestdir):
             return 9002
         """
     )
-    args = ['-v', '--doctest-modules', '--randomly-seed=5']
+    args = ["-v", "--doctest-modules", "--randomly-seed=5"]
 
     out = ourtestdir.runpytest(*args)
     out.assert_outcomes(passed=2)
     assert out.outlines[8:10] == [
-        'test_one.py::test_one.bar PASSED',
-        'test_one.py::test_one.foo PASSED',
+        "test_one.py::test_one.bar PASSED",
+        "test_one.py::test_one.foo PASSED",
     ]
 
 
@@ -459,28 +451,32 @@ def test_it_works_with_the_simplest_test_items(ourtestdir):
             )
         """
     )
-    args = ['-v']
+    args = ["-v"]
 
     out = ourtestdir.runpytest(*args)
     out.assert_outcomes(passed=2)
 
 
 def test_doctests_in_txt_files_reordered(ourtestdir):
-    ourtestdir.tmpdir.join('test.txt').write('''\
+    ourtestdir.tmpdir.join("test.txt").write(
+        """\
         >>> 2 + 2
         4
-        ''')
-    ourtestdir.tmpdir.join('test2.txt').write('''\
+        """
+    )
+    ourtestdir.tmpdir.join("test2.txt").write(
+        """\
         >>> 2 - 2
         0
-        ''')
-    args = ['-v', '--randomly-seed=1']
+        """
+    )
+    args = ["-v", "--randomly-seed=1"]
 
     out = ourtestdir.runpytest(*args)
     out.assert_outcomes(passed=2)
     assert out.outlines[8:10] == [
-        'test2.txt::test2.txt PASSED',
-        'test.txt::test.txt PASSED',
+        "test2.txt::test2.txt PASSED",
+        "test.txt::test.txt PASSED",
     ]
 
 
@@ -532,14 +528,14 @@ def test_fixtures_dont_interfere_with_tests_getting_same_random_state(ourtestdir
             assert random.getstate() == state_at_seed_two
         """
     )
-    args = ['--randomly-seed=2']
+    args = ["--randomly-seed=2"]
 
     out = ourtestdir.runpytest(*args)
     out.assert_outcomes(passed=2)
 
-    out = ourtestdir.runpytest('-m', 'one', *args)
+    out = ourtestdir.runpytest("-m", "one", *args)
     out.assert_outcomes(passed=1)
-    out = ourtestdir.runpytest('-m', 'two', *args)
+    out = ourtestdir.runpytest("-m", "two", *args)
     out.assert_outcomes(passed=1)
 
 
@@ -564,7 +560,7 @@ def test_factory_boy(ourtestdir):
         """
     )
 
-    out = ourtestdir.runpytest('--randomly-seed=1')
+    out = ourtestdir.runpytest("--randomly-seed=1")
     out.assert_outcomes(passed=2)
 
 
@@ -583,7 +579,7 @@ def test_faker(ourtestdir):
         """
     )
 
-    out = ourtestdir.runpytest('--randomly-seed=1')
+    out = ourtestdir.runpytest("--randomly-seed=1")
     out.assert_outcomes(passed=2)
 
 
@@ -600,7 +596,7 @@ def test_numpy(ourtestdir):
         """
     )
 
-    out = ourtestdir.runpytest('--randomly-seed=1')
+    out = ourtestdir.runpytest("--randomly-seed=1")
     out.assert_outcomes(passed=2)
 
 

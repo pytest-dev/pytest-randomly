@@ -1,7 +1,9 @@
+black ; python_version == '3.7.*'
 docutils
 factory_boy
 faker
 flake8
+flake8-bugbear
 isort
 multilint
 numpy
