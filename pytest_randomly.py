@@ -7,11 +7,13 @@ from pytest import Collector
 # factory-boy
 try:
     from factory.random import set_random_state as factory_set_random_state
+
     have_factory_boy = True
 except ImportError:
     # old versions
     try:
         from factory.fuzzy import set_random_state as factory_set_random_state
+
         have_factory_boy = True
     except ImportError:
         have_factory_boy = False
@@ -19,6 +21,7 @@ except ImportError:
 # faker
 try:
     from faker.generator import random as faker_random
+
     have_faker = True
 except ImportError:
     have_faker = False
@@ -26,19 +29,20 @@ except ImportError:
 # numpy
 try:
     from numpy import random as np_random
+
     have_numpy = True
 except ImportError:
     have_numpy = False
 
 
-__version__ = '3.0.0'
+__version__ = "3.0.0"
 
 
 default_seed = int(time.time())
 
 
 def seed_type(string):
-    if string == 'last':
+    if string == "last":
         return string
     try:
         return int(string)
@@ -49,26 +53,33 @@ def seed_type(string):
 
 
 def pytest_addoption(parser):
-    group = parser.getgroup('randomly', 'Randomizes tests')
+    group = parser.getgroup("randomly", "Randomizes tests")
     group._addoption(
-        '--randomly-seed', action='store', dest='randomly_seed',
-        default=str(default_seed), type=seed_type,
+        "--randomly-seed",
+        action="store",
+        dest="randomly_seed",
+        default=str(default_seed),
+        type=seed_type,
         help="""Set the seed that pytest-randomly uses (int), or pass the
                 special value 'last' to reuse the seed from the previous run.
                 Default behaviour: use int(time.time()), so the seed is
-                different on each run."""
+                different on each run.""",
     )
     group._addoption(
-        '--randomly-dont-reset-seed', action='store_false',
-        dest='randomly_reset_seed', default=True,
+        "--randomly-dont-reset-seed",
+        action="store_false",
+        dest="randomly_reset_seed",
+        default=True,
         help="""Stop pytest-randomly from resetting random.seed() at the
                 start of every test context (e.g. TestCase) and individual
-                test."""
+                test.""",
     )
     group._addoption(
-        '--randomly-dont-reorganize', action='store_false',
-        dest='randomly_reorganize', default=True,
-        help="Stop pytest-randomly from randomly reorganizing the test order."
+        "--randomly-dont-reorganize",
+        action="store_false",
+        dest="randomly_reorganize",
+        default=True,
+        help="Stop pytest-randomly from randomly reorganizing the test order.",
     )
 
 
@@ -77,7 +88,7 @@ np_random_states = {}
 
 
 def _reseed(config, offset=0):
-    seed = config.getoption('randomly_seed') + offset
+    seed = config.getoption("randomly_seed") + offset
     if seed not in random_states:
         random.seed(seed)
         random_states[seed] = random.getstate()
@@ -99,34 +110,34 @@ def _reseed(config, offset=0):
 
 
 def pytest_report_header(config):
-    seed_value = config.getoption('randomly_seed')
-    if seed_value == 'last':
-        seed = config.cache.get('randomly_seed', default_seed)
+    seed_value = config.getoption("randomly_seed")
+    if seed_value == "last":
+        seed = config.cache.get("randomly_seed", default_seed)
     else:
         seed = seed_value
-    config.cache.set('randomly_seed', seed)
+    config.cache.set("randomly_seed", seed)
     config.option.randomly_seed = seed
     _reseed(config)
     return "Using --randomly-seed={0}".format(seed)
 
 
 def pytest_runtest_setup(item):
-    if item.config.getoption('randomly_reset_seed'):
+    if item.config.getoption("randomly_reset_seed"):
         _reseed(item.config, -1)
 
 
 def pytest_runtest_call(item):
-    if item.config.getoption('randomly_reset_seed'):
+    if item.config.getoption("randomly_reset_seed"):
         _reseed(item.config)
 
 
 def pytest_runtest_teardown(item):
-    if item.config.getoption('randomly_reset_seed'):
+    if item.config.getoption("randomly_reset_seed"):
         _reseed(item.config, 1)
 
 
 def pytest_collection_modifyitems(session, config, items):
-    if not config.getoption('randomly_reorganize'):
+    if not config.getoption("randomly_reorganize"):
         return
 
     _reseed(config)
@@ -138,7 +149,7 @@ def pytest_collection_modifyitems(session, config, items):
     for item in items:
 
         try:
-            item_module = getattr(item, 'module', None)
+            item_module = getattr(item, "module", None)
         except (ImportError, Collector.CollectError):
             item_module = None
 
@@ -165,9 +176,9 @@ def shuffle_by_class(items):
 
     for item in items:
         if current_cls is None:
-            current_cls = getattr(item, 'cls', None)
+            current_cls = getattr(item, "cls", None)
 
-        if getattr(item, 'cls', None) != current_cls:
+        if getattr(item, "cls", None) != current_cls:
             random.shuffle(current_items)
             class_items.append(current_items)
             current_items = [item]
