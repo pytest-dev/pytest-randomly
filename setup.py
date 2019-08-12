@@ -26,6 +26,11 @@ setup(
     author="Adam Johnson",
     author_email="me@adamj.eu",
     url="https://github.com/pytest-dev/pytest-randomly",
+    project_urls={
+        "Changelog": (
+            "https://github.com/pytest-dev/pytest-randomly/blob/master/HISTORY.rst"
+        )
+    },
     py_modules=["pytest_randomly"],
     include_package_data=True,
     install_requires=["pytest"],
