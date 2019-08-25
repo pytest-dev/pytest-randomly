@@ -1,5 +1,6 @@
 black ; python_version == '3.7.*'
 docutils
+entrypoints
 factory_boy
 faker
 flake8

@@ -2,7 +2,7 @@ import argparse
 import random
 import time
 
-import pkg_resources
+import entrypoints
 from pytest import Collector
 
 # factory-boy
@@ -88,7 +88,11 @@ random_states = {}
 np_random_states = {}
 
 
+entrypoint_reseeds = None
+
+
 def _reseed(config, offset=0):
+    global entrypoint_reseeds
     seed = config.getoption("randomly_seed") + offset
     if seed not in random_states:
         random.seed(seed)
@@ -109,10 +113,12 @@ def _reseed(config, offset=0):
         else:
             np_random.set_state(np_random_states[seed])
 
-    # Find any dynamically registered entry points
-    for entry_point in pkg_resources.iter_entry_points('pytest_randomly.random_seeder'):
-        plugin_seeder = entry_point.load()
-        plugin_seeder(seed)
+    if entrypoint_reseeds is None:
+        entrypoint_reseeds = [
+            e.load() for e in entrypoints.get_group_all("pytest_randomly.random_seeder")
+        ]
+    for reseed in entrypoint_reseeds:
+        reseed(seed)
 
 
 def pytest_report_header(config):

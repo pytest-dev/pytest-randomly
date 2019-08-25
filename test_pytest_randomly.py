@@ -6,6 +6,12 @@ import pytest_randomly
 pytest_plugins = ["pytester"]
 
 
+@pytest.fixture(autouse=True)
+def reset_entrypoints_cache():
+    yield
+    pytest_randomly.entrypoint_reseeds = None
+
+
 @pytest.fixture
 def ourtestdir(testdir):
     testdir.tmpdir.join("pytest.ini").write(
@@ -618,38 +624,38 @@ def test_failing_import(testdir):
 
 
 def test_entrypoint_injection(testdir, monkeypatch):
-    """Tests that registered entry points are seeded"""
+    """Test that registered entry points are seeded"""
 
     class _FakeEntryPoint(object):
         """Minimal surface of Entry point API to allow testing"""
 
-        def __init__(self, name, object):
+        def __init__(self, name, obj):
             self.name = name
-            self._object = object
+            self._obj = obj
 
         def load(self):
-            return self._object
+            return self._obj
 
-    class _FakePackageResources(object):
-        """Minimal surface of pkg_resources to allow testing"""
+    class _FakeEntrypoints(object):
+        """Minimal surface of entrypoints to allow testing"""
 
         def __init__(self):
-            self._seeders = []
+            self._entrypoints = []
 
         def add_entry_point(self, name, function):
-            self._seeders.append(_FakeEntryPoint(name, function))
+            self._entrypoints.append(_FakeEntryPoint(name, function))
 
-        def iter_entry_points(self, name):
+        def get_group_all(self, name):
             assert name == "pytest_randomly.random_seeder"
-            yield from self._seeders
+            return self._entrypoints
 
-    fake_pkg_resources = _FakePackageResources()
-    monkeypatch.setattr(pytest_randomly, "pkg_resources", fake_pkg_resources)
-    entry_point = Mock()
-    fake_pkg_resources.add_entry_point("test_seeder", entry_point)
+    fake_entrypoints = _FakeEntrypoints()
+    monkeypatch.setattr(pytest_randomly, "entrypoints", fake_entrypoints)
+    reseed = Mock()
+    fake_entrypoints.add_entry_point("test_seeder", reseed)
 
     # Need to run in-process so that monkeypatching works
     testdir.runpytest("--randomly-seed=1")
-    assert entry_point.call_args == ((1,),)
+    assert reseed.call_args == ((1,),)
     testdir.runpytest("--randomly-seed=424242")
-    assert entry_point.call_args == ((424242,),)
+    assert reseed.call_args == ((424242,),)
