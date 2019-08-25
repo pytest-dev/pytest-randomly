@@ -1,6 +1,16 @@
+from unittest.mock import Mock
+
 import pytest
 
+import pytest_randomly
+
 pytest_plugins = ["pytester"]
+
+
+@pytest.fixture(autouse=True)
+def reset_entrypoints_cache():
+    yield
+    pytest_randomly.entrypoint_reseeds = None
 
 
 @pytest.fixture
@@ -612,3 +622,41 @@ def test_failing_import(testdir):
     modcol = testdir.getmodulecol("pytest_plugins='xasdlkj',")
     with pytest.raises(ImportError):
         modcol.obj
+
+
+def test_entrypoint_injection(testdir, monkeypatch):
+    """Test that registered entry points are seeded"""
+
+    class _FakeEntryPoint(object):
+        """Minimal surface of Entry point API to allow testing"""
+
+        def __init__(self, name, obj):
+            self.name = name
+            self._obj = obj
+
+        def load(self):
+            return self._obj
+
+    class _FakeEntrypoints(object):
+        """Minimal surface of entrypoints to allow testing"""
+
+        def __init__(self):
+            self._entrypoints = []
+
+        def add_entry_point(self, name, function):
+            self._entrypoints.append(_FakeEntryPoint(name, function))
+
+        def get_group_all(self, name):
+            assert name == "pytest_randomly.random_seeder"
+            return self._entrypoints
+
+    fake_entrypoints = _FakeEntrypoints()
+    monkeypatch.setattr(pytest_randomly, "entrypoints", fake_entrypoints)
+    reseed = Mock()
+    fake_entrypoints.add_entry_point("test_seeder", reseed)
+
+    # Need to run in-process so that monkeypatching works
+    testdir.runpytest("--randomly-seed=1")
+    assert reseed.call_args == ((1,),)
+    testdir.runpytest("--randomly-seed=424242")
+    assert reseed.call_args == ((424242,),)

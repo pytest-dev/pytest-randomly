@@ -2,6 +2,7 @@ import argparse
 import random
 import time
 
+import entrypoints
 from pytest import Collector
 
 # factory-boy
@@ -87,7 +88,11 @@ random_states = {}
 np_random_states = {}
 
 
+entrypoint_reseeds = None
+
+
 def _reseed(config, offset=0):
+    global entrypoint_reseeds
     seed = config.getoption("randomly_seed") + offset
     if seed not in random_states:
         random.seed(seed)
@@ -107,6 +112,13 @@ def _reseed(config, offset=0):
             np_random_states[seed] = np_random.get_state()
         else:
             np_random.set_state(np_random_states[seed])
+
+    if entrypoint_reseeds is None:
+        entrypoint_reseeds = [
+            e.load() for e in entrypoints.get_group_all("pytest_randomly.random_seeder")
+        ]
+    for reseed in entrypoint_reseeds:
+        reseed(seed)
 
 
 def pytest_report_header(config):

@@ -33,7 +33,7 @@ setup(
     },
     py_modules=["pytest_randomly"],
     include_package_data=True,
-    install_requires=["pytest"],
+    install_requires=["entrypoints", "pytest"],
     python_requires=">=3.5",
     license="BSD",
     zip_safe=False,
