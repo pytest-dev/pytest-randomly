@@ -8,6 +8,9 @@ Pending Release
 
 .. Insert new release notes below this line
 
+3.1.0 (2019-08-25)
+------------------
+
 * Add plugins via entry points ``pytest_randomly.random_seeder`` to allow
   outside packages to register additional random generators to seed. This has
   added a dependency on the ``entrypoints`` package.

@@ -36,7 +36,7 @@ except ImportError:
     have_numpy = False
 
 
-__version__ = "3.0.0"
+__version__ = "3.1.0"
 
 
 default_seed = int(time.time())
