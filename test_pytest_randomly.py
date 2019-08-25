@@ -1,6 +1,7 @@
 from unittest.mock import Mock
 
 import pytest
+
 import pytest_randomly
 
 pytest_plugins = ["pytester"]
