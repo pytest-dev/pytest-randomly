@@ -654,3 +654,17 @@ def test_entrypoint_injection(testdir, monkeypatch):
     assert reseed.call_args == ((1,),)
     testdir.runpytest("--randomly-seed=424242")
     assert reseed.call_args == ((424242,),)
+
+
+def test_entrypoint_missing(testdir, monkeypatch):
+    """
+    Test that if there aren't any registered entrypoints, it doesn't crash
+    """
+
+    def fake_entry_points():
+        return {}
+
+    monkeypatch.setattr(pytest_randomly, "entry_points", fake_entry_points)
+
+    # Need to run in-process so that monkeypatching works
+    testdir.runpytest("--randomly-seed=1")

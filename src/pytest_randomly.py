@@ -118,7 +118,7 @@ def _reseed(config, offset=0):
 
     if entrypoint_reseeds is None:
         entrypoint_reseeds = [
-            e.load() for e in entry_points()["pytest_randomly.random_seeder"]
+            e.load() for e in entry_points().get("pytest_randomly.random_seeder", [])
         ]
     for reseed in entrypoint_reseeds:
         reseed(seed)
