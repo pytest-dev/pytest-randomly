@@ -1,10 +1,10 @@
 black ; python_version == '3.7.*'
 docutils
-entrypoints
 factory_boy
 faker
 flake8
 flake8-bugbear
+importlib-metadata ; python_version < "3.8"
 isort
 multilint
 numpy
