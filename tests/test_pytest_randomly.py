@@ -637,26 +637,34 @@ def test_entrypoint_injection(testdir, monkeypatch):
         def load(self):
             return self._obj
 
-    class _FakeEntrypoints(object):
-        """Minimal surface of entrypoints to allow testing"""
+    entry_points = []
 
-        def __init__(self):
-            self._entrypoints = []
+    def fake_entry_points():
+        return {
+            "pytest_randomly.random_seeder": entry_points,
+            "ignore": lambda x: 1 / 0,
+        }
 
-        def add_entry_point(self, name, function):
-            self._entrypoints.append(_FakeEntryPoint(name, function))
-
-        def get_group_all(self, name):
-            assert name == "pytest_randomly.random_seeder"
-            return self._entrypoints
-
-    fake_entrypoints = _FakeEntrypoints()
-    monkeypatch.setattr(pytest_randomly, "entrypoints", fake_entrypoints)
+    monkeypatch.setattr(pytest_randomly, "entry_points", fake_entry_points)
     reseed = Mock()
-    fake_entrypoints.add_entry_point("test_seeder", reseed)
+    entry_points.append(_FakeEntryPoint("test_seeder", reseed))
 
     # Need to run in-process so that monkeypatching works
     testdir.runpytest("--randomly-seed=1")
     assert reseed.call_args == ((1,),)
     testdir.runpytest("--randomly-seed=424242")
     assert reseed.call_args == ((424242,),)
+
+
+def test_entrypoint_missing(testdir, monkeypatch):
+    """
+    Test that if there aren't any registered entrypoints, it doesn't crash
+    """
+
+    def fake_entry_points():
+        return {}
+
+    monkeypatch.setattr(pytest_randomly, "entry_points", fake_entry_points)
+
+    # Need to run in-process so that monkeypatching works
+    testdir.runpytest("--randomly-seed=1")

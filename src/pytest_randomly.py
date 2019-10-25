@@ -1,9 +1,15 @@
 import argparse
 import random
+import sys
 import time
 
-import entrypoints
 from pytest import Collector
+
+if sys.version_info >= (3, 8):
+    from importlib.metadata import entry_points
+else:
+    from importlib_metadata import entry_points
+
 
 # factory-boy
 try:
@@ -112,7 +118,7 @@ def _reseed(config, offset=0):
 
     if entrypoint_reseeds is None:
         entrypoint_reseeds = [
-            e.load() for e in entrypoints.get_group_all("pytest_randomly.random_seeder")
+            e.load() for e in entry_points().get("pytest_randomly.random_seeder", [])
         ]
     for reseed in entrypoint_reseeds:
         reseed(seed)
