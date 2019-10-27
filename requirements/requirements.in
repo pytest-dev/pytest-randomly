@@ -4,6 +4,8 @@ factory_boy
 faker
 flake8
 flake8-bugbear
+flake8-comprehensions
+flake8-tidy-imports
 importlib-metadata ; python_version < "3.8"
 isort
 multilint
