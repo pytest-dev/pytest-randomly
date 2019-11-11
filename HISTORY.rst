@@ -16,6 +16,7 @@ Pending Release
   `backport <https://pypi.org/project/importlib-metadata/>`__).
 * Convert reading entrypoints to use ``importlib.metadata``. Depend on
   ``importlib-metadata`` on Python < 3.8.
+* Update Python support to 3.5-3.8.
 
 3.1.0 (2019-08-25)
 ------------------
