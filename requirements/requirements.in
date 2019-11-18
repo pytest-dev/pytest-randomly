@@ -1,4 +1,4 @@
-black ; python_version == '3.7.*'
+black ; python_version == '3.8.*'
 docutils
 factory_boy
 faker
