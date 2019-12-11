@@ -12,4 +12,5 @@ multilint
 numpy
 pygments
 pytest
+secretstorage # required for twine on linux
 twine

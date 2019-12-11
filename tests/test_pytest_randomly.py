@@ -121,7 +121,7 @@ def test_passing_nonsense_for_randomly_seed(ourtestdir):
     out.stderr.fnmatch_lines(
         [
             (
-                "pytest.py: error: argument --randomly-seed: 'invalidvalue' "
+                "pytest: error: argument --randomly-seed: 'invalidvalue' "
                 + "is not an integer or the string 'last'"
             )
         ]
