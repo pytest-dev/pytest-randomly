@@ -1,12 +1,9 @@
-.. :changelog:
-
+-------
 History
 -------
 
-Pending Release
----------------
-
-.. Insert new release notes below this line
+3.2.0 (2019-12-19)
+------------------
 
 * Converted setuptools metadata to configuration file. This meant removing the
   ``__version__`` attribute from the package. If you want to inspect the

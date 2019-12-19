@@ -18,6 +18,7 @@ pytest-randomly
 Pytest plugin to randomly order tests and control ``random.seed``. (Also
 available `for nose <https://github.com/adamchainz/nose-randomly>`_).
 
+--------
 Features
 --------
 
@@ -45,6 +46,7 @@ All of these features are on by default but can be disabled with flags.
   will have their seed reset at the start of every test. Register a function
   that takes the current seed value.
 
+-----
 About
 -----
 
@@ -65,6 +67,7 @@ filled in randomly due to not being specified.
 This plugin is a Pytest port of my plugin for nose, ``nose-randomly``. I've
 written a `blog post on its history <https://adamj.eu/tech/2018/01/08/pytest-randomly-history/>`_.
 
+-----
 Usage
 -----
 
@@ -122,6 +125,7 @@ altogether, you can use the ``-p`` argument, for example:
 
     pytest -p no:randomly
 
+-----------
 Entry Point
 -----------
 
