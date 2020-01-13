@@ -2,6 +2,11 @@
 History
 -------
 
+3.2.1 (2020-01-13)
+------------------
+
+* Update ``MANIFEST.in`` so tests are included in the sdist tarball again.
+
 3.2.0 (2019-12-19)
 ------------------
 
