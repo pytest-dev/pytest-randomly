@@ -2,7 +2,7 @@ include AUTHORS.rst
 include HISTORY.rst
 include LICENSE
 include README.rst
-include test_pytest_randomly.py
+recursive-include tests/ *.py
 
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]
