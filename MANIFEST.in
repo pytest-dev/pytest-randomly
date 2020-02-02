@@ -1,8 +1,13 @@
+global-exclude *.py[cod]
+graft tests
+prune __pycache__
+prune requirements
 include AUTHORS.rst
 include HISTORY.rst
 include LICENSE
+include logo.png
 include README.rst
-recursive-include tests/ *.py
-
-recursive-exclude * __pycache__
-recursive-exclude * *.py[co]
+exclude .editorconfig
+exclude pyproject.toml
+exclude pytest.ini
+exclude tox.ini

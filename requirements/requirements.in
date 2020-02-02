@@ -1,4 +1,5 @@
 black ; python_version == '3.8.*'
+check-manifest ; python_version == '3.8.*'
 docutils
 factory_boy
 faker
