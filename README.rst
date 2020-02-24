@@ -75,7 +75,7 @@ Install from pip with:
 
 .. code-block:: bash
 
-    pip install pytest-randomly
+    python -m pip install pytest-randomly
 
 Python 3.5 to 3.8 supported.
 
