@@ -76,7 +76,7 @@ cryptography==2.8 \
 docutils==0.16 \
     --hash=sha256:0c5b78adfbf7762415433f5515cd5c9e762339e23369dbe8000d84a4bf4ab3af \
     --hash=sha256:c2de3a60e9e7d07be26b7f2b00ca0309c207e06c100f9cc2a94931fc75a478fc \
-    # via -r requirements.in (line 3), readme-renderer
+    # via -r requirements.in, readme-renderer
 entrypoints==0.3 \
     --hash=sha256:589f874b313739ad35be6e0cd7efde2a4e9b6fea91edcc34e58ecbb8dbe56d19 \
     --hash=sha256:c70dd71abe5a8c85e55e12c19bd91ccfeec11a6e99044204511f9ed547d48451 \
@@ -84,27 +84,27 @@ entrypoints==0.3 \
 factory-boy==2.12.0 \
     --hash=sha256:728df59b372c9588b83153facf26d3d28947fc750e8e3c95cefa9bed0e6394ee \
     --hash=sha256:faf48d608a1735f0d0a3c9cbf536d64f9132b547dae7ba452c4d99a79e84a370 \
-    # via -r requirements.in (line 4)
+    # via -r requirements.in
 faker==4.0.1 \
     --hash=sha256:440d68fe0e46c1658b1975b2497abe0c24a7f772e3892253f31e713ffcc48965 \
     --hash=sha256:ee24608768549c2c69e593e9d7a3b53c9498ae735534243ec8390cae5d529f8b \
-    # via -r requirements.in (line 5), factory-boy
+    # via -r requirements.in, factory-boy
 flake8-bugbear==20.1.4 \
     --hash=sha256:a3ddc03ec28ba2296fc6f89444d1c946a6b76460f859795b35b77d4920a51b63 \
     --hash=sha256:bd02e4b009fb153fe6072c31c52aeab5b133d508095befb2ffcf3b41c4823162 \
-    # via -r requirements.in (line 7)
+    # via -r requirements.in
 flake8-comprehensions==3.2.2 \
     --hash=sha256:d08323aa801aef33477cd33f2f5ce3acb1aafd26803ab0d171d85d514c1273a2 \
     --hash=sha256:e7db586bb6eb95afdfd87ed244c90e57ae1352db8ef0ad3012fca0200421e5df \
-    # via -r requirements.in (line 8)
+    # via -r requirements.in
 flake8-tidy-imports==4.0.0 \
     --hash=sha256:8aa34384b45137d4cf33f5818b8e7897dc903b1d1e10a503fa7dd193a9a710ba \
     --hash=sha256:b26461561bcc80e8012e46846630ecf0aaa59314f362a94cb7800dfdb32fa413 \
-    # via -r requirements.in (line 9)
+    # via -r requirements.in
 flake8==3.7.9 \
     --hash=sha256:45681a117ecc81e870cbf1262835ae4af5e7a8b08e40b944a8a6e6b895914cfb \
     --hash=sha256:49356e766643ad15072a789a20915d3c91dc89fd313ccd71802303fd67e4deca \
-    # via -r requirements.in (line 6), flake8-bugbear, flake8-comprehensions, flake8-tidy-imports
+    # via -r requirements.in, flake8-bugbear, flake8-comprehensions, flake8-tidy-imports
 idna==2.9 \
     --hash=sha256:7588d1c14ae4c77d74036e8c22ff447b26d0fde8f007354fd48a7814db15b7cb \
     --hash=sha256:a068a21ceac8a4d63dbfd964670474107f541babbd2250d61922f029858365fa \
@@ -112,7 +112,7 @@ idna==2.9 \
 isort==4.3.21 \
     --hash=sha256:54da7e92468955c4fceacd0c86bd0ec997b0e1ee80d97f67c35a78b719dccab1 \
     --hash=sha256:6e811fcb295968434526407adb8796944f1988c5b65e8139058f2014cbe100fd \
-    # via -r requirements.in (line 11)
+    # via -r requirements.in
 jeepney==0.4.2 \
     --hash=sha256:0ba6d8c597e9bef1ebd18aaec595f942a264e25c1a48f164d46120eacaa2e9bb \
     --hash=sha256:6f45dce1125cf6c58a1c88123d3831f36a789f9204fbad3172eac15f8ccd08d0 \
@@ -132,7 +132,7 @@ more-itertools==8.2.0 \
 multilint==4.1.0 \
     --hash=sha256:795573aeb096b939f3c00b343c113be86b027d8347e9b587169b3a7de6b6810f \
     --hash=sha256:ff3919f7af9b4e6db6306258715160a33537979cd494e0b611f224517c035478 \
-    # via -r requirements.in (line 12)
+    # via -r requirements.in
 numpy==1.18.1 \
     --hash=sha256:1786a08236f2c92ae0e70423c45e1e62788ed33028f94ca99c4df03f5be6b3c6 \
     --hash=sha256:17aa7a81fe7599a10f2b7d95856dc5cf84a4eefa45bc96123cbbc3ebc568994e \
@@ -155,7 +155,7 @@ numpy==1.18.1 \
     --hash=sha256:e422c3152921cece8b6a2fb6b0b4d73b6579bd20ae075e7d15143e711f3ca2ca \
     --hash=sha256:e840f552a509e3380b0f0ec977e8124d0dc34dc0e68289ca28f4d7c1d0d79474 \
     --hash=sha256:f3d0a94ad151870978fb93538e95411c83899c9dc63e6fb65542f769568ecfa5 \
-    # via -r requirements.in (line 13)
+    # via -r requirements.in
 packaging==20.1 \
     --hash=sha256:170748228214b70b672c581a3dd610ee51f733018650740e98c7df862a583f73 \
     --hash=sha256:e665345f9eef0c621aa0bf2f8d78cf6d21904eef16a93f020240b704a57f1334 \
@@ -186,7 +186,7 @@ pyflakes==2.1.1 \
 pygments==2.5.2 \
     --hash=sha256:2a3fe295e54a20164a9df49c75fa58526d3be48e14aceba6d6b1e8ac0bfd6f1b \
     --hash=sha256:98c8aa5a9f778fcd1026a17361ddaf7330d1b7c62ae97c3bb0ae73e0b9b6b0fe \
-    # via -r requirements.in (line 14), readme-renderer
+    # via -r requirements.in, readme-renderer
 pyparsing==2.4.6 \
     --hash=sha256:4c830582a84fb022400b85429791bc551f1f4871c33f23e44f353119e92f969f \
     --hash=sha256:c342dccb5250c08d45fd6f8b4a559613ca603b57498511740e65cd11a2e7dcec \
@@ -194,7 +194,7 @@ pyparsing==2.4.6 \
 pytest==5.3.5 \
     --hash=sha256:0d5fe9189a148acc3c3eb2ac8e1ac0742cb7618c084f3d228baaec0c254b318d \
     --hash=sha256:ff615c761e25eb25df19edddc0b970302d2a9091fbce0e7213298d85fb61fef6 \
-    # via -r requirements.in (line 15)
+    # via -r requirements.in
 python-dateutil==2.8.1 \
     --hash=sha256:73ebfe9dbf22e832286dafa60473e4cd239f8592f699aa5adaf10050e6e1823c \
     --hash=sha256:75bb3f31ea686f1197762692a9ee6a7550b59fc6ca3a1f4b5d7e32fb98e2da2a \
@@ -214,7 +214,7 @@ requests==2.23.0 \
 secretstorage==3.1.2 \
     --hash=sha256:15da8a989b65498e29be338b3b279965f1b8f09b9668bd8010da183024c8bff6 \
     --hash=sha256:b5ec909dde94d4ae2fa26af7c089036997030f0cf0a5cb372b4cccabd81c143b \
-    # via -r requirements.in (line 16)
+    # via -r requirements.in
 six==1.14.0 \
     --hash=sha256:236bdbdce46e6e6a3d61a337c0f8b763ca1e8717c03b369e87a7ec7ce1319c0a \
     --hash=sha256:8f3cd2e254d8f793e7f3d6d9df77b92252b52637291d0f0da013c76ea2724b6c \
@@ -230,7 +230,7 @@ tqdm==4.43.0 \
 twine==3.1.1 \
     --hash=sha256:c1af8ca391e43b0a06bbc155f7f67db0bf0d19d284bfc88d1675da497a946124 \
     --hash=sha256:d561a5e511f70275e5a485a6275ff61851c16ffcb3a95a602189161112d9f160 \
-    # via -r requirements.in (line 17)
+    # via -r requirements.in
 urllib3==1.25.8 \
     --hash=sha256:2f3db8b19923a873b3e5256dc9c2dedfa883e33d87c690d9c7913e1f40673cdc \
     --hash=sha256:87716c2d2a7121198ebcb7ce7cccf6ce5e9ba539041cfbaeecfb641dc0bf6acc \
