@@ -85,9 +85,9 @@ factory-boy==2.12.0 \
     --hash=sha256:728df59b372c9588b83153facf26d3d28947fc750e8e3c95cefa9bed0e6394ee \
     --hash=sha256:faf48d608a1735f0d0a3c9cbf536d64f9132b547dae7ba452c4d99a79e84a370 \
     # via -r requirements.in
-faker==4.0.1 \
-    --hash=sha256:440d68fe0e46c1658b1975b2497abe0c24a7f772e3892253f31e713ffcc48965 \
-    --hash=sha256:ee24608768549c2c69e593e9d7a3b53c9498ae735534243ec8390cae5d529f8b \
+faker==4.0.2 \
+    --hash=sha256:2d3f866ef25e1a5af80e7b0ceeacc3c92dec5d0fdbad3e2cb6adf6e60b22188f \
+    --hash=sha256:b89aa33837498498e15c709eb40c31386408a901a53c7a5e12a425737a767976 \
     # via -r requirements.in, factory-boy
 flake8-bugbear==20.1.4 \
     --hash=sha256:a3ddc03ec28ba2296fc6f89444d1c946a6b76460f859795b35b77d4920a51b63 \
@@ -117,9 +117,9 @@ jeepney==0.4.3 \
     --hash=sha256:3479b861cc2b6407de5188695fa1a8d57e5072d7059322469b62628869b8e36e \
     --hash=sha256:d6c6b49683446d2407d2fe3acb7a368a77ff063f9182fe427da15d622adc24cf \
     # via secretstorage
-keyring==21.1.0 \
-    --hash=sha256:1f393f7466314068961c7e1d508120c092bd71fa54e3d93b76180b526d4abc56 \
-    --hash=sha256:24ae23ab2d6adc59138339e56843e33ec7b0a6b2f06302662477085c6c0aca00 \
+keyring==21.1.1 \
+    --hash=sha256:b7bdfb1978cfdbabec63a3d389ad60242e7ffe9d739cae00760408c4f07d2c13 \
+    --hash=sha256:ebce8a4acfcabbcdfdcae2fc58571cebf11f71262cca898edceef89cdc891898 \
     # via twine
 mccabe==0.6.1 \
     --hash=sha256:ab8a6258860da4b6677da4bd2fe5dc2c659cff31b3ee4f7f5d64e79735b80d42 \
@@ -184,17 +184,17 @@ pyflakes==2.1.1 \
     --hash=sha256:17dbeb2e3f4d772725c777fabc446d5634d1038f234e77343108ce445ea69ce0 \
     --hash=sha256:d976835886f8c5b31d47970ed689944a0262b5f3afa00a5a7b4dc81e5449f8a2 \
     # via flake8
-pygments==2.5.2 \
-    --hash=sha256:2a3fe295e54a20164a9df49c75fa58526d3be48e14aceba6d6b1e8ac0bfd6f1b \
-    --hash=sha256:98c8aa5a9f778fcd1026a17361ddaf7330d1b7c62ae97c3bb0ae73e0b9b6b0fe \
+pygments==2.6.1 \
+    --hash=sha256:647344a061c249a3b74e230c739f434d7ea4d8b1d5f3721bc0f3558049b38f44 \
+    --hash=sha256:ff7a40b4860b727ab48fad6360eb351cc1b33cbf9b15a0f689ca5353e9463324 \
     # via -r requirements.in, readme-renderer
 pyparsing==2.4.6 \
     --hash=sha256:4c830582a84fb022400b85429791bc551f1f4871c33f23e44f353119e92f969f \
     --hash=sha256:c342dccb5250c08d45fd6f8b4a559613ca603b57498511740e65cd11a2e7dcec \
     # via packaging
-pytest==5.3.5 \
-    --hash=sha256:0d5fe9189a148acc3c3eb2ac8e1ac0742cb7618c084f3d228baaec0c254b318d \
-    --hash=sha256:ff615c761e25eb25df19edddc0b970302d2a9091fbce0e7213298d85fb61fef6 \
+pytest==5.4.1 \
+    --hash=sha256:0e5b30f5cb04e887b91b1ee519fa3d89049595f428c1db76e73bd7f17b09b172 \
+    --hash=sha256:84dde37075b8805f3d1f392cc47e38a0e59518fb46a431cfdaf7cf1ce805f970 \
     # via -r requirements.in
 python-dateutil==2.8.1 \
     --hash=sha256:73ebfe9dbf22e832286dafa60473e4cd239f8592f699aa5adaf10050e6e1823c \
