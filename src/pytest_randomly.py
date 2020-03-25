@@ -133,7 +133,7 @@ def pytest_report_header(config):
     config.cache.set("randomly_seed", seed)
     config.option.randomly_seed = seed
     _reseed(config)
-    return "Using --randomly-seed={0}".format(seed)
+    return "Using --randomly-seed={}".format(seed)
 
 
 def pytest_runtest_setup(item):

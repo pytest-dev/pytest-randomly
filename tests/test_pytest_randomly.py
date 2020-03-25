@@ -627,7 +627,7 @@ def test_failing_import(testdir):
 def test_entrypoint_injection(testdir, monkeypatch):
     """Test that registered entry points are seeded"""
 
-    class _FakeEntryPoint(object):
+    class _FakeEntryPoint:
         """Minimal surface of Entry point API to allow testing"""
 
         def __init__(self, name, obj):
