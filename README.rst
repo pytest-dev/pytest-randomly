@@ -2,8 +2,8 @@
 pytest-randomly
 ===============
 
-.. image:: https://img.shields.io/travis/pytest-dev/pytest-randomly.svg
-        :target: https://travis-ci.org/pytest-dev/pytest-randomly
+.. image:: https://github.com/pytest-dev/pytest-randomly/workflows/CI/badge.svg?branch=master
+        :target: https://github.com/pytest-dev/pytest-randomly/actions?workflow=CI
 
 .. image:: https://img.shields.io/pypi/v/pytest-randomly.svg
         :target: https://pypi.python.org/pypi/pytest-randomly

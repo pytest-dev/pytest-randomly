@@ -21,6 +21,3 @@ if __name__ == "__main__":
     subprocess.run(
         ["python3.8", *common_args, "-o", "py38.txt"], check=True,
     )
-    subprocess.run(
-        ["python3.9", *common_args, "-o", "py39.txt"], check=True,
-    )
