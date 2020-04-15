@@ -668,3 +668,25 @@ def test_entrypoint_missing(testdir, monkeypatch):
 
     # Need to run in-process so that monkeypatching works
     testdir.runpytest("--randomly-seed=1")
+
+
+@pytest.mark.parametrize("n", list(range(5)))
+def test_xdist(n, ourtestdir):
+    """
+    This test does not expose the original bug (non-shared default seeds) with
+    a very high probability, hence multiple runs.
+    """
+    ourtestdir.makepyfile(
+        test_one="def test_a(): pass",
+        test_two="def test_a(): pass",
+        test_three="def test_a(): pass",
+        test_four="def test_a(): pass",
+        test_five="def test_a(): pass",
+        test_six="def test_a(): pass",
+    )
+
+    out = ourtestdir.runpytest("-n 6", "-v", "--dist=loadfile")
+    out.assert_outcomes(passed=6)
+
+    # Can't make any assertion on the order, since output comes back from
+    # workers non-deterministically

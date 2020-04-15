@@ -13,5 +13,6 @@ multilint
 numpy
 pygments
 pytest
+pytest-xdist
 secretstorage # required for twine on linux
 twine

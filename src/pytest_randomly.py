@@ -46,7 +46,7 @@ default_seed = int(time.time())
 
 
 def seed_type(string):
-    if string == "last":
+    if string in ("default", "last"):
         return string
     try:
         return int(string)
@@ -62,7 +62,7 @@ def pytest_addoption(parser):
         "--randomly-seed",
         action="store",
         dest="randomly_seed",
-        default=str(default_seed),
+        default="default",
         type=seed_type,
         help="""Set the seed that pytest-randomly uses (int), or pass the
                 special value 'last' to reuse the seed from the previous run.
@@ -85,6 +85,29 @@ def pytest_addoption(parser):
         default=True,
         help="Stop pytest-randomly from randomly reorganizing the test order.",
     )
+
+
+def pytest_configure(config):
+    seed_value = config.getoption("randomly_seed")
+    if seed_value == "last":
+        seed = config.cache.get("randomly_seed", default_seed)
+    elif seed_value == "default":
+        if hasattr(config, "workerinput"):
+            # pytest-xdist: use seed generated on master.
+            seed = config.workerinput["randomly_seed"]
+        else:
+            seed = default_seed
+    else:
+        seed = seed_value
+    config.cache.set("randomly_seed", seed)
+    config.option.randomly_seed = seed
+
+
+def pytest_configure_node(node):
+    """
+    pytest-xdist hook. Send the selected seed through to the nodes.
+    """
+    node.workerinput["randomly_seed"] = node.config.getoption("randomly_seed")
 
 
 random_states = {}
@@ -125,13 +148,7 @@ def _reseed(config, offset=0):
 
 
 def pytest_report_header(config):
-    seed_value = config.getoption("randomly_seed")
-    if seed_value == "last":
-        seed = config.cache.get("randomly_seed", default_seed)
-    else:
-        seed = seed_value
-    config.cache.set("randomly_seed", seed)
-    config.option.randomly_seed = seed
+    seed = config.getoption("randomly_seed")
     _reseed(config)
     return "Using --randomly-seed={}".format(seed)
 
