@@ -10,6 +10,10 @@ if sys.version_info >= (3, 8):
 else:
     from importlib_metadata import entry_points
 
+try:
+    import xdist
+except ImportError:
+    xdist = None
 
 # factory-boy
 try:
@@ -88,6 +92,9 @@ def pytest_addoption(parser):
 
 
 def pytest_configure(config):
+    if config.pluginmanager.hasplugin("xdist"):
+        config.pluginmanager.register(XdistHooks())
+
     seed_value = config.getoption("randomly_seed")
     if seed_value == "last":
         seed = config.cache.get("randomly_seed", default_seed)
@@ -103,11 +110,12 @@ def pytest_configure(config):
     config.option.randomly_seed = seed
 
 
-def pytest_configure_node(node):
-    """
-    pytest-xdist hook. Send the selected seed through to the nodes.
-    """
-    node.workerinput["randomly_seed"] = node.config.getoption("randomly_seed")
+class XdistHooks:
+    # Hooks for xdist only, registered when needed in pytest_configure()
+    # https://docs.pytest.org/en/latest/writing_plugins.html#optionally-using-hooks-from-3rd-party-plugins  # noqa: B950
+
+    def pytest_configure_node(self, node):
+        node.workerinput["randomly_seed"] = node.config.getoption("randomly_seed")
 
 
 random_states = {}
