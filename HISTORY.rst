@@ -2,6 +2,9 @@
 History
 -------
 
+3.3.0 (2020-04-15)
+------------------
+
 * Add `pytest-xdist <https://pypi.org/project/pytest-xdist/>`__ support.
   Previously it only worked reliably when setting ``--randomly-seed``
   explicitly. When not provided, the default seed generated in workers could
