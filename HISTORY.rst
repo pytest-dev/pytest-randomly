@@ -2,6 +2,9 @@
 History
 -------
 
+* Fix to work when pytest-xdist is not installed or active
+  (``PluginValidationError: unknown hook 'pytest_configure_node'``).
+
 3.3.0 (2020-04-15)
 ------------------
 

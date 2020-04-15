@@ -670,6 +670,11 @@ def test_entrypoint_missing(testdir, monkeypatch):
     testdir.runpytest("--randomly-seed=1")
 
 
+def test_works_without_xdist(simpletestdir):
+    out = simpletestdir.runpytest("-p", "no:xdist")
+    out.assert_outcomes(passed=1)
+
+
 @pytest.mark.parametrize("n", list(range(5)))
 def test_xdist(n, ourtestdir):
     """
@@ -685,7 +690,7 @@ def test_xdist(n, ourtestdir):
         test_six="def test_a(): pass",
     )
 
-    out = ourtestdir.runpytest("-n 6", "-v", "--dist=loadfile")
+    out = ourtestdir.runpytest("-n", "6", "-v", "--dist=loadfile")
     out.assert_outcomes(passed=6)
 
     # Can't make any assertion on the order, since output comes back from
