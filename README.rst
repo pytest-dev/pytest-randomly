@@ -45,6 +45,7 @@ All of these features are on by default but can be disabled with flags.
   `entry point <https://packaging.python.org/specifications/entry-points/>`_ and
   will have their seed reset at the start of every test. Register a function
   that takes the current seed value.
+* Works with `pytest-xdist <https://pypi.org/project/pytest-xdist/>`__.
 
 -----
 About
