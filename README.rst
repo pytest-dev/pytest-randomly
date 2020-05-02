@@ -105,6 +105,14 @@ Or more conveniently, use the special value ``last``:
 
     pytest --randomly-seed=last
 
+You can get the seed value in a test case by using the ``pytestconfig`` fixture. For example:
+
+.. code-block:: python
+
+    def test_seed_is_int(pytestconfig):
+        randomly_seed = pytestconfig.getoption("randomly_seed")
+        assert isinstance(randomly_seed, int)
+
 Since the ordering is by module, then by class, you can debug inter-test
 pollution failures by narrowing down which tests are being run to find the bad
 interaction by rerunning just the module/class:
