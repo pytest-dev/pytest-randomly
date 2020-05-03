@@ -176,7 +176,7 @@ def pytest_runtest_teardown(item):
         _reseed(item.config, 1)
 
 
-def pytest_collection_modifyitems(session, config, items):
+def pytest_collection_modifyitems(config, items):
     if not config.getoption("randomly_reorganize"):
         return
 
