@@ -57,7 +57,12 @@ tests themselves, as well as giving a little more coverage to your system.
 By randomly ordering the tests, the risk of surprising inter-test dependencies
 is reduced - a technique used in many places, for example Google's C++ test
 runner `googletest
-<https://code.google.com/p/googletest/wiki/V1_5_AdvancedGuide#Shuffling_the_Tests>`_.
+<https://code.google.com/p/googletest/wiki/V1_5_AdvancedGuide#Shuffling_the_Tests>`_. 
+Research suggests that "dependent tests do exist in practice" and a random 
+order of test executions can effectively detect such dependencies [1]_. 
+Alternatively, a reverse order of test executions, as provided by `pytest-reverse 
+<https://github.com/adamchainz/pytest-reverse>`__, may find less dependent 
+tests but can achieve a better benefit/cost ratio.
 
 By resetting the random seed to a repeatable number for each test, tests can
 create data based on random numbers and yet remain repeatable, for example
@@ -65,8 +70,7 @@ factory boy's fuzzy values. This is good for ensuring that tests specify the
 data they need and that the tested system is not affected by any data that is
 filled in randomly due to not being specified.
 
-This plugin is a Pytest port of my plugin for nose, ``nose-randomly``. I've
-written a `blog post on its history <https://adamj.eu/tech/2018/01/08/pytest-randomly-history/>`_.
+This plugin is a Pytest port of ``nose-randomly`` for nose. See a `blog post on its history <https://adamj.eu/tech/2018/01/08/pytest-randomly-history/>`_.
 
 -----
 Usage
@@ -144,3 +148,9 @@ For example in your ``setup.cfg``:
         mypackage = mypackage.reseed
 
 Then implement ``reseed(new_seed)``.
+
+-----
+References
+-----
+
+.. [1] Sai Zhang, Darioush Jalali, Jochen Wuttke, Kıvanç Muşlu, Wing Lam, Michael D. Ernst, and David Notkin. 2014. Empirically revisiting the test independence assumption. In Proceedings of the 2014 International Symposium on Software Testing and Analysis (ISSTA 2014). Association for Computing Machinery, New York, NY, USA, 385–396. doi:https://doi.org/10.1145/2610384.2610404
