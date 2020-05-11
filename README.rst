@@ -149,8 +149,8 @@ For example in your ``setup.cfg``:
 
 Then implement ``reseed(new_seed)``.
 
------
+----------
 References
------
+----------
 
 .. [1] Sai Zhang, Darioush Jalali, Jochen Wuttke, Kıvanç Muşlu, Wing Lam, Michael D. Ernst, and David Notkin. 2014. Empirically revisiting the test independence assumption. In Proceedings of the 2014 International Symposium on Software Testing and Analysis (ISSTA 2014). Association for Computing Machinery, New York, NY, USA, 385–396. doi:https://doi.org/10.1145/2610384.2610404
