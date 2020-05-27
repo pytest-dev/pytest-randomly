@@ -3,8 +3,7 @@ import random
 import sys
 import time
 
-from pytest import Collector
-from pytest import fixture
+from pytest import Collector, fixture
 
 if sys.version_info >= (3, 8):
     from importlib.metadata import entry_points
