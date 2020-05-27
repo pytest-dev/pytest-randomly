@@ -243,6 +243,7 @@ def reduce_list_of_lists(lists):
 
 
 if have_faker:
-    @fixture(name='faker_seed', autouse=True)
-    def faker_seed_fixture(pytestconfig):
+
+    @fixture(autouse=True)
+    def faker_seed(pytestconfig):
         return pytestconfig.getoption("randomly_seed")
