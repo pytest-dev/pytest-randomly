@@ -3,7 +3,7 @@ import random
 import sys
 import time
 
-from pytest import Collector
+from pytest import Collector, fixture
 
 if sys.version_info >= (3, 8):
     from importlib.metadata import entry_points
@@ -239,3 +239,10 @@ def reduce_list_of_lists(lists):
     for list_ in lists:
         new_list.extend(list_)
     return new_list
+
+
+if have_faker:
+
+    @fixture(autouse=True)
+    def faker_seed(pytestconfig):
+        return pytestconfig.getoption("randomly_seed")

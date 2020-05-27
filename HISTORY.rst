@@ -2,6 +2,13 @@
 History
 -------
 
+* Provide a ``faker_seed`` fixture to set the seed for tests using faker's
+  pytest fixtures (as per its
+  `docs <https://faker.readthedocs.io/en/master/pytest-fixtures.html#seeding-configuration>`__).
+
+  Thanks to Romain Létendart for the change in `PR #261
+  <https://github.com/pytest-dev/pytest-randomly/pull/261>`__.
+
 3.3.1 (2020-04-15)
 ------------------
 

@@ -37,7 +37,10 @@ All of these features are on by default but can be disabled with flags.
   allows for repeatable use of its random 'fuzzy' features.
 * If `faker <https://pypi.python.org/pypi/faker>`_ is installed, its random
   state is reset at the start of every test. This is also for repeatable fuzzy
-  data in tests - factory boy uses faker for lots of data.
+  data in tests - factory boy uses faker for lots of data. This is also done
+  if you're using the ``faker`` pytest fixture, by defining the ``faker_seed``
+  fixture
+  (`docs <https://faker.readthedocs.io/en/master/pytest-fixtures.html#seeding-configuration>`__).
 * If `numpy <http://www.numpy.org/>`_ is installed, its random state is reset
   at the start of every test.
 * If additional random generators are used, they can be registered under the
@@ -57,11 +60,11 @@ tests themselves, as well as giving a little more coverage to your system.
 By randomly ordering the tests, the risk of surprising inter-test dependencies
 is reduced - a technique used in many places, for example Google's C++ test
 runner `googletest
-<https://code.google.com/p/googletest/wiki/V1_5_AdvancedGuide#Shuffling_the_Tests>`_. 
-Research suggests that "dependent tests do exist in practice" and a random 
-order of test executions can effectively detect such dependencies [1]_. 
-Alternatively, a reverse order of test executions, as provided by `pytest-reverse 
-<https://github.com/adamchainz/pytest-reverse>`__, may find less dependent 
+<https://code.google.com/p/googletest/wiki/V1_5_AdvancedGuide#Shuffling_the_Tests>`_.
+Research suggests that "dependent tests do exist in practice" and a random
+order of test executions can effectively detect such dependencies [1]_.
+Alternatively, a reverse order of test executions, as provided by `pytest-reverse
+<https://github.com/adamchainz/pytest-reverse>`__, may find less dependent
 tests but can achieve a better benefit/cost ratio.
 
 By resetting the random seed to a repeatable number for each test, tests can
