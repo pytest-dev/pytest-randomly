@@ -593,6 +593,21 @@ def test_faker(ourtestdir):
     out.assert_outcomes(passed=2)
 
 
+def test_faker_fixture(ourtestdir):
+    ourtestdir.makepyfile(
+        test_one="""
+        def test_one(faker):
+            assert faker.name() == 'Ryan Gallagher'
+
+        def test_two(faker):
+            assert faker.name() == 'Ryan Gallagher'
+        """
+    )
+
+    out = ourtestdir.runpytest("--randomly-seed=1")
+    out.assert_outcomes(passed=2)
+
+
 def test_numpy(ourtestdir):
     ourtestdir.makepyfile(
         test_one="""
