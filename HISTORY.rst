@@ -2,6 +2,9 @@
 History
 -------
 
+3.4.0 (2020-05-27)
+------------------
+
 * Provide a ``faker_seed`` fixture to set the seed for tests using faker's
   pytest fixtures (as per its
   `docs <https://faker.readthedocs.io/en/master/pytest-fixtures.html#seeding-configuration>`__).
