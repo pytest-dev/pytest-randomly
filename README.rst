@@ -6,7 +6,7 @@ pytest-randomly
    :target: https://github.com/pytest-dev/pytest-randomly/actions?workflow=CI
 
 .. image:: https://img.shields.io/pypi/v/pytest-randomly.svg
-   :target: https://pypi.python.org/pypi/pytest-randomly
+   :target: https://pypi.org/project/pytest-randomly/
 
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
    :target: https://github.com/python/black
@@ -35,7 +35,7 @@ All of these features are on by default but can be disabled with flags.
   `factory boy <https://factoryboy.readthedocs.io/en/latest/reference.html>`_
   is installed, its random state is reset at the start of every test. This
   allows for repeatable use of its random 'fuzzy' features.
-* If `faker <https://pypi.python.org/pypi/faker>`_ is installed, its random
+* If `faker <https://pypi.org/project/faker>`_ is installed, its random
   state is reset at the start of every test. This is also for repeatable fuzzy
   data in tests - factory boy uses faker for lots of data. This is also done
   if you're using the ``faker`` pytest fixture, by defining the ``faker_seed``
