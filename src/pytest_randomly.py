@@ -1,7 +1,6 @@
 import argparse
 import random
 import sys
-import time
 
 from pytest import Collector, fixture
 
@@ -46,7 +45,7 @@ except ImportError:
     have_numpy = False
 
 
-default_seed = int(time.time())
+default_seed = random.Random().getrandbits(32)
 
 
 def seed_type(string):
@@ -70,7 +69,7 @@ def pytest_addoption(parser):
         type=seed_type,
         help="""Set the seed that pytest-randomly uses (int), or pass the
                 special value 'last' to reuse the seed from the previous run.
-                Default behaviour: use int(time.time()), so the seed is
+                Default behaviour: use random.Random().getrandbits(32), so the seed is
                 different on each run.""",
     )
     group._addoption(
