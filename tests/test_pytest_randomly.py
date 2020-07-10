@@ -625,6 +625,20 @@ def test_numpy(ourtestdir):
     out.assert_outcomes(passed=2)
 
 
+def test_numpy_doesnt_crash_with_large_seed(ourtestdir):
+    ourtestdir.makepyfile(
+        test_one="""
+        import numpy as np
+
+        def test_one():
+            assert np.random.rand() >= 0.0
+        """
+    )
+
+    out = ourtestdir.runpytest("--randomly-seed=7106521602475165645")
+    out.assert_outcomes(passed=1)
+
+
 def test_failing_import(testdir):
     """Test with pytest raising CollectError or ImportError.
 
