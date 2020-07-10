@@ -2,6 +2,9 @@
 History
 -------
 
+3.4.1 (2020-07-10)
+------------------
+
 * Fix numpy error ``ValueError: Seed must be between 0 and 2**32 - 1`` when
   passed a seed outside of this range.
 
