@@ -1,4 +1,5 @@
 import argparse
+import hashlib
 import random
 import sys
 
@@ -140,11 +141,12 @@ def _reseed(config, offset=0):
         faker_random.setstate(random_states[seed])
 
     if have_numpy:
-        if seed not in np_random_states:
-            np_random.seed(seed)
-            np_random_states[seed] = np_random.get_state()
+        numpy_seed = _truncate_seed_for_numpy(seed)
+        if numpy_seed not in np_random_states:
+            np_random.seed(numpy_seed)
+            np_random_states[numpy_seed] = np_random.get_state()
         else:
-            np_random.set_state(np_random_states[seed])
+            np_random.set_state(np_random_states[numpy_seed])
 
     if entrypoint_reseeds is None:
         entrypoint_reseeds = [
@@ -152,6 +154,15 @@ def _reseed(config, offset=0):
         ]
     for reseed in entrypoint_reseeds:
         reseed(seed)
+
+
+def _truncate_seed_for_numpy(seed):
+    seed = abs(seed)
+    if seed <= 2 ** 32 - 1:
+        return seed
+
+    seed_bytes = seed.to_bytes(seed.bit_length(), "big")
+    return int.from_bytes(hashlib.sha512(seed_bytes).digest()[: 32 // 8], "big")
 
 
 def pytest_report_header(config):
