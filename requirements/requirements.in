@@ -12,7 +12,7 @@ isort ; python_version == '3.8.*'
 multilint ; python_version == '3.8.*'
 numpy
 pygments ; python_version == '3.8.*'
-pytest
+pytest==6.0.0rc1
 pytest-xdist
 secretstorage ; python_version == '3.8.*' # required for twine on linux
 twine ; python_version == '3.8.*'

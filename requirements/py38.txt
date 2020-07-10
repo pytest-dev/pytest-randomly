@@ -131,6 +131,9 @@ idna==2.10 \
     --hash=sha256:b307872f855b18632ce0c21c5e45be78c0ea7ae4c15c828c20788b26921eb3f6 \
     --hash=sha256:b97d804b1e9b523befed77c48dacec60e6dcb0b5391d57af6a65a312a90648c0 \
     # via requests
+iniconfig==1.0.0 \
+    --hash=sha256:aa0b40f50a00e72323cb5d41302f9c6165728fd764ac8822aa3fff00a40d56b4 \
+    # via pytest
 isort==5.0.3 ; python_version == "3.8.*" \
     --hash=sha256:3fbfad425b0a08a2969c5e1821d88785c210a08656c029c28931a1620f2d0f12 \
     --hash=sha256:4c48d4cd773a6226baaaa176839e6f7ff82ef7c7842f6c54374fe2b14df4024b \
@@ -235,9 +238,9 @@ pytest-xdist==1.32.0 \
     --hash=sha256:1d4166dcac69adb38eeaedb88c8fada8588348258a3492ab49ba9161f2971129 \
     --hash=sha256:ba5ec9fde3410bd9a116ff7e4f26c92e02fa3d27975ef3ad03f330b3d4b54e91 \
     # via -r requirements.in
-pytest==5.4.3 \
-    --hash=sha256:5c0db86b698e8f170ba4582a492248919255fcd4c79b1ee64ace34301fb589a1 \
-    --hash=sha256:7979331bfcba207414f5e1263b5a0f8f521d0f457318836a7355531ed1a4c7d8 \
+pytest==6.0.0rc1 \
+    --hash=sha256:3296b4ad0b07363f69b740edf70e40db8286f882f019179b31e6a03d896afbff \
+    --hash=sha256:c934e33079966229fd236ffae6a7a3c3415bd585693a646ba3adb62a2d695874 \
     # via -r requirements.in, pytest-forked, pytest-xdist
 python-dateutil==2.8.1 \
     --hash=sha256:73ebfe9dbf22e832286dafa60473e4cd239f8592f699aa5adaf10050e6e1823c \
@@ -297,7 +300,7 @@ text-unidecode==1.3 \
 toml==0.10.1 \
     --hash=sha256:926b612be1e5ce0634a2ca03470f95169cf16f939018233a670519cb4ac58b0f \
     --hash=sha256:bda89d5935c2eac546d648028b9901107a595863cb36bae0c73ac804a9b4ce88 \
-    # via black, check-manifest, pep517
+    # via black, check-manifest, pep517, pytest
 tqdm==4.47.0 \
     --hash=sha256:63ef7a6d3eb39f80d6b36e4867566b3d8e5f1fe3d6cb50c5e9ede2b3198ba7b7 \
     --hash=sha256:7810e627bcf9d983a99d9ff8a0c09674400fd2927eddabeadf153c14a2ec8656 \
@@ -333,10 +336,6 @@ urllib3==1.25.9 \
     --hash=sha256:3018294ebefce6572a474f0604c2021e33b3fd8006ecd11d62107a5d2a963527 \
     --hash=sha256:88206b0eb87e6d677d424843ac5209e3fb9d0190d0ee169599165ec25e9d9115 \
     # via requests
-wcwidth==0.2.5 \
-    --hash=sha256:beb4802a9cebb9144e99086eff703a642a13d6a0052920003a230f3294bbe784 \
-    --hash=sha256:c4d647b99872929fdb7bdcaa4fbe7f01413ed3d98077df798530e5b04f116c83 \
-    # via pytest
 webencodings==0.5.1 \
     --hash=sha256:a0af1213f3c2226497a97e2b3aa01a7e4bee4f403f95be16fc9acd2947514a78 \
     --hash=sha256:b36a1c245f2d304965eb4e0a82848379241dc04b865afcc4aab16748587e1923 \
