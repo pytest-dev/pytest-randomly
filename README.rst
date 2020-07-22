@@ -18,9 +18,8 @@ pytest-randomly
 Pytest plugin to randomly order tests and control ``random.seed``. (Also
 available `for nose <https://github.com/adamchainz/nose-randomly>`_).
 
---------
 Features
---------
+========
 
 All of these features are on by default but can be disabled with flags.
 
@@ -50,9 +49,8 @@ All of these features are on by default but can be disabled with flags.
   that takes the current seed value.
 * Works with `pytest-xdist <https://pypi.org/project/pytest-xdist/>`__.
 
------
 About
------
+=====
 
 Randomness in testing can be quite powerful to discover hidden flaws in the
 tests themselves, as well as giving a little more coverage to your system.
@@ -75,9 +73,8 @@ filled in randomly due to not being specified.
 
 This plugin is a Pytest port of ``nose-randomly`` for nose. See a `blog post on its history <https://adamj.eu/tech/2018/01/08/pytest-randomly-history/>`_.
 
------
-Usage
------
+Installation
+============
 
 Install from pip with:
 
@@ -86,6 +83,9 @@ Install from pip with:
     python -m pip install pytest-randomly
 
 Python 3.5 to 3.8 supported.
+
+Usage
+=====
 
 Pytest will automatically find the plugin and use it when you run ``pytest``.
 The output will start with an extra line that tells you the random seed that is
@@ -133,9 +133,8 @@ altogether, you can use the ``-p`` argument, for example:
 
     pytest -p no:randomly
 
------------
 Entry Point
------------
+===========
 
 If you're using a different randomness generator in your third party package,
 you can register an entrypoint to be called every time ``pytest-randomly``
@@ -152,8 +151,7 @@ For example in your ``setup.cfg``:
 
 Then implement ``reseed(new_seed)``.
 
-----------
 References
-----------
+==========
 
 .. [1] Sai Zhang, Darioush Jalali, Jochen Wuttke, Kıvanç Muşlu, Wing Lam, Michael D. Ernst, and David Notkin. 2014. Empirically revisiting the test independence assumption. In Proceedings of the 2014 International Symposium on Software Testing and Analysis (ISSTA 2014). Association for Computing Machinery, New York, NY, USA, 385–396. doi:https://doi.org/10.1145/2610384.2610404
