@@ -84,6 +84,13 @@ Install from pip with:
 
 Python 3.5 to 3.8 supported.
 
+----
+
+**Testing a Django project?**
+Check out my book `Speed Up Your Django Tests <https://gumroad.com/l/suydt>`__ which covers loads of best practices so you can write faster, more accurate tests.
+
+----
+
 Usage
 =====
 
