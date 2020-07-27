@@ -455,8 +455,14 @@ def test_it_works_with_the_simplest_test_items(ourtestdir):
                 parent=parent,
                 fspath=str(path),
                 items=[
-                    NoOpItem.from_parent(name=str(path) + "1", parent=parent, module='foo'),
-                    NoOpItem.from_parent(name=str(path) + "2", parent=parent),
+                    NoOpItem.from_parent(
+                        name=str(path) + "1",
+                        parent=parent, module="foo"
+                    ),
+                    NoOpItem.from_parent(
+                        name=str(path) + "2",
+                        parent=parent,
+                    ),
                 ],
             )
         """
