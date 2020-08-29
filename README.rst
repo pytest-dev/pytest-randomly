@@ -15,8 +15,7 @@ pytest-randomly
    :scale: 50%
    :alt: Randomness power.
 
-Pytest plugin to randomly order tests and control ``random.seed``. (Also
-available `for nose <https://github.com/adamchainz/nose-randomly>`_).
+Pytest plugin to randomly order tests and control ``random.seed``.
 
 Features
 ========
@@ -71,7 +70,13 @@ factory boy's fuzzy values. This is good for ensuring that tests specify the
 data they need and that the tested system is not affected by any data that is
 filled in randomly due to not being specified.
 
-This plugin is a Pytest port of ``nose-randomly`` for nose. See a `blog post on its history <https://adamj.eu/tech/2018/01/08/pytest-randomly-history/>`_.
+I have written a `blog post covering the history of
+pytest-randomly <https://adamj.eu/tech/2018/01/08/pytest-randomly-history/>`__,
+including how it started life the a nose plugin
+`nose-randomly <https://github.com/adamchainz/nose-randomly>`__.
+
+Additionally, I appeared on the Test and Code podcast to `talk about
+pytest-randomly <https://testandcode.com/128>`__.
 
 Installation
 ============
