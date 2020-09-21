@@ -1,6 +1,8 @@
 History
 =======
 
+* Move license from BSD to MIT License.
+
 3.4.1 (2020-07-10)
 ------------------
 
