@@ -19,9 +19,9 @@ execnet==1.7.1 \
 factory-boy==3.0.1 \
     --hash=sha256:2ce2f665045d9f15145a6310565fcb8255d52fc6fd867f3b783b3ac3de6cf10e \
     # via -r requirements.in
-faker==4.1.2 \
-    --hash=sha256:bc4b8c908dfcd84e4fe5d9fa2e52fbe17546515fb8f126909b98c47badf05658 \
-    --hash=sha256:ff188c416864e3f7d8becd8f9ee683a4b4101a2a2d2bcdcb3e84bb1bdd06eaae \
+faker==4.1.3 \
+    --hash=sha256:075a95ac4c95765370919d787dcd958acfaea635005ad5af4d926cb0973800db \
+    --hash=sha256:80bab8d46035a7393de827210c5d39c17109d3346d131946bde622137120c496 \
     # via -r requirements.in, factory-boy
 iniconfig==1.0.1 \
     --hash=sha256:80cf40c597eb564e86346103f609d74efce0f6b4d4f30ec8ce9e2c26411ba437 \
