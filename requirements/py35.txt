@@ -19,13 +19,13 @@ execnet==1.7.1 \
 factory-boy==3.0.1 \
     --hash=sha256:2ce2f665045d9f15145a6310565fcb8255d52fc6fd867f3b783b3ac3de6cf10e \
     # via -r requirements.in
-faker==4.1.2 \
-    --hash=sha256:bc4b8c908dfcd84e4fe5d9fa2e52fbe17546515fb8f126909b98c47badf05658 \
-    --hash=sha256:ff188c416864e3f7d8becd8f9ee683a4b4101a2a2d2bcdcb3e84bb1bdd06eaae \
+faker==4.1.3 \
+    --hash=sha256:075a95ac4c95765370919d787dcd958acfaea635005ad5af4d926cb0973800db \
+    --hash=sha256:80bab8d46035a7393de827210c5d39c17109d3346d131946bde622137120c496 \
     # via -r requirements.in, factory-boy
-importlib-metadata==1.7.0 ; python_version < "3.8" \
-    --hash=sha256:90bb658cdbbf6d1735b6341ce708fc7024a3e14e99ffdc5783edea9f9b077f83 \
-    --hash=sha256:dc15b2969b4ce36305c51eebe62d418ac7791e9a157911d58bfb1f9ccd8e2070 \
+importlib-metadata==2.0.0 ; python_version < "3.8" \
+    --hash=sha256:77a540690e24b0305878c37ffd421785a6f7e53c8b5720d211b211de8d0e95da \
+    --hash=sha256:cefa1a2f919b866c5beb7c9f7b0ebb4061f30a8a9bf16d609b000e2dfaceb9c3 \
     # via -r requirements.in, pluggy, pytest
 iniconfig==1.0.1 \
     --hash=sha256:80cf40c597eb564e86346103f609d74efce0f6b4d4f30ec8ce9e2c26411ba437 \
