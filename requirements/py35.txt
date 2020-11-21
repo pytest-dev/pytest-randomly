@@ -20,9 +20,9 @@ factory-boy==3.1.0 \
     --hash=sha256:d8626622550c8ba31392f9e19fdbcef9f139cf1ad643c5923f20490a7b3e2e3d \
     --hash=sha256:ded73e49135c24bd4d3f45bf1eb168f8d290090f5cf4566b8df3698317dc9c08 \
     # via -r requirements.in
-faker==4.14.2 \
-    --hash=sha256:6afc461ab3f779c9c16e299fc731d775e39ea7e8e063b3053ee359ae198a15ca \
-    --hash=sha256:ce1c38823eb0f927567cde5bf2e7c8ca565c7a70316139342050ce2ca74b4026 \
+faker==4.17.1 \
+    --hash=sha256:5398268e1d751ffdb3ed36b8a790ed98659200599b368eec38a02eed15bce997 \
+    --hash=sha256:d4183b8f57316de3be27cd6c3b40e9f9343d27c95c96179f027316c58c2c239e \
     # via -r requirements.in, factory-boy
 importlib-metadata==2.0.0 ; python_version < "3.8" \
     --hash=sha256:77a540690e24b0305878c37ffd421785a6f7e53c8b5720d211b211de8d0e95da \
