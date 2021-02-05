@@ -76,7 +76,7 @@ filled in randomly due to not being specified.
 
 I have written a `blog post covering the history of
 pytest-randomly <https://adamj.eu/tech/2018/01/08/pytest-randomly-history/>`__,
-including how it started life the a nose plugin
+including how it started life as the nose plugin
 `nose-randomly <https://github.com/adamchainz/nose-randomly>`__.
 
 Additionally, I appeared on the Test and Code podcast to `talk about
