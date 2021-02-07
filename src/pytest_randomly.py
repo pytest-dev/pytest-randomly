@@ -100,7 +100,7 @@ def pytest_configure(config):
         seed = config.cache.get("randomly_seed", default_seed)
     elif seed_value == "default":
         if hasattr(config, "workerinput"):
-            # pytest-xdist: use seed generated on master.
+            # pytest-xdist: use seed generated on main.
             seed = config.workerinput["randomly_seed"]
         else:
             seed = default_seed
