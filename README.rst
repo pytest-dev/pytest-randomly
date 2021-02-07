@@ -2,7 +2,7 @@
 pytest-randomly
 ===============
 
-.. image:: https://img.shields.io/github/workflow/status/pytest-dev/pytest-randomly/CI/master?style=for-the-badge
+.. image:: https://img.shields.io/github/workflow/status/pytest-dev/pytest-randomly/CI/main?style=for-the-badge
    :target: https://github.com/pytest-dev/pytest-randomly/actions?workflow=CI
 
 .. image:: https://img.shields.io/pypi/v/pytest-randomly.svg?style=for-the-badge
@@ -15,7 +15,7 @@ pytest-randomly
    :target: https://github.com/pre-commit/pre-commit
    :alt: pre-commit
 
-.. figure:: https://raw.githubusercontent.com/pytest-dev/pytest-randomly/master/logo.png
+.. figure:: https://raw.githubusercontent.com/pytest-dev/pytest-randomly/main/logo.png
    :scale: 50%
    :alt: Randomness power.
 

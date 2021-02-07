@@ -39,7 +39,7 @@ History
   Previously it only worked reliably when setting ``--randomly-seed``
   explicitly. When not provided, the default seed generated in workers could
   differ and collection would fail. Now when it is not provided, all xdist
-  worker processes shared the same default seed generated in the master
+  worker processes shared the same default seed generated in the main
   process.
 
 3.2.1 (2020-01-13)
