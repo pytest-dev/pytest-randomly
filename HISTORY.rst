@@ -2,6 +2,10 @@
 History
 =======
 
+* Stop distributing tests to reduce package size. Tests are not intended to be
+  run outside of the tox setup in the repository. Repackagers can use GitHub's
+  tarballs per tag.
+
 * Drop Python 3.5 support.
 
 3.5.0 (2020-11-16)
