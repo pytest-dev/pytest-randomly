@@ -20,15 +20,15 @@ factory-boy==3.2.0 \
     --hash=sha256:1d3db4b44b8c8c54cdd8b83ae4bdb9aeb121e464400035f1f03ae0e1eade56a4 \
     --hash=sha256:401cc00ff339a022f84d64a4339503d1689e8263a4478d876e58a3295b155c5b
     # via -r requirements.in
-faker==6.6.0 \
-    --hash=sha256:0a68a539b236a614157581a135c82a27024a66dc96b9a491883fe583ae3689f9 \
-    --hash=sha256:38bd2ff0afb7d9956fed477a2cd1007a7012b401a9ffd3de5fb909d739880582
+faker==6.6.3 \
+    --hash=sha256:579348fac4597cf5c998f10e3b840b48d85157413cb501809f98a83eb228e907 \
+    --hash=sha256:c2852cadc99a4ebdbf06934e4c15e30f2307d414ead21d15605759602645f152
     # via
     #   -r requirements.in
     #   factory-boy
-importlib-metadata==3.7.2 ; python_version < "3.8" \
-    --hash=sha256:18d5ff601069f98d5d605b6a4b50c18a34811d655c55548adc833e687289acde \
-    --hash=sha256:407d13f55dc6f2a844e62325d18ad7019a436c4bfcaee34cda35f2be6e7c3e34
+importlib-metadata==3.8.1 ; python_version < "3.8" \
+    --hash=sha256:eb83dfc8d87a64d42fb2904312d632bb8d57e47c5b435f8d4d5523d2b0efc3d0 \
+    --hash=sha256:fc605f818ff2389df65d893ccefcd5310678c48c2855c42619464ed48556ff08
     # via
     #   -r requirements.in
     #   pluggy
