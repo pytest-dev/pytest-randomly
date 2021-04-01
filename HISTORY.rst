@@ -2,6 +2,11 @@
 History
 =======
 
+* Fix deprecation warning from importlib-metadata 3.9.0+.
+
+  Thanks to Dominic Davis-Foster for report in `Issue #333
+  <https://github.com/pytest-dev/pytest-randomly/issue/333>`__.
+
 * Stop distributing tests to reduce package size. Tests are not intended to be
   run outside of the tox setup in the repository. Repackagers can use GitHub's
   tarballs per tag.

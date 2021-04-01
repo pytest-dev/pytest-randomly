@@ -1,3 +1,4 @@
+from types import SimpleNamespace
 from unittest.mock import Mock
 
 import pytest
@@ -675,10 +676,10 @@ def test_entrypoint_injection(testdir, monkeypatch):
     entry_points = []
 
     def fake_entry_points():
-        return {
-            "pytest_randomly.random_seeder": entry_points,
-            "ignore": lambda x: 1 / 0,
-        }
+        return SimpleNamespace(select=fake_select)
+
+    def fake_select(*, group):
+        return entry_points
 
     monkeypatch.setattr(pytest_randomly, "entry_points", fake_entry_points)
     reseed = Mock()

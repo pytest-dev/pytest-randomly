@@ -1,14 +1,10 @@
 import argparse
 import hashlib
 import random
-import sys
 
+# if sys.version_info < (3, 10):
+from backports.entry_points_selectable import entry_points
 from pytest import Collector, fixture
-
-if sys.version_info >= (3, 8):
-    from importlib.metadata import entry_points
-else:
-    from importlib_metadata import entry_points
 
 try:
     import xdist
@@ -150,7 +146,8 @@ def _reseed(config, offset=0):
 
     if entrypoint_reseeds is None:
         entrypoint_reseeds = [
-            e.load() for e in entry_points().get("pytest_randomly.random_seeder", [])
+            e.load()
+            for e in entry_points().select(group="pytest_randomly.random_seeder")
         ]
     for reseed in entrypoint_reseeds:
         reseed(seed)
