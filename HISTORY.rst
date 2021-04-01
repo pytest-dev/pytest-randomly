@@ -2,6 +2,9 @@
 History
 =======
 
+3.6.0 (2021-04-01)
+------------------
+
 * Fix deprecation warning from importlib-metadata 3.9.0+.
 
   Thanks to Dominic Davis-Foster for report in `Issue #333
