@@ -12,6 +12,10 @@ attrs==20.3.0 \
     --hash=sha256:31b2eced602aa8423c2aea9c76a724617ed67cf9513173fd3a4f03e3a929c7e6 \
     --hash=sha256:832aa3cde19744e49938b91fea06d69ecb9e649c93ba974535d08ad92164f700
     # via pytest
+backports.entry-points-selectable==1.0.2 ; python_version < "3.10" \
+    --hash=sha256:1817925560c765efe73fb692c047fb007511388d53e6dbeec7bfcda391eb83ac \
+    --hash=sha256:98b9fda50dab4f298f646bc7b717b6a3b90dd4d509015f1ce9e66b41a1330d46
+    # via -r requirements.in
 execnet==1.8.0 \
     --hash=sha256:7a13113028b1e1cc4c6492b28098b3c6576c9dccc7973bfe47b342afadafb2ac \
     --hash=sha256:b73c5565e517f24b62dea8a5ceac178c661c4309d3aa0c3e420856c072c411b4
