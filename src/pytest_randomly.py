@@ -3,7 +3,7 @@ import hashlib
 import random
 
 # if sys.version_info < (3, 10):
-from backports.entry_points_selectable import entry_points
+from importlib_metadata import entry_points
 from pytest import Collector, fixture
 
 try:

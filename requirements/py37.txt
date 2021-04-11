@@ -12,10 +12,6 @@ attrs==20.3.0 \
     --hash=sha256:31b2eced602aa8423c2aea9c76a724617ed67cf9513173fd3a4f03e3a929c7e6 \
     --hash=sha256:832aa3cde19744e49938b91fea06d69ecb9e649c93ba974535d08ad92164f700
     # via pytest
-backports.entry-points-selectable==1.0.3 ; python_version < "3.10" \
-    --hash=sha256:0f60097faa317875ad76a4a47ae62dc3932df73a3cdad3968e6d573efa3707e3 \
-    --hash=sha256:f30bcd19c5e2728ac93821d2b6ae0a325597e0ca12324fd91a39fa80e1cd0dd8
-    # via -r requirements.in
 execnet==1.8.0 \
     --hash=sha256:7a13113028b1e1cc4c6492b28098b3c6576c9dccc7973bfe47b342afadafb2ac \
     --hash=sha256:b73c5565e517f24b62dea8a5ceac178c661c4309d3aa0c3e420856c072c411b4
@@ -30,11 +26,11 @@ faker==8.0.0 \
     # via
     #   -r requirements.in
     #   factory-boy
-importlib-metadata==3.10.0 \
+importlib-metadata==3.10.0 ; python_version < "3.10" \
     --hash=sha256:c9db46394197244adf2f0b08ec5bc3cf16757e9590b02af1fca085c16c0d600a \
     --hash=sha256:d2d46ef77ffc85cbf7dac7e81dd663fde71c45326131bea8033b9bad42268ebe
     # via
-    #   backports.entry-points-selectable
+    #   -r requirements.in
     #   pluggy
     #   pytest
 iniconfig==1.1.1 \

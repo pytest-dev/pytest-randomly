@@ -1,6 +1,6 @@
-backports.entry-points-selectable ; python_version < "3.10"
 factory_boy
 faker
+importlib-metadata >= 3.6.0 ; python_version < "3.10"
 numpy
 pytest
 pytest-xdist

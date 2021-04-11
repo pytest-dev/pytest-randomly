@@ -2,6 +2,9 @@
 History
 =======
 
+* Drop dependency on ``backports.entry-points-selectable`` by depending on
+  ``importlib-metadata`` version 3.6.0+.
+
 3.6.0 (2021-04-01)
 ------------------
 
