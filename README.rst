@@ -159,7 +159,7 @@ to a function/callable that takes one argument, the new seed (int).
 
 For example in your ``setup.cfg``:
 
-.. code-block:: sh
+.. code-block:: ini
 
     [options.entry_points]
     pytest_randomly.random_seeder =
