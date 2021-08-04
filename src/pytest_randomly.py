@@ -56,7 +56,7 @@ def seed_type(string):
         return int(string)
     except ValueError:
         raise argparse.ArgumentTypeError(
-            "{} is not an integer or the string 'last'".format(repr(string))
+            f"{repr(string)} is not an integer or the string 'last'"
         )
 
 
@@ -168,7 +168,7 @@ def _truncate_seed_for_numpy(seed):
 def pytest_report_header(config):
     seed = config.getoption("randomly_seed")
     _reseed(config)
-    return "Using --randomly-seed={}".format(seed)
+    return f"Using --randomly-seed={seed}"
 
 
 def pytest_runtest_setup(item):
