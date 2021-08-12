@@ -2,6 +2,7 @@ import argparse
 import hashlib
 import random
 import sys
+from itertools import groupby
 from types import ModuleType
 from typing import Any, Callable, Dict, List, Optional, Type, TypeVar, Union
 
@@ -200,55 +201,38 @@ def pytest_collection_modifyitems(config: Config, items: List[Item]) -> None:
 
     _reseed(config)
 
-    module_items: List[List[Item]] = []
-    current_module: Optional[ModuleType] = None
-    current_items: List[Item] = []
-    for item in items:
+    module_items: List[List[Item]] = [
+        list(group) for _key, group in groupby(items, _get_module)
+    ]
 
-        try:
-            item_module = getattr(item, "module", None)
-        except (ImportError, Collector.CollectError):
-            item_module = None
-
-        if current_module is None:
-            current_module = item_module
-
-        if item_module != current_module:
-            module_items.append(shuffle_by_class(current_items))
-            current_items = [item]
-            current_module = item_module
-        else:
-            current_items.append(item)
-    module_items.append(shuffle_by_class(current_items))
-
+    for sub_items in module_items:
+        sub_items[:] = shuffle_by_class(sub_items)
     random.shuffle(module_items)
 
     items[:] = reduce_list_of_lists(module_items)
 
 
+def _get_module(item: Item) -> Optional[ModuleType]:
+    try:
+        return getattr(item, "module", None)
+    except (ImportError, Collector.CollectError):
+        return None
+
+
 def shuffle_by_class(items: List[Item]) -> List[Item]:
-    class_items: List[List[Item]] = []
-    current_cls: Optional[Type[Any]] = None
-    current_items: List[Item] = []
+    class_items: List[List[Item]] = [
+        list(group) for _key, group in groupby(items, _get_cls)
+    ]
 
-    for item in items:
-        if current_cls is None:
-            current_cls = getattr(item, "cls", None)
-
-        if getattr(item, "cls", None) != current_cls:
-            random.shuffle(current_items)
-            class_items.append(current_items)
-            current_items = [item]
-            current_cls = item.cls  # type: ignore [attr-defined]
-        else:
-            current_items.append(item)
-
-    random.shuffle(current_items)
-    class_items.append(current_items)
-
+    for sub_items in class_items:
+        random.shuffle(sub_items)
     random.shuffle(class_items)
 
     return reduce_list_of_lists(class_items)
+
+
+def _get_cls(item: Item) -> Optional[Type[Any]]:
+    return getattr(item, "cls", None)
 
 
 T = TypeVar("T")
