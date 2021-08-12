@@ -240,10 +240,10 @@ def test_files_reordered(ourtestdir):
 
     out.assert_outcomes(passed=4, failed=0)
     assert out.outlines[8:12] == [
+        "test_b.py::test_it PASSED",
+        "test_a.py::test_it PASSED",
         "test_d.py::test_it PASSED",
         "test_c.py::test_it PASSED",
-        "test_a.py::test_it PASSED",
-        "test_b.py::test_it PASSED",
     ]
 
 
@@ -260,10 +260,10 @@ def test_files_reordered_when_seed_not_reset(ourtestdir):
 
     out.assert_outcomes(passed=4, failed=0)
     assert out.outlines[8:12] == [
+        "test_b.py::test_it PASSED",
+        "test_a.py::test_it PASSED",
         "test_d.py::test_it PASSED",
         "test_c.py::test_it PASSED",
-        "test_a.py::test_it PASSED",
-        "test_b.py::test_it PASSED",
     ]
 
 
@@ -300,9 +300,9 @@ def test_classes_reordered(ourtestdir):
     out.assert_outcomes(passed=4, failed=0)
     assert out.outlines[8:12] == [
         "test_one.py::D::test_d PASSED",
+        "test_one.py::B::test_b PASSED",
         "test_one.py::C::test_c PASSED",
         "test_one.py::A::test_a PASSED",
-        "test_one.py::B::test_b PASSED",
     ]
 
 
@@ -331,10 +331,10 @@ def test_class_test_methods_reordered(ourtestdir):
 
     out.assert_outcomes(passed=4, failed=0)
     assert out.outlines[8:12] == [
-        "test_one.py::T::test_d PASSED",
         "test_one.py::T::test_c PASSED",
-        "test_one.py::T::test_a PASSED",
         "test_one.py::T::test_b PASSED",
+        "test_one.py::T::test_a PASSED",
+        "test_one.py::T::test_d PASSED",
     ]
 
 
@@ -360,10 +360,10 @@ def test_test_functions_reordered(ourtestdir):
 
     out.assert_outcomes(passed=4, failed=0)
     assert out.outlines[8:12] == [
-        "test_one.py::test_d PASSED",
         "test_one.py::test_c PASSED",
         "test_one.py::test_a PASSED",
         "test_one.py::test_b PASSED",
+        "test_one.py::test_d PASSED",
     ]
 
 
@@ -394,10 +394,10 @@ def test_test_functions_reordered_when_randomness_in_module(ourtestdir):
 
     out.assert_outcomes(passed=4, failed=0)
     assert out.outlines[8:12] == [
-        "test_one.py::test_d PASSED",
         "test_one.py::test_c PASSED",
         "test_one.py::test_a PASSED",
         "test_one.py::test_b PASSED",
+        "test_one.py::test_d PASSED",
     ]
 
 
@@ -419,7 +419,7 @@ def test_doctests_reordered(ourtestdir):
             return 9002
         """
     )
-    args = ["-v", "--doctest-modules", "--randomly-seed=5"]
+    args = ["-v", "--doctest-modules", "--randomly-seed=1"]
 
     out = ourtestdir.runpytest(*args)
     out.assert_outcomes(passed=2)
@@ -432,6 +432,8 @@ def test_doctests_reordered(ourtestdir):
 def test_it_works_with_the_simplest_test_items(ourtestdir):
     ourtestdir.makepyfile(
         conftest="""
+        import sys
+
         import pytest
 
 
@@ -463,7 +465,8 @@ def test_it_works_with_the_simplest_test_items(ourtestdir):
                 items=[
                     NoOpItem.from_parent(
                         name=str(path) + "1",
-                        parent=parent, module="foo"
+                        parent=parent,
+                        module=sys.modules[__name__],
                     ),
                     NoOpItem.from_parent(
                         name=str(path) + "2",
@@ -492,7 +495,7 @@ def test_doctests_in_txt_files_reordered(ourtestdir):
         0
         """
     )
-    args = ["-v", "--randomly-seed=1"]
+    args = ["-v", "--randomly-seed=2"]
 
     out = ourtestdir.runpytest(*args)
     out.assert_outcomes(passed=2)

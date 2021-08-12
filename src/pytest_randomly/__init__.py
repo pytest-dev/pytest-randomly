@@ -4,7 +4,7 @@ import random
 import sys
 from itertools import groupby
 from types import ModuleType
-from typing import Any, Callable, Dict, List, Optional, Type, TypeVar, Union
+from typing import Any, Callable, Dict, List, Optional, Tuple, Type, TypeVar, Union
 
 from _pytest.config import Config
 from _pytest.config.argparsing import Parser
@@ -134,7 +134,7 @@ np_random_states: Dict[int, Any] = {}
 entrypoint_reseeds: Optional[List[Callable[[int], None]]] = None
 
 
-def _reseed(config: Config, offset: int = 0) -> None:
+def _reseed(config: Config, offset: int = 0) -> int:
     global entrypoint_reseeds
     seed = config.getoption("randomly_seed") + offset
     if seed not in random_states:
@@ -163,6 +163,8 @@ def _reseed(config: Config, offset: int = 0) -> None:
         ]
     for reseed in entrypoint_reseeds:
         reseed(seed)
+
+    return seed
 
 
 def _truncate_seed_for_numpy(seed: int) -> int:
@@ -199,17 +201,26 @@ def pytest_collection_modifyitems(config: Config, items: List[Item]) -> None:
     if not config.getoption("randomly_reorganize"):
         return
 
-    _reseed(config)
+    seed = _reseed(config)
 
-    module_items: List[List[Item]] = [
-        list(group) for _key, group in groupby(items, _get_module)
-    ]
+    modules_items: List[Tuple[Optional[ModuleType], List[Item]]] = []
+    for module, group in groupby(items, _get_module):
+        modules_items.append(
+            (
+                module,
+                _shuffle_by_class(list(group), seed),
+            )
+        )
 
-    for sub_items in module_items:
-        sub_items[:] = shuffle_by_class(sub_items)
-    random.shuffle(module_items)
+    def _module_key(module_item: Tuple[Optional[ModuleType], List[Item]]) -> bytes:
+        module, _items = module_item
+        if module is None:
+            return _md5(f"{seed}::None")
+        return _md5(f"{seed}::{module.__name__}")
 
-    items[:] = reduce_list_of_lists(module_items)
+    modules_items.sort(key=_module_key)
+
+    items[:] = reduce_list_of_lists([subitems for module, subitems in modules_items])
 
 
 def _get_module(item: Item) -> Optional[ModuleType]:
@@ -219,16 +230,28 @@ def _get_module(item: Item) -> Optional[ModuleType]:
         return None
 
 
-def shuffle_by_class(items: List[Item]) -> List[Item]:
-    class_items: List[List[Item]] = [
-        list(group) for _key, group in groupby(items, _get_cls)
-    ]
+def _shuffle_by_class(items: List[Item], seed: int) -> List[Item]:
+    klasses_items: List[Tuple[Optional[Type[Any]], List[Item]]] = []
 
-    for sub_items in class_items:
-        random.shuffle(sub_items)
-    random.shuffle(class_items)
+    for klass, group in groupby(items, _get_cls):
+        klass_items = [(_md5(f"{seed}::{item.nodeid}"), item) for item in group]
+        klass_items.sort()
+        klasses_items.append(
+            (
+                klass,
+                [item for _key, item in klass_items],
+            )
+        )
 
-    return reduce_list_of_lists(class_items)
+    def _cls_key(klass_items: Tuple[Optional[Type[Any]], List[Item]]) -> bytes:
+        klass, items = klass_items
+        if klass is None:
+            return _md5(f"{seed}::None")
+        return _md5(f"{seed}::{klass.__module__}.{klass.__qualname__}")
+
+    klasses_items.sort(key=_cls_key)
+
+    return reduce_list_of_lists([subitems for klass, subitems in klasses_items])
 
 
 def _get_cls(item: Item) -> Optional[Type[Any]]:
@@ -243,6 +266,12 @@ def reduce_list_of_lists(lists: List[List[T]]) -> List[T]:
     for list_ in lists:
         new_list.extend(list_)
     return new_list
+
+
+def _md5(string: str) -> bytes:
+    hasher = hashlib.md5()
+    hasher.update(string.encode())
+    return hasher.digest()
 
 
 if have_faker:

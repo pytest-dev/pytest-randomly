@@ -2,6 +2,13 @@
 History
 =======
 
+* Rework shuffling algorithm to use hashing. This means that running a subset
+  of tests with the same seed will now produce the same ordering as running the
+  full set of tests. This allows narrowing down ordering-related failures.
+
+  Thanks to Tom Grainger for the suggestion in `Issue #210
+  <https://github.com/pytest-dev/pytest-randomly/issues/210>`__.
+
 3.9.0 (2021-08-12)
 ------------------
 
@@ -24,7 +31,7 @@ History
 * Fix deprecation warning from importlib-metadata 3.9.0+.
 
   Thanks to Dominic Davis-Foster for report in `Issue #333
-  <https://github.com/pytest-dev/pytest-randomly/issue/333>`__.
+  <https://github.com/pytest-dev/pytest-randomly/issues/333>`__.
 
 * Stop distributing tests to reduce package size. Tests are not intended to be
   run outside of the tox setup in the repository. Repackagers can use GitHub's
