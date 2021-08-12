@@ -6,6 +6,7 @@ include HISTORY.rst
 include LICENSE
 include logo.png
 include README.rst
+include src/pytest_randomly/py.typed
 exclude .editorconfig
 exclude .pre-commit-config.yaml
 include pyproject.toml
