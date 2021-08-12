@@ -3,7 +3,7 @@ import hashlib
 import random
 import sys
 from types import ModuleType
-from typing import Any, Callable, List, Optional, Type, TypeVar, Union
+from typing import Any, Callable, Dict, List, Optional, Type, TypeVar, Union
 
 from _pytest.config import Config
 from _pytest.config.argparsing import Parser
@@ -126,8 +126,8 @@ class XdistHooks:
         node.workerinput["randomly_seed"] = seed  # type: ignore [attr-defined]
 
 
-random_states = {}
-np_random_states = {}
+random_states: Dict[int, object] = {}
+np_random_states: Dict[int, Any] = {}
 
 
 entrypoint_reseeds: Optional[List[Callable[[int], None]]] = None
