@@ -1,3 +1,4 @@
+from typing import List
 from unittest.mock import Mock
 
 import pytest
@@ -679,7 +680,7 @@ def test_entrypoint_injection(testdir, monkeypatch):
         def load(self):
             return self._obj
 
-    entry_points = []
+    entry_points: List[_FakeEntryPoint] = []
 
     def fake_entry_points(*, group):
         return entry_points

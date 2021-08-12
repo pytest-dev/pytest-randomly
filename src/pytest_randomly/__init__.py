@@ -2,7 +2,12 @@ import argparse
 import hashlib
 import random
 import sys
+from types import ModuleType
+from typing import Any, Callable, List, Optional, Type, TypeVar, Union
 
+from _pytest.config import Config
+from _pytest.config.argparsing import Parser
+from _pytest.nodes import Item
 from pytest import Collector, fixture
 
 if sys.version_info < (3, 10):
@@ -49,7 +54,7 @@ except ImportError:
 default_seed = random.Random().getrandbits(32)
 
 
-def seed_type(string):
+def seed_type(string: str) -> Union[str, int]:
     if string in ("default", "last"):
         return string
     try:
@@ -60,7 +65,7 @@ def seed_type(string):
         )
 
 
-def pytest_addoption(parser):
+def pytest_addoption(parser: Parser) -> None:
     group = parser.getgroup("randomly", "Randomizes tests")
     group._addoption(
         "--randomly-seed",
@@ -91,21 +96,23 @@ def pytest_addoption(parser):
     )
 
 
-def pytest_configure(config):
+def pytest_configure(config: Config) -> None:
     if config.pluginmanager.hasplugin("xdist"):
         config.pluginmanager.register(XdistHooks())
 
     seed_value = config.getoption("randomly_seed")
     if seed_value == "last":
+        assert config.cache is not None
         seed = config.cache.get("randomly_seed", default_seed)
     elif seed_value == "default":
         if hasattr(config, "workerinput"):
             # pytest-xdist: use seed generated on main.
-            seed = config.workerinput["randomly_seed"]
+            seed = config.workerinput["randomly_seed"]  # type: ignore [attr-defined]
         else:
             seed = default_seed
     else:
         seed = seed_value
+    assert config.cache is not None
     config.cache.set("randomly_seed", seed)
     config.option.randomly_seed = seed
 
@@ -114,18 +121,19 @@ class XdistHooks:
     # Hooks for xdist only, registered when needed in pytest_configure()
     # https://docs.pytest.org/en/latest/writing_plugins.html#optionally-using-hooks-from-3rd-party-plugins  # noqa: B950
 
-    def pytest_configure_node(self, node):
-        node.workerinput["randomly_seed"] = node.config.getoption("randomly_seed")
+    def pytest_configure_node(self, node: Item) -> None:
+        seed = node.config.getoption("randomly_seed")
+        node.workerinput["randomly_seed"] = seed  # type: ignore [attr-defined]
 
 
 random_states = {}
 np_random_states = {}
 
 
-entrypoint_reseeds = None
+entrypoint_reseeds: Optional[List[Callable[[int], None]]] = None
 
 
-def _reseed(config, offset=0):
+def _reseed(config: Config, offset: int = 0) -> None:
     global entrypoint_reseeds
     seed = config.getoption("randomly_seed") + offset
     if seed not in random_states:
@@ -156,7 +164,7 @@ def _reseed(config, offset=0):
         reseed(seed)
 
 
-def _truncate_seed_for_numpy(seed):
+def _truncate_seed_for_numpy(seed: int) -> int:
     seed = abs(seed)
     if seed <= 2 ** 32 - 1:
         return seed
@@ -165,37 +173,36 @@ def _truncate_seed_for_numpy(seed):
     return int.from_bytes(hashlib.sha512(seed_bytes).digest()[: 32 // 8], "big")
 
 
-def pytest_report_header(config):
+def pytest_report_header(config: Config) -> str:
     seed = config.getoption("randomly_seed")
     _reseed(config)
     return f"Using --randomly-seed={seed}"
 
 
-def pytest_runtest_setup(item):
+def pytest_runtest_setup(item: Item) -> None:
     if item.config.getoption("randomly_reset_seed"):
         _reseed(item.config, -1)
 
 
-def pytest_runtest_call(item):
+def pytest_runtest_call(item: Item) -> None:
     if item.config.getoption("randomly_reset_seed"):
         _reseed(item.config)
 
 
-def pytest_runtest_teardown(item):
+def pytest_runtest_teardown(item: Item) -> None:
     if item.config.getoption("randomly_reset_seed"):
         _reseed(item.config, 1)
 
 
-def pytest_collection_modifyitems(config, items):
+def pytest_collection_modifyitems(config: Config, items: List[Item]) -> None:
     if not config.getoption("randomly_reorganize"):
         return
 
     _reseed(config)
 
-    module_items = []
-
-    current_module = None
-    current_items = []
+    module_items: List[List[Item]] = []
+    current_module: Optional[ModuleType] = None
+    current_items: List[Item] = []
     for item in items:
 
         try:
@@ -219,10 +226,10 @@ def pytest_collection_modifyitems(config, items):
     items[:] = reduce_list_of_lists(module_items)
 
 
-def shuffle_by_class(items):
-    class_items = []
-    current_cls = None
-    current_items = []
+def shuffle_by_class(items: List[Item]) -> List[Item]:
+    class_items: List[List[Item]] = []
+    current_cls: Optional[Type[Any]] = None
+    current_items: List[Item] = []
 
     for item in items:
         if current_cls is None:
@@ -232,7 +239,7 @@ def shuffle_by_class(items):
             random.shuffle(current_items)
             class_items.append(current_items)
             current_items = [item]
-            current_cls = item.cls
+            current_cls = item.cls  # type: ignore [attr-defined]
         else:
             current_items.append(item)
 
@@ -244,7 +251,10 @@ def shuffle_by_class(items):
     return reduce_list_of_lists(class_items)
 
 
-def reduce_list_of_lists(lists):
+T = TypeVar("T")
+
+
+def reduce_list_of_lists(lists: List[List[T]]) -> List[T]:
     new_list = []
     for list_ in lists:
         new_list.extend(list_)
@@ -254,5 +264,5 @@ def reduce_list_of_lists(lists):
 if have_faker:
 
     @fixture(autouse=True)
-    def faker_seed(pytestconfig):
+    def faker_seed(pytestconfig: Config) -> None:
         return pytestconfig.getoption("randomly_seed")
