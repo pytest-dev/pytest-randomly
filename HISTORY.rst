@@ -2,6 +2,9 @@
 History
 =======
 
+3.10.1 (2021-08-13)
+-------------------
+
 * Fix new shuffling to work when one or more test in a class or module have the
   same test id.
 
