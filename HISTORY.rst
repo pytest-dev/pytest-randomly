@@ -2,6 +2,9 @@
 History
 =======
 
+3.10.0 (2021-08-13)
+-------------------
+
 * Rework shuffling algorithm to use hashing. This means that running a subset
   of tests with the same seed will now produce the same ordering as running the
   full set of tests. This allows narrowing down ordering-related failures.
