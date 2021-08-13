@@ -9,7 +9,7 @@ from typing import Any, Callable, Dict, List, Optional, Tuple, Type, TypeVar, Un
 from _pytest.config import Config
 from _pytest.config.argparsing import Parser
 from _pytest.nodes import Item
-from pytest import Collector, fixture
+from pytest import Collector, fixture, hookimpl
 
 if sys.version_info < (3, 10):
     from importlib_metadata import entry_points
@@ -197,6 +197,7 @@ def pytest_runtest_teardown(item: Item) -> None:
         _reseed(item.config, 1)
 
 
+@hookimpl(tryfirst=True)
 def pytest_collection_modifyitems(config: Config, items: List[Item]) -> None:
     if not config.getoption("randomly_reorganize"):
         return
