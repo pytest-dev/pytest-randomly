@@ -234,15 +234,13 @@ def _get_module(item: Item) -> Optional[ModuleType]:
 def _shuffle_by_class(items: List[Item], seed: int) -> List[Item]:
     klasses_items: List[Tuple[Optional[Type[Any]], List[Item]]] = []
 
+    def _item_key(item: Item) -> bytes:
+        return _md5(f"{seed}::{item.nodeid}")
+
     for klass, group in groupby(items, _get_cls):
-        klass_items = [(_md5(f"{seed}::{item.nodeid}"), item) for item in group]
-        klass_items.sort()
-        klasses_items.append(
-            (
-                klass,
-                [item for _key, item in klass_items],
-            )
-        )
+        klass_items = list(group)
+        klass_items.sort(key=_item_key)
+        klasses_items.append((klass, klass_items))
 
     def _cls_key(klass_items: Tuple[Optional[Type[Any]], List[Item]]) -> bytes:
         klass, items = klass_items

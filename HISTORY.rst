@@ -2,6 +2,12 @@
 History
 =======
 
+* Fix new shuffling to work when one or more test in a class or module have the
+  same test id.
+
+  Thanks to Nikita Sobolev for the report in `Issue #378
+  <https://github.com/pytest-dev/pytest-randomly/issues/378>`__.
+
 3.10.0 (2021-08-13)
 -------------------
 

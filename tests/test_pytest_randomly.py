@@ -469,6 +469,11 @@ def test_it_works_with_the_simplest_test_items(ourtestdir):
                         module=sys.modules[__name__],
                     ),
                     NoOpItem.from_parent(
+                        name=str(path) + "1",
+                        parent=parent,
+                        module=sys.modules[__name__],
+                    ),
+                    NoOpItem.from_parent(
                         name=str(path) + "2",
                         parent=parent,
                     ),
@@ -479,7 +484,7 @@ def test_it_works_with_the_simplest_test_items(ourtestdir):
     args = ["-v"]
 
     out = ourtestdir.runpytest(*args)
-    out.assert_outcomes(passed=2)
+    out.assert_outcomes(passed=3)
 
 
 def test_doctests_in_txt_files_reordered(ourtestdir):
