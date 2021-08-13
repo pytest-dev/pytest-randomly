@@ -505,6 +505,38 @@ def test_doctests_in_txt_files_reordered(ourtestdir):
     ]
 
 
+def test_it_runs_before_stepwise(ourtestdir):
+    ourtestdir.makepyfile(
+        test_one="""
+        def test_a():
+            assert 0
+
+
+        def test_b():
+            assert 0
+        """
+    )
+    out = ourtestdir.runpytest("-v", "--randomly-seed=1", "--stepwise")
+    out.assert_outcomes(failed=1)
+
+    # Now make test_b pass
+    ourtestdir.makepyfile(
+        test_one="""
+        def test_a():
+            assert 0
+
+
+        def test_b():
+            assert 1
+        """
+    )
+    ourtestdir.tmpdir.join("__pycache__").remove()
+    out = ourtestdir.runpytest("-v", "--randomly-seed=1", "--stepwise")
+    out.assert_outcomes(passed=1, failed=1)
+    out = ourtestdir.runpytest("-v", "--randomly-seed=1", "--stepwise")
+    out.assert_outcomes(failed=1)
+
+
 def test_fixtures_get_different_random_state_to_tests(ourtestdir):
     ourtestdir.makepyfile(
         test_one="""

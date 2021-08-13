@@ -9,6 +9,15 @@ History
   Thanks to Tom Grainger for the suggestion in `Issue #210
   <https://github.com/pytest-dev/pytest-randomly/issues/210>`__.
 
+* Shuffle before other test collection hooks. This allows
+  pytest’s `--stepwise flag
+  <https://docs.pytest.org/en/latest/cache.html#stepwise>`__ to work, among
+  other things.
+
+  Thanks to Tom Grainger for the suggestion to try with ``--stepwise``. Fixes
+  `Issue #376
+  <https://github.com/pytest-dev/pytest-randomly/issues/376>`__.
+
 3.9.0 (2021-08-12)
 ------------------
 
