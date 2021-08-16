@@ -1,7 +1,6 @@
 factory_boy
 faker
 importlib-metadata >= 3.6.0 ; python_version < "3.10"
-# Temporarily disable numpy on 3.10 as it doesn't work there yet
-numpy ; python_version < "3.10"
+numpy
 pytest
 pytest-xdist

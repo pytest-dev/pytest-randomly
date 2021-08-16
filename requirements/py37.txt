@@ -33,7 +33,7 @@ iniconfig==1.1.1 \
     --hash=sha256:011e24c64b7f47f6ebd835bb12a743f2fbe9a26d4cecaa7f53bc4f35ee9da8b3 \
     --hash=sha256:bc3af051d7d14b2ee5ef9969666def0cd1a000e121eaea580d4a313df4b37f32
     # via pytest
-numpy==1.21.1 ; python_version < "3.10" \
+numpy==1.21.1 \
     --hash=sha256:01721eefe70544d548425a07c80be8377096a54118070b8a62476866d5208e33 \
     --hash=sha256:0318c465786c1f63ac05d7c4dbcecd4d2d7e13f0959b01b534ea1e92202235c5 \
     --hash=sha256:05a0f648eb28bae4bcb204e6fd14603de2908de982e761a2fc78efe0f19e96e1 \
