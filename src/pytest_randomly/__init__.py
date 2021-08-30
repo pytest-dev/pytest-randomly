@@ -67,7 +67,7 @@ def seed_type(string: str) -> Union[str, int]:
 
 
 def pytest_addoption(parser: Parser) -> None:
-    group = parser.getgroup("randomly", "Randomizes tests")
+    group = parser.getgroup("randomly", "pytest-randomly")
     group._addoption(
         "--randomly-seed",
         action="store",
