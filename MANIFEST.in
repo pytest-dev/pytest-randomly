@@ -10,5 +10,4 @@ include src/pytest_randomly/py.typed
 exclude .editorconfig
 exclude .pre-commit-config.yaml
 include pyproject.toml
-exclude pytest.ini
 exclude tox.ini
