@@ -16,9 +16,9 @@ factory-boy==3.2.0 \
     --hash=sha256:1d3db4b44b8c8c54cdd8b83ae4bdb9aeb121e464400035f1f03ae0e1eade56a4 \
     --hash=sha256:401cc00ff339a022f84d64a4339503d1689e8263a4478d876e58a3295b155c5b
     # via -r requirements.in
-faker==8.12.1 \
-    --hash=sha256:6714c153433086681b26e5c95ee314ee0fcd45ec05f2426097543dd4c70789a6 \
-    --hash=sha256:810859626d19e62a2a13aa4a08d59ada131f0522431eec163b09b6df147a25b9
+faker==8.14.0 \
+    --hash=sha256:2649789e3e0c354dde1b8257d2ba7ed663fc3201e41277581de65c17e8aab10a \
+    --hash=sha256:7b116034973a9a977a34a8a380354028150edf69f6cfbe55c03a852dd0a4116b
     # via
     #   -r requirements.in
     #   factory-boy
@@ -87,9 +87,9 @@ pytest-forked==1.3.0 \
     --hash=sha256:6aa9ac7e00ad1a539c41bec6d21011332de671e938c7637378ec9710204e37ca \
     --hash=sha256:dc4147784048e70ef5d437951728825a131b81714b398d5d52f17c7c144d8815
     # via pytest-xdist
-pytest-xdist==2.3.0 \
-    --hash=sha256:e8ecde2f85d88fbcadb7d28cb33da0fa29bca5cf7d5967fa89fc0e97e5299ea5 \
-    --hash=sha256:ed3d7da961070fce2a01818b51f6888327fb88df4379edeb6b9d990e789d9c8d
+pytest-xdist==2.4.0 \
+    --hash=sha256:7b61ebb46997a0820a263553179d6d1e25a8c50d8a8620cd1aa1e20e3be99168 \
+    --hash=sha256:89b330316f7fc475f999c81b577c2b926c9569f3d397ae432c0c2e2496d61ff9
     # via -r requirements.in
 python-dateutil==2.8.2 \
     --hash=sha256:0123cacc1627ae19ddf3c27a5de5bd67ee4586fbdd6440d9748f8abb483d3e86 \
