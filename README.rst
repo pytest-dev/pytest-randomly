@@ -29,27 +29,33 @@ All of these features are on by default but can be disabled with flags.
 * Randomly shuffles the order of test items. This is done first at the level of
   modules, then at the level of test classes (if you have them), then at the
   order of functions. This also works with things like doctests.
-* Resets ``random.seed()`` at the start of every test case and test to a fixed
-  number - this defaults to ``time.time()`` from the start of your test run,
-  but you can pass in ``--randomly-seed`` to repeat a randomness-induced
-  failure.
+
+* Resets the global ``random.seed()`` at the start of every test case and test
+  to a fixed number - this defaults to ``time.time()`` from the start of your
+  test run, but you can pass in ``--randomly-seed`` to repeat a
+  randomness-induced failure.
+
 * If
   `factory boy <https://factoryboy.readthedocs.io/en/latest/reference.html>`_
   is installed, its random state is reset at the start of every test. This
   allows for repeatable use of its random 'fuzzy' features.
+
 * If `faker <https://pypi.org/project/faker>`_ is installed, its random
   state is reset at the start of every test. This is also for repeatable fuzzy
   data in tests - factory boy uses faker for lots of data. This is also done
   if you're using the ``faker`` pytest fixture, by defining the ``faker_seed``
   fixture
   (`docs <https://faker.readthedocs.io/en/master/pytest-fixtures.html#seeding-configuration>`__).
-* If `numpy <http://www.numpy.org/>`_ is installed, its random state is reset
-  at the start of every test.
+
+* If `numpy <http://www.numpy.org/>`_ is installed, its global random state is
+  reset at the start of every test.
+
 * If additional random generators are used, they can be registered under the
   ``pytest_randomly.random_seeder``
   `entry point <https://packaging.python.org/specifications/entry-points/>`_ and
   will have their seed reset at the start of every test. Register a function
   that takes the current seed value.
+
 * Works with `pytest-xdist <https://pypi.org/project/pytest-xdist/>`__.
 
 About
