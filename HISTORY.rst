@@ -2,6 +2,9 @@
 History
 =======
 
+3.10.2 (2021-11-10)
+-------------------
+
 * Fix crash when pytest’s cacheprovider is disabled.
 
   Thanks to Mandeep Sandhu for the report in `Issue #408
