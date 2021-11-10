@@ -134,6 +134,8 @@ Or more conveniently, use the special value ``last``:
 
     pytest --randomly-seed=last
 
+(This only works if pytest’s cacheprovider plugin has not been disabled.)
+
 Since the ordering is by module, then by class, you can debug inter-test
 pollution failures by narrowing down which tests are being run to find the bad
 interaction by rerunning just the module/class:

@@ -103,6 +103,9 @@ def pytest_configure(config: Config) -> None:
 
     seed_value = config.getoption("randomly_seed")
     if seed_value == "last":
+        assert hasattr(
+            config, "cache"
+        ), "The cacheprovider plugin is required to use 'last'"
         assert config.cache is not None
         seed = config.cache.get("randomly_seed", default_seed)
     elif seed_value == "default":
@@ -113,8 +116,9 @@ def pytest_configure(config: Config) -> None:
             seed = default_seed
     else:
         seed = seed_value
-    assert config.cache is not None
-    config.cache.set("randomly_seed", seed)
+    if hasattr(config, "cache"):
+        assert config.cache is not None
+        config.cache.set("randomly_seed", seed)
     config.option.randomly_seed = seed
 
 

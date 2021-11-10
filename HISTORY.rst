@@ -2,6 +2,11 @@
 History
 =======
 
+* Fix crash when pytest’s cacheprovider is disabled.
+
+  Thanks to Mandeep Sandhu for the report in `Issue #408
+  <https://github.com/pytest-dev/pytest-randomly/issues/408>`__.
+
 * Improve group name in ``pytest --help``.
 
 3.10.1 (2021-08-13)

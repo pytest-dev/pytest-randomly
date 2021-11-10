@@ -76,6 +76,17 @@ def test_it_reuses_the_same_random_seed_per_test(ourtestdir):
     out.assert_outcomes(passed=2, failed=0)
 
 
+def test_without_cacheprovider(ourtestdir):
+    ourtestdir.makepyfile(
+        test_one="""
+        def test_a():
+            pass
+        """
+    )
+    out = ourtestdir.runpytest("-p", "no:cacheprovider")
+    out.assert_outcomes(passed=1, failed=0)
+
+
 def test_using_last_seed(ourtestdir):
     ourtestdir.makepyfile(
         test_one="""
