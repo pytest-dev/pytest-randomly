@@ -162,9 +162,11 @@ def _reseed(config: Config, offset: int = 0) -> int:
             np_random.set_state(np_random_states[numpy_seed])
 
     if entrypoint_reseeds is None:
-        entrypoint_reseeds = [
-            e.load() for e in entry_points(group="pytest_randomly.random_seeder")
-        ]
+        # typeshed missing correct types for latest importlib.metadata changes
+        eps = entry_points(
+            group="pytest_randomly.random_seeder",  # type: ignore [call-arg]
+        )
+        entrypoint_reseeds = [e.load() for e in eps]  # type: ignore [attr-defined]
     for reseed in entrypoint_reseeds:
         reseed(seed)
 
