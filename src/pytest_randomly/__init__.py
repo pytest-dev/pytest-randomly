@@ -20,7 +20,7 @@ else:
 
 try:
     import xdist
-except ImportError:
+except ImportError:  # pragma: no cover
     xdist = None
 
 # factory-boy
@@ -28,7 +28,7 @@ try:
     from factory.random import set_random_state as factory_set_random_state
 
     have_factory_boy = True
-except ImportError:
+except ImportError:  # pragma: no cover
     # old versions
     try:
         from factory.fuzzy import set_random_state as factory_set_random_state
@@ -42,7 +42,7 @@ try:
     from faker.generator import random as faker_random
 
     have_faker = True
-except ImportError:
+except ImportError:  # pragma: no cover
     have_faker = False
 
 # numpy
@@ -50,7 +50,7 @@ try:
     from numpy import random as np_random
 
     have_numpy = True
-except ImportError:
+except ImportError:  # pragma: no cover
     have_numpy = False
 
 
@@ -111,7 +111,7 @@ def pytest_configure(config: Config) -> None:
         assert config.cache is not None
         seed = config.cache.get("randomly_seed", default_seed)
     elif seed_value == "default":
-        if hasattr(config, "workerinput"):
+        if hasattr(config, "workerinput"):  # pragma: no cover
             # pytest-xdist: use seed generated on main.
             seed = config.workerinput["randomly_seed"]  # type: ignore [attr-defined]
         else:
@@ -149,13 +149,13 @@ def _reseed(config: Config, offset: int = 0) -> int:
     else:
         random.setstate(random_states[seed])
 
-    if have_factory_boy:
+    if have_factory_boy:  # pragma: no branch
         factory_set_random_state(random_states[seed])
 
-    if have_faker:
+    if have_faker:  # pragma: no branch
         faker_random.setstate(random_states[seed])
 
-    if have_numpy:
+    if have_numpy:  # pragma: no branch
         numpy_seed = _truncate_seed_for_numpy(seed)
         if numpy_seed not in np_random_states:
             np_random.seed(numpy_seed)
@@ -281,7 +281,7 @@ def _md5(string: str) -> bytes:
     return hasher.digest()
 
 
-if have_faker:
+if have_faker:  # pragma: no branch
 
     @fixture(autouse=True)
     def faker_seed(pytestconfig: Config) -> None:
