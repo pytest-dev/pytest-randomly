@@ -11,6 +11,8 @@ from _pytest.config.argparsing import Parser
 from _pytest.nodes import Item
 from pytest import Collector, fixture, hookimpl
 
+from pytest_randomly.compat import md5
+
 if sys.version_info < (3, 10):
     from importlib_metadata import entry_points
 else:
@@ -274,7 +276,7 @@ def reduce_list_of_lists(lists: List[List[T]]) -> List[T]:
 
 
 def _md5(string: str) -> bytes:
-    hasher = hashlib.md5()
+    hasher = md5()
     hasher.update(string.encode())
     return hasher.digest()
 
