@@ -2,6 +2,9 @@
 History
 =======
 
+3.10.3 (2021-11-30)
+-------------------
+
 * Work on FIPS Python 3.9+, by declaring use of ``hashlib.md5()`` as not used for security.
 
   Thanks to dantebben for the report in `Issue #414 <https://github.com/pytest-dev/pytest-randomly/issues/414>`__.
