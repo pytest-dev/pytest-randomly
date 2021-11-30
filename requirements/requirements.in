@@ -1,3 +1,4 @@
+coverage
 factory_boy
 faker
 importlib-metadata >= 3.6.0 ; python_version < "3.10"
