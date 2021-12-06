@@ -6,7 +6,7 @@ pytest-randomly
    :target: https://github.com/pytest-dev/pytest-randomly/actions?workflow=CI
 
 .. image:: https://img.shields.io/badge/Coverage-100%25-success?style=for-the-badge
-  :target: https://github.com/pytest-dev/pytest/actions?workflow=CI
+  :target: https://github.com/pytest-dev/pytest-randomly/actions?workflow=CI
 
 .. image:: https://img.shields.io/pypi/v/pytest-randomly.svg?style=for-the-badge
    :target: https://pypi.org/project/pytest-randomly/
