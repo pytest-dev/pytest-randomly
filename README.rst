@@ -94,7 +94,7 @@ pytest-randomly <https://testandcode.com/128>`__.
 Installation
 ============
 
-Install from pip with:
+Install with:
 
 .. code-block:: bash
 
