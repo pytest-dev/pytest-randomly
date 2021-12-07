@@ -545,7 +545,7 @@ def test_it_runs_before_stepwise(ourtestdir):
     out = ourtestdir.runpytest("-v", "--randomly-seed=1", "--stepwise")
     out.assert_outcomes(passed=1, failed=1)
     out = ourtestdir.runpytest("-v", "--randomly-seed=1", "--stepwise")
-    out.assert_outcomes(failed=1)
+    out.assert_outcomes(failed=1, deselected=1)
 
 
 def test_fixtures_get_different_random_state_to_tests(ourtestdir):
@@ -571,11 +571,18 @@ def test_fixtures_get_different_random_state_to_tests(ourtestdir):
 
 def test_fixtures_dont_interfere_with_tests_getting_same_random_state(ourtestdir):
     ourtestdir.makepyfile(
+        conftest="""
+
+        def pytest_configure(config):
+            config.addinivalue_line("markers", "one: test marker one")
+            config.addinivalue_line("markers", "two: test marker two")
+        """
+    )
+    ourtestdir.makepyfile(
         test_one="""
         import random
 
         import pytest
-
 
         random.seed(2)
         state_at_seed_two = random.getstate()
@@ -586,12 +593,12 @@ def test_fixtures_dont_interfere_with_tests_getting_same_random_state(ourtestdir
             return random.random()
 
 
-        @pytest.mark.one()
+        @pytest.mark.one
         def test_one(myfixture):
             assert random.getstate() == state_at_seed_two
 
 
-        @pytest.mark.two()
+        @pytest.mark.two
         def test_two(myfixture):
             assert random.getstate() == state_at_seed_two
         """
@@ -602,9 +609,9 @@ def test_fixtures_dont_interfere_with_tests_getting_same_random_state(ourtestdir
     out.assert_outcomes(passed=2)
 
     out = ourtestdir.runpytest("-m", "one", *args)
-    out.assert_outcomes(passed=1)
+    out.assert_outcomes(passed=1, deselected=1)
     out = ourtestdir.runpytest("-m", "two", *args)
-    out.assert_outcomes(passed=1)
+    out.assert_outcomes(passed=1, deselected=1)
 
 
 def test_factory_boy(ourtestdir):
@@ -704,7 +711,7 @@ def test_failing_import(testdir):
     pytest_collection_modifyitems.
     """
     modcol = testdir.getmodulecol("import alksdjalskdjalkjals")
-    assert modcol.instance is None
+    assert modcol.cls is None
 
     modcol = testdir.getmodulecol("pytest_plugins='xasdlkj',")
     with pytest.raises(ImportError):
