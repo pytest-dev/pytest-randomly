@@ -126,7 +126,7 @@ def pytest_configure(config: Config) -> None:
 
 class XdistHooks:
     # Hooks for xdist only, registered when needed in pytest_configure()
-    # https://docs.pytest.org/en/latest/writing_plugins.html#optionally-using-hooks-from-3rd-party-plugins  # noqa: B950
+    # https://docs.pytest.org/en/latest/writing_plugins.html#optionally-using-hooks-from-3rd-party-plugins  # noqa: E501
 
     def pytest_configure_node(self, node: Item) -> None:
         seed = node.config.getoption("randomly_seed")
