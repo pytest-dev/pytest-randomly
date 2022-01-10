@@ -25,7 +25,7 @@ def ourtestdir(testdir):
     #   File ".../site-packages/numpy/core/overrides.py", line 204, in decorator
     # add_docstring(implementation, dispatcher.__doc__)
     # RuntimeError: empty_like method already has a docstring
-    testdir._runpytest_method = testdir.runpytest_subprocess
+    # testdir._runpytest_method = testdir.runpytest_subprocess
 
     yield testdir
 
@@ -711,9 +711,9 @@ def test_failing_import(testdir):
         modcol.obj
 
 
-@mock.patch.object(pytest_randomly, "entrypoint_reseeds", None)
-def test_entrypoint_injection(testdir, monkeypatch):
+def test_entrypoint_injection(pytester, monkeypatch):
     """Test that registered entry points are seeded"""
+    (pytester.path / "test_one.py").write_text("def test_one(): pass\n")
 
     class _FakeEntryPoint:
         """Minimal surface of Entry point API to allow testing"""
@@ -735,25 +735,41 @@ def test_entrypoint_injection(testdir, monkeypatch):
     entry_points.append(_FakeEntryPoint("test_seeder", reseed))
 
     # Need to run in-process so that monkeypatching works
-    testdir.runpytest("--randomly-seed=1")
-    assert reseed.call_args == ((1,),)
-    testdir.runpytest("--randomly-seed=424242")
-    assert reseed.call_args == ((424242,),)
+    pytester.runpytest_inprocess("--randomly-seed=1")
+    assert reseed.mock_calls == [
+        mock.call(1),
+        mock.call(1),
+        mock.call(0),
+        mock.call(1),
+        mock.call(2),
+    ]
+
+    reseed.mock_calls[:] = []
+    pytester.runpytest_inprocess("--randomly-seed=424242")
+    assert reseed.mock_calls == [
+        mock.call(424242),
+        mock.call(424242),
+        mock.call(424241),
+        mock.call(424242),
+        mock.call(424243),
+    ]
 
 
-@mock.patch.object(pytest_randomly, "entrypoint_reseeds", None)
-def test_entrypoint_missing(testdir, monkeypatch):
+def test_entrypoint_missing(pytester, monkeypatch):
     """
     Test that if there aren't any registered entrypoints, it doesn't crash
     """
+    (pytester.path / "test_one.py").write_text("def test_one(): pass\n")
 
-    def fake_entry_points():
-        return {}
+    def fake_entry_points(group):
+        return []
 
     monkeypatch.setattr(pytest_randomly, "entry_points", fake_entry_points)
 
     # Need to run in-process so that monkeypatching works
-    testdir.runpytest("--randomly-seed=1")
+    result = pytester.runpytest_inprocess("--randomly-seed=1")
+
+    assert result.ret == 0
 
 
 def test_works_without_xdist(simpletestdir):
