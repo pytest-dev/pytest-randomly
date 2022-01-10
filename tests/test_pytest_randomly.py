@@ -1,5 +1,5 @@
 from typing import List
-from unittest.mock import Mock
+from unittest import mock
 
 import pytest
 
@@ -711,6 +711,7 @@ def test_failing_import(testdir):
         modcol.obj
 
 
+@mock.patch.object(pytest_randomly, "entrypoint_reseeds", None)
 def test_entrypoint_injection(testdir, monkeypatch):
     """Test that registered entry points are seeded"""
 
@@ -730,7 +731,7 @@ def test_entrypoint_injection(testdir, monkeypatch):
         return entry_points
 
     monkeypatch.setattr(pytest_randomly, "entry_points", fake_entry_points)
-    reseed = Mock()
+    reseed = mock.Mock()
     entry_points.append(_FakeEntryPoint("test_seeder", reseed))
 
     # Need to run in-process so that monkeypatching works
@@ -740,6 +741,7 @@ def test_entrypoint_injection(testdir, monkeypatch):
     assert reseed.call_args == ((424242,),)
 
 
+@mock.patch.object(pytest_randomly, "entrypoint_reseeds", None)
 def test_entrypoint_missing(testdir, monkeypatch):
     """
     Test that if there aren't any registered entrypoints, it doesn't crash
