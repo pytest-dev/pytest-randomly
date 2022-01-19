@@ -1,10 +1,12 @@
+from __future__ import annotations
+
 import argparse
 import hashlib
 import random
 import sys
 from itertools import groupby
 from types import ModuleType
-from typing import Any, Callable, Dict, List, Optional, Tuple, Type, TypeVar, Union
+from typing import Any, Callable, TypeVar
 
 from _pytest.config import Config
 from _pytest.config.argparsing import Parser
@@ -57,7 +59,7 @@ except ImportError:  # pragma: no cover
 default_seed = random.Random().getrandbits(32)
 
 
-def seed_type(string: str) -> Union[str, int]:
+def seed_type(string: str) -> str | int:
     if string in ("default", "last"):
         return string
     try:
@@ -133,11 +135,11 @@ class XdistHooks:
         node.workerinput["randomly_seed"] = seed  # type: ignore [attr-defined]
 
 
-random_states: Dict[int, object] = {}
-np_random_states: Dict[int, Any] = {}
+random_states: dict[int, object] = {}
+np_random_states: dict[int, Any] = {}
 
 
-entrypoint_reseeds: Optional[List[Callable[[int], None]]] = None
+entrypoint_reseeds: list[Callable[[int], None]] | None = None
 
 
 def _reseed(config: Config, offset: int = 0) -> int:
@@ -206,13 +208,13 @@ def pytest_runtest_teardown(item: Item) -> None:
 
 
 @hookimpl(tryfirst=True)
-def pytest_collection_modifyitems(config: Config, items: List[Item]) -> None:
+def pytest_collection_modifyitems(config: Config, items: list[Item]) -> None:
     if not config.getoption("randomly_reorganize"):
         return
 
     seed = _reseed(config)
 
-    modules_items: List[Tuple[Optional[ModuleType], List[Item]]] = []
+    modules_items: list[tuple[ModuleType | None, list[Item]]] = []
     for module, group in groupby(items, _get_module):
         modules_items.append(
             (
@@ -221,7 +223,7 @@ def pytest_collection_modifyitems(config: Config, items: List[Item]) -> None:
             )
         )
 
-    def _module_key(module_item: Tuple[Optional[ModuleType], List[Item]]) -> bytes:
+    def _module_key(module_item: tuple[ModuleType | None, list[Item]]) -> bytes:
         module, _items = module_item
         if module is None:
             return _md5(f"{seed}::None")
@@ -232,15 +234,15 @@ def pytest_collection_modifyitems(config: Config, items: List[Item]) -> None:
     items[:] = reduce_list_of_lists([subitems for module, subitems in modules_items])
 
 
-def _get_module(item: Item) -> Optional[ModuleType]:
+def _get_module(item: Item) -> ModuleType | None:
     try:
         return getattr(item, "module", None)
     except (ImportError, Collector.CollectError):
         return None
 
 
-def _shuffle_by_class(items: List[Item], seed: int) -> List[Item]:
-    klasses_items: List[Tuple[Optional[Type[Any]], List[Item]]] = []
+def _shuffle_by_class(items: list[Item], seed: int) -> list[Item]:
+    klasses_items: list[tuple[type[Any] | None, list[Item]]] = []
 
     def _item_key(item: Item) -> bytes:
         return _md5(f"{seed}::{item.nodeid}")
@@ -250,7 +252,7 @@ def _shuffle_by_class(items: List[Item], seed: int) -> List[Item]:
         klass_items.sort(key=_item_key)
         klasses_items.append((klass, klass_items))
 
-    def _cls_key(klass_items: Tuple[Optional[Type[Any]], List[Item]]) -> bytes:
+    def _cls_key(klass_items: tuple[type[Any] | None, list[Item]]) -> bytes:
         klass, items = klass_items
         if klass is None:
             return _md5(f"{seed}::None")
@@ -261,14 +263,14 @@ def _shuffle_by_class(items: List[Item], seed: int) -> List[Item]:
     return reduce_list_of_lists([subitems for klass, subitems in klasses_items])
 
 
-def _get_cls(item: Item) -> Optional[Type[Any]]:
+def _get_cls(item: Item) -> type[Any] | None:
     return getattr(item, "cls", None)
 
 
 T = TypeVar("T")
 
 
-def reduce_list_of_lists(lists: List[List[T]]) -> List[T]:
+def reduce_list_of_lists(lists: list[list[T]]) -> list[T]:
     new_list = []
     for list_ in lists:
         new_list.extend(list_)
