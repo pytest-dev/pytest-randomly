@@ -1,4 +1,5 @@
-from typing import List
+from __future__ import annotations
+
 from unittest import mock
 
 import pytest
@@ -725,7 +726,7 @@ def test_entrypoint_injection(pytester, monkeypatch):
         def load(self):
             return self._obj
 
-    entry_points: List[_FakeEntryPoint] = []
+    entry_points: list[_FakeEntryPoint] = []
 
     def fake_entry_points(*, group):
         return entry_points
