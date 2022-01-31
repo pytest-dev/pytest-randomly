@@ -179,7 +179,7 @@ def _reseed(config: Config, offset: int = 0) -> int:
 
 def _truncate_seed_for_numpy(seed: int) -> int:
     seed = abs(seed)
-    if seed <= 2 ** 32 - 1:
+    if seed <= 2**32 - 1:
         return seed
 
     seed_bytes = seed.to_bytes(seed.bit_length(), "big")
