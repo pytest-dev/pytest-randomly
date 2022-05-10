@@ -135,7 +135,7 @@ class XdistHooks:
         node.workerinput["randomly_seed"] = seed  # type: ignore [attr-defined]
 
 
-random_states: dict[int, object] = {}
+random_states: dict[int, tuple[Any, ...]] = {}
 np_random_states: dict[int, Any] = {}
 
 
@@ -166,11 +166,8 @@ def _reseed(config: Config, offset: int = 0) -> int:
             np_random.set_state(np_random_states[numpy_seed])
 
     if entrypoint_reseeds is None:
-        # typeshed missing correct types for latest importlib.metadata changes
-        eps = entry_points(
-            group="pytest_randomly.random_seeder",  # type: ignore [call-arg]
-        )
-        entrypoint_reseeds = [e.load() for e in eps]  # type: ignore [attr-defined]
+        eps = entry_points(group="pytest_randomly.random_seeder")
+        entrypoint_reseeds = [e.load() for e in eps]
     for reseed in entrypoint_reseeds:
         reseed(seed)
 
