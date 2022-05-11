@@ -2,6 +2,6 @@ coverage
 factory_boy
 faker
 importlib-metadata >= 3.6.0 ; python_version < "3.10"
-numpy
+numpy ; python_version < "3.11"
 pytest
 pytest-xdist
