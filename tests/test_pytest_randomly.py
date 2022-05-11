@@ -6,6 +6,13 @@ import pytest
 
 import pytest_randomly
 
+try:
+    import numpy  # noqa: F401
+
+    HAVE_NUMPY = True
+except ImportError:
+    HAVE_NUMPY = False
+
 pytest_plugins = ["pytester"]
 
 
@@ -667,6 +674,7 @@ def test_faker_fixture(ourtestdir):
     out.assert_outcomes(passed=2)
 
 
+@pytest.mark.skipif(not HAVE_NUMPY, reason="numpy not installed")
 def test_numpy(ourtestdir):
     ourtestdir.makepyfile(
         test_one="""
@@ -684,6 +692,7 @@ def test_numpy(ourtestdir):
     out.assert_outcomes(passed=2)
 
 
+@pytest.mark.skipif(not HAVE_NUMPY, reason="numpy not installed")
 def test_numpy_doesnt_crash_with_large_seed(ourtestdir):
     ourtestdir.makepyfile(
         test_one="""
