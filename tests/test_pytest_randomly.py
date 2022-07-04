@@ -807,3 +807,9 @@ def test_xdist(n, ourtestdir):
 
     # Can't make any assertion on the order, since output comes back from
     # workers non-deterministically
+
+    
+def test_randomly_seed_fixture():
+    config = object
+    config.option.randomly_seed = 1234
+    assert pytest_randomly.randomly_seed(config) == 1234
