@@ -282,7 +282,7 @@ def _md5(string: str) -> bytes:
 
 @fixture(scope="session")
 def randomly_seed(pytestconfig: Config) -> int:
-    return pytestconfig.config.option.randomly_seed
+    return pytestconfig.option.randomly_seed
 
 
 if have_faker:  # pragma: no branch
