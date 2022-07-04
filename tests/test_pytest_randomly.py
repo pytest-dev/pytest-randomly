@@ -810,6 +810,7 @@ def test_xdist(n, ourtestdir):
 
 
 def test_randomly_seed_fixture():
-    config = object
+    config = mock.Mock()
+    config.option = mock.Mock()
     config.option.randomly_seed = 1234
     assert pytest_randomly.randomly_seed(config) == 1234
