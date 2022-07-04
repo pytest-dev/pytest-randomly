@@ -55,9 +55,9 @@ All of these features are on by default but can be disabled with flags.
 
 * If additional random generators are used, they can be registered under the
   ``pytest_randomly.random_seeder``
-  `entry point <https://packaging.python.org/specifications/entry-points/>`_ and
-  will have their seed reset at the start of every test. Register a function
-  that takes the current seed value.
+  `entry point <https://packaging.python.org/specifications/entry-points/>`_ or
+  ``randomly_seed`` fixture. They will have their seed reset at the start of
+  every test. Register a function that takes the current seed value.
 
 * Works with `pytest-xdist <https://pypi.org/project/pytest-xdist/>`__.
 
