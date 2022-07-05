@@ -135,6 +135,8 @@ class XdistHooks:
         node.workerinput["randomly_seed"] = seed  # type: ignore [attr-defined]
 
 
+_current_seed: int | None = None
+
 random_states: dict[int, tuple[Any, ...]] = {}
 np_random_states: dict[int, Any] = {}
 
@@ -143,8 +145,8 @@ entrypoint_reseeds: list[Callable[[int], None]] | None = None
 
 
 def _reseed(config: Config, offset: int = 0) -> int:
-    global entrypoint_reseeds
-    seed = config.getoption("randomly_seed") + offset
+    global entrypoint_reseeds, _current_seed
+    seed = _current_seed = config.getoption("randomly_seed") + offset
     if seed not in random_states:
         random.seed(seed)
         random_states[seed] = random.getstate()
@@ -280,9 +282,10 @@ def _md5(string: str) -> bytes:
     return hasher.digest()
 
 
-@fixture(scope="session")
-def randomly_seed(pytestconfig: Config) -> int:
-    return pytestconfig.option.randomly_seed
+def get_seed() -> int:
+    if _current_seed is None:
+        raise ReferenceError("Seed is not setted, please wait until pytest will start.")
+    return _current_seed
 
 
 if have_faker:  # pragma: no branch

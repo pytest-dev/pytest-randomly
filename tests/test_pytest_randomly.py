@@ -809,8 +809,13 @@ def test_xdist(n, ourtestdir):
     # workers non-deterministically
 
 
-def test_randomly_seed_fixture():
-    config = mock.Mock()
-    config.option = mock.Mock()
-    config.option.randomly_seed = 1234
-    assert pytest_randomly.randomly_seed(config) == 1234
+def test_get_seed():
+    pytest_randomly._current_seed = mock.Mock()
+    # `is` comparing links to objects, we should use it here
+    assert pytest_randomly.get_seed() is pytest_randomly._current_seed
+
+
+def test_get_seed_but_pytest_didnt_start():
+    pytest_randomly._current_seed = None
+    with pytest.raises(ReferenceError):
+        pytest_randomly.get_seed()
