@@ -4,9 +4,9 @@
 #
 #    requirements/compile.py
 #
-attrs==21.4.0 \
-    --hash=sha256:2d27e3784d7a565d36ab851fe94887c5eccd6a463168875832a1be79c82828b4 \
-    --hash=sha256:626ba8234211db98e869df76230a137c4c40a12d72445c45d5f5b716f076e2fd
+attrs==22.1.0 \
+    --hash=sha256:29adc2665447e5191d0e7c568fde78b21f9672d344281d0c6e1ab085429b22b6 \
+    --hash=sha256:86efa402f67bf2df34f51a335487cf46b1ec130d02b8d39fd248abfd30da551c
     # via pytest
 coverage==6.4.2 \
     --hash=sha256:0895ea6e6f7f9939166cc835df8fa4599e2d9b759b02d1521b574e13b859ac32 \
@@ -59,9 +59,9 @@ factory-boy==3.2.1 \
     --hash=sha256:a98d277b0c047c75eb6e4ab8508a7f81fb03d2cb21986f627913546ef7a2a55e \
     --hash=sha256:eb02a7dd1b577ef606b75a253b9818e6f9eaf996d94449c9d5ebb124f90dc795
     # via -r requirements.in
-faker==13.15.0 \
-    --hash=sha256:8e94a749d2f3d9b367f61eb33be6a534f0a2d305c54e912ee6618370e3278db7 \
-    --hash=sha256:a126fa66f54e65a67f913dcc698c9d023def7277882536bde2968fcac701bfd5
+faker==13.15.1 \
+    --hash=sha256:172e45220b7a46743f4fb58cf380adb306d5c3ab1c0b0d97062508474cec5ff8 \
+    --hash=sha256:7c3f8ee807d3916415568169a172bf0893ea9cc3371ab55e4e5f5170d2185bea
     # via
     #   -r requirements.in
     #   factory-boy
