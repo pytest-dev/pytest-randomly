@@ -144,7 +144,7 @@ entrypoint_reseeds: list[Callable[[int], None]] | None = None
 
 def _reseed(config: Config, offset: int = 0) -> int:
     global entrypoint_reseeds
-    seed = config.getoption("randomly_seed") + offset
+    seed: int = config.getoption("randomly_seed") + offset
     if seed not in random_states:
         random.seed(seed)
         random_states[seed] = random.getstate()
@@ -204,7 +204,8 @@ def pytest_runtest_teardown(item: Item) -> None:
         _reseed(item.config, 1)
 
 
-@hookimpl(tryfirst=True)
+# pytest missing type hints for @hookimpl
+@hookimpl(tryfirst=True)  # type: ignore [misc]
 def pytest_collection_modifyitems(config: Config, items: list[Item]) -> None:
     if not config.getoption("randomly_reorganize"):
         return
@@ -283,5 +284,6 @@ def _md5(string: str) -> bytes:
 if have_faker:  # pragma: no branch
 
     @fixture(autouse=True)
-    def faker_seed(pytestconfig: Config) -> None:
-        return pytestconfig.getoption("randomly_seed")
+    def faker_seed(pytestconfig: Config) -> int:
+        result: int = pytestconfig.getoption("randomly_seed")
+        return result
