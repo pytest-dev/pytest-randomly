@@ -728,11 +728,11 @@ def test_entrypoint_injection(pytester, monkeypatch):
     class _FakeEntryPoint:
         """Minimal surface of Entry point API to allow testing"""
 
-        def __init__(self, name, obj):
+        def __init__(self, name: str, obj: mock.Mock) -> None:
             self.name = name
             self._obj = obj
 
-        def load(self):
+        def load(self) -> mock.Mock:
             return self._obj
 
     entry_points: list[_FakeEntryPoint] = []
