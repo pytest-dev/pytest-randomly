@@ -85,7 +85,7 @@ iniconfig==1.1.1 \
     --hash=sha256:011e24c64b7f47f6ebd835bb12a743f2fbe9a26d4cecaa7f53bc4f35ee9da8b3 \
     --hash=sha256:bc3af051d7d14b2ee5ef9969666def0cd1a000e121eaea580d4a313df4b37f32
     # via pytest
-numpy==1.21.6 ; python_version < "3.11" \
+numpy==1.21.6 \
     --hash=sha256:1dbe1c91269f880e364526649a52eff93ac30035507ae980d2fed33aaee633ac \
     --hash=sha256:357768c2e4451ac241465157a3e929b265dfac85d9214074985b1786244f2ef3 \
     --hash=sha256:3820724272f9913b597ccd13a467cc492a0da6b05df26ea09e78b171a0bb9da6 \
