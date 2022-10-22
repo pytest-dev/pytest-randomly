@@ -68,9 +68,9 @@ factory-boy==3.2.1 \
     --hash=sha256:a98d277b0c047c75eb6e4ab8508a7f81fb03d2cb21986f627913546ef7a2a55e \
     --hash=sha256:eb02a7dd1b577ef606b75a253b9818e6f9eaf996d94449c9d5ebb124f90dc795
     # via -r requirements.in
-faker==15.0.0 \
-    --hash=sha256:245fc7d23470dc57164bd9a59b7b1126e16289ffcf813d88a6c8e9b8a37ea3fb \
-    --hash=sha256:84c83f0ac1a2c8ecabd784c501aa0ef1d082d4aee52c3d797d586081c166434c
+faker==15.1.1 \
+    --hash=sha256:096c15e136adb365db24d8c3964fe26bfc68fe060c9385071a339f8c14e09c8a \
+    --hash=sha256:a741b77f484215c3aab2604100669657189548f440fcb2ed0f8b7ee21c385629
     # via
     #   -r requirements.in
     #   factory-boy
@@ -169,7 +169,7 @@ typing-extensions==4.4.0 \
     # via
     #   faker
     #   importlib-metadata
-zipp==3.8.1 \
-    --hash=sha256:05b45f1ee8f807d0cc928485ca40a07cb491cf092ff587c0df9cb1fd154848d2 \
-    --hash=sha256:47c40d7fe183a6f21403a199b3e4192cca5774656965b0a4988ad2f8feb5f009
+zipp==3.9.0 \
+    --hash=sha256:3a7af91c3db40ec72dd9d154ae18e008c69efe8ca88dde4f9a731bb82fe2f9eb \
+    --hash=sha256:972cfa31bc2fedd3fa838a51e9bc7e64b7fb725a8c00e7431554311f180e9980
     # via importlib-metadata
