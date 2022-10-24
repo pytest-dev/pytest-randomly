@@ -6,7 +6,7 @@ import random
 import sys
 from itertools import groupby
 from types import ModuleType
-from typing import Any, Callable, TypeVar, List
+from typing import Any, Callable, TypeVar
 
 from _pytest.config import Config
 from _pytest.config.argparsing import Parser
