@@ -108,7 +108,6 @@ def pytest_addoption(parser: Parser) -> None:
     )
 
 
-
 def pytest_configure(config: Config) -> None:
     if config.pluginmanager.hasplugin("xdist"):
         config.pluginmanager.register(XdistHooks())
@@ -174,7 +173,7 @@ def _reseed(config: Config, offset: int = 0) -> int:
             np_random.set_state(np_random_states[numpy_seed])
 
     if entrypoint_reseeds is None:
-        seeders: List[str] = config.getoption("randomly_seeders")
+        seeders: list[str] = config.getoption("randomly_seeders")
         eps = entry_points(group="pytest_randomly.random_seeder")
         seeders = [] if seeders is None else seeders
         entrypoint_reseeds = [e.load() for e in eps if e.name in seeders]
