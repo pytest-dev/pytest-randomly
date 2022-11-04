@@ -6,12 +6,16 @@ import random
 import sys
 from itertools import groupby
 from types import ModuleType
-from typing import Any, Callable, TypeVar
+from typing import Any
+from typing import Callable
+from typing import TypeVar
 
 from _pytest.config import Config
 from _pytest.config.argparsing import Parser
 from _pytest.nodes import Item
-from pytest import Collector, fixture, hookimpl
+from pytest import Collector
+from pytest import fixture
+from pytest import hookimpl
 
 from pytest_randomly.compat import md5
 
