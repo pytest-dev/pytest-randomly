@@ -119,7 +119,7 @@ def pytest_configure(config: Config) -> None:
     elif seed_value == "default":
         if hasattr(config, "workerinput"):  # pragma: no cover
             # pytest-xdist: use seed generated on main.
-            seed = config.workerinput["randomly_seed"]  # type: ignore [attr-defined]
+            seed = config.workerinput["randomly_seed"]
         else:
             seed = default_seed
     else:
