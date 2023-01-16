@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import shutil
 from unittest import mock
 
 import pytest
@@ -16,9 +17,13 @@ def reset_entrypoints_cache():
 
 
 @pytest.fixture
-def ourtestdir(testdir):
-    testdir.tmpdir.join("pytest.ini").write(
-        "[pytest]\n" "console_output_style = classic"
+def ourtester(pytester):
+    pytester.makefile(
+        ".ini",
+        pytest="""
+            [pytest]
+            console_output_style = classic
+            """,
     )
 
     # Change from default running pytest in-process to running in a subprocess
@@ -28,37 +33,37 @@ def ourtestdir(testdir):
     # RuntimeError: empty_like method already has a docstring
     # testdir._runpytest_method = testdir.runpytest_subprocess
 
-    yield testdir
+    yield pytester
 
 
 @pytest.fixture
-def simpletestdir(ourtestdir):
-    ourtestdir.makepyfile(
+def simpletester(ourtester):
+    ourtester.makepyfile(
         test_one="""
-        def test_a():
-            assert True
-        """
+            def test_a():
+                assert True
+            """,
     )
-    yield ourtestdir
+    yield ourtester
 
 
-def test_it_reports_a_header_when_not_set(simpletestdir):
-    out = simpletestdir.runpytest()
+def test_it_reports_a_header_when_not_set(simpletester):
+    out = simpletester.runpytest()
     assert len([x for x in out.outlines if x.startswith("Using --randomly-seed=")]) == 1
 
 
-def test_it_reports_a_header_when_set(simpletestdir):
-    out = simpletestdir.runpytest("--randomly-seed=10")
+def test_it_reports_a_header_when_set(simpletester):
+    out = simpletester.runpytest("--randomly-seed=10")
     lines = [x for x in out.outlines if x.startswith("Using --randomly-seed=")]
     assert lines == ["Using --randomly-seed=10"]
 
 
-def test_it_reuses_the_same_random_seed_per_test(ourtestdir):
+def test_it_reuses_the_same_random_seed_per_test(ourtester):
     """
     Run a pair of tests that generate the a number and then assert they got
     what the other did.
     """
-    ourtestdir.makepyfile(
+    ourtester.makepyfile(
         test_one="""
         import random
 
@@ -73,63 +78,63 @@ def test_it_reuses_the_same_random_seed_per_test(ourtestdir):
                 assert test_b.num == test_a.num
         """
     )
-    out = ourtestdir.runpytest("--randomly-dont-reorganize")
+    out = ourtester.runpytest("--randomly-dont-reorganize")
     out.assert_outcomes(passed=2, failed=0)
 
 
-def test_without_cacheprovider(ourtestdir):
-    ourtestdir.makepyfile(
+def test_without_cacheprovider(ourtester):
+    ourtester.makepyfile(
         test_one="""
         def test_a():
             pass
         """
     )
-    out = ourtestdir.runpytest("-p", "no:cacheprovider")
+    out = ourtester.runpytest("-p", "no:cacheprovider")
     out.assert_outcomes(passed=1, failed=0)
 
 
-def test_using_last_seed(ourtestdir):
-    ourtestdir.makepyfile(
+def test_using_last_seed(ourtester):
+    ourtester.makepyfile(
         test_one="""
         def test_a():
             pass
         """
     )
-    out = ourtestdir.runpytest()
+    out = ourtester.runpytest()
     out.assert_outcomes(passed=1, failed=0)
     seed_line = [x for x in out.stdout.lines if x.startswith("Using --randomly-seed=")][
         0
     ]
 
-    out = ourtestdir.runpytest("--randomly-seed=last")
+    out = ourtester.runpytest("--randomly-seed=last")
     out.assert_outcomes(passed=1, failed=0)
     out.stdout.fnmatch_lines([seed_line])
 
 
-def test_using_last_explicit_seed(ourtestdir):
-    ourtestdir.makepyfile(
+def test_using_last_explicit_seed(ourtester):
+    ourtester.makepyfile(
         test_one="""
         def test_a():
             pass
         """
     )
-    out = ourtestdir.runpytest("--randomly-seed=33")
+    out = ourtester.runpytest("--randomly-seed=33")
     out.assert_outcomes(passed=1, failed=0)
     out.stdout.fnmatch_lines(["Using --randomly-seed=33"])
 
-    out = ourtestdir.runpytest("--randomly-seed=last")
+    out = ourtester.runpytest("--randomly-seed=last")
     out.assert_outcomes(passed=1, failed=0)
     out.stdout.fnmatch_lines(["Using --randomly-seed=33"])
 
 
-def test_passing_nonsense_for_randomly_seed(ourtestdir):
-    ourtestdir.makepyfile(
+def test_passing_nonsense_for_randomly_seed(ourtester):
+    ourtester.makepyfile(
         test_one="""
         def test_a():
             pass
         """
     )
-    out = ourtestdir.runpytest("--randomly-seed=invalidvalue")
+    out = ourtester.runpytest("--randomly-seed=invalidvalue")
     assert out.ret != 0
     out.stderr.fnmatch_lines(
         [
@@ -141,8 +146,8 @@ def test_passing_nonsense_for_randomly_seed(ourtestdir):
     )
 
 
-def test_it_resets_the_random_seed_at_the_start_of_test_classes(ourtestdir):
-    ourtestdir.makepyfile(
+def test_it_resets_the_random_seed_at_the_start_of_test_classes(ourtester):
+    ourtester.makepyfile(
         test_one="""
         import random
         from unittest import TestCase
@@ -172,12 +177,12 @@ def test_it_resets_the_random_seed_at_the_start_of_test_classes(ourtestdir):
                 assert True
         """
     )
-    out = ourtestdir.runpytest()
+    out = ourtester.runpytest()
     out.assert_outcomes(passed=2, failed=0)
 
 
-def test_it_resets_the_random_seed_at_the_end_of_test_classes(ourtestdir):
-    ourtestdir.makepyfile(
+def test_it_resets_the_random_seed_at_the_end_of_test_classes(ourtester):
+    ourtester.makepyfile(
         test_one="""
         import random
         from unittest import TestCase
@@ -207,12 +212,12 @@ def test_it_resets_the_random_seed_at_the_end_of_test_classes(ourtestdir):
                 assert cls.suc_num == getattr(A, 'suc_num', cls.suc_num)
         """
     )
-    out = ourtestdir.runpytest()
+    out = ourtester.runpytest()
     out.assert_outcomes(passed=2, failed=0)
 
 
-def test_the_same_random_seed_per_test_can_be_turned_off(ourtestdir):
-    ourtestdir.makepyfile(
+def test_the_same_random_seed_per_test_can_be_turned_off(ourtester):
+    ourtester.makepyfile(
         test_one="""
         import random
 
@@ -229,21 +234,21 @@ def test_the_same_random_seed_per_test_can_be_turned_off(ourtestdir):
             assert test_a.state2 == test_b.state
         """
     )
-    out = ourtestdir.runpytest(
+    out = ourtester.runpytest(
         "--randomly-dont-reset-seed", "--randomly-dont-reorganize"
     )
     out.assert_outcomes(passed=2, failed=0)
 
 
-def test_files_reordered(ourtestdir):
+def test_files_reordered(ourtester):
     code = """
         def test_it():
             pass
     """
-    ourtestdir.makepyfile(test_a=code, test_b=code, test_c=code, test_d=code)
+    ourtester.makepyfile(test_a=code, test_b=code, test_c=code, test_d=code)
     args = ["-v", "--randomly-seed=15"]
 
-    out = ourtestdir.runpytest(*args)
+    out = ourtester.runpytest(*args)
 
     out.assert_outcomes(passed=4, failed=0)
     assert out.outlines[8:12] == [
@@ -254,16 +259,16 @@ def test_files_reordered(ourtestdir):
     ]
 
 
-def test_files_reordered_when_seed_not_reset(ourtestdir):
+def test_files_reordered_when_seed_not_reset(ourtester):
     code = """
         def test_it():
             pass
     """
-    ourtestdir.makepyfile(test_a=code, test_b=code, test_c=code, test_d=code)
+    ourtester.makepyfile(test_a=code, test_b=code, test_c=code, test_d=code)
     args = ["-v", "--randomly-seed=15"]
 
     args.append("--randomly-dont-reset-seed")
-    out = ourtestdir.runpytest(*args)
+    out = ourtester.runpytest(*args)
 
     out.assert_outcomes(passed=4, failed=0)
     assert out.outlines[8:12] == [
@@ -274,8 +279,8 @@ def test_files_reordered_when_seed_not_reset(ourtestdir):
     ]
 
 
-def test_classes_reordered(ourtestdir):
-    ourtestdir.makepyfile(
+def test_classes_reordered(ourtester):
+    ourtester.makepyfile(
         test_one="""
         from unittest import TestCase
 
@@ -302,7 +307,7 @@ def test_classes_reordered(ourtestdir):
     )
     args = ["-v", "--randomly-seed=15"]
 
-    out = ourtestdir.runpytest(*args)
+    out = ourtester.runpytest(*args)
 
     out.assert_outcomes(passed=4, failed=0)
     assert out.outlines[8:12] == [
@@ -313,8 +318,8 @@ def test_classes_reordered(ourtestdir):
     ]
 
 
-def test_class_test_methods_reordered(ourtestdir):
-    ourtestdir.makepyfile(
+def test_class_test_methods_reordered(ourtester):
+    ourtester.makepyfile(
         test_one="""
         from unittest import TestCase
 
@@ -334,7 +339,7 @@ def test_class_test_methods_reordered(ourtestdir):
     )
     args = ["-v", "--randomly-seed=15"]
 
-    out = ourtestdir.runpytest(*args)
+    out = ourtester.runpytest(*args)
 
     out.assert_outcomes(passed=4, failed=0)
     assert out.outlines[8:12] == [
@@ -345,8 +350,8 @@ def test_class_test_methods_reordered(ourtestdir):
     ]
 
 
-def test_test_functions_reordered(ourtestdir):
-    ourtestdir.makepyfile(
+def test_test_functions_reordered(ourtester):
+    ourtester.makepyfile(
         test_one="""
         def test_a():
             pass
@@ -363,7 +368,7 @@ def test_test_functions_reordered(ourtestdir):
     )
     args = ["-v", "--randomly-seed=15"]
 
-    out = ourtestdir.runpytest(*args)
+    out = ourtester.runpytest(*args)
 
     out.assert_outcomes(passed=4, failed=0)
     assert out.outlines[8:12] == [
@@ -374,8 +379,8 @@ def test_test_functions_reordered(ourtestdir):
     ]
 
 
-def test_test_functions_reordered_when_randomness_in_module(ourtestdir):
-    ourtestdir.makepyfile(
+def test_test_functions_reordered_when_randomness_in_module(ourtester):
+    ourtester.makepyfile(
         test_one="""
         import random
         import time
@@ -397,7 +402,7 @@ def test_test_functions_reordered_when_randomness_in_module(ourtestdir):
     )
     args = ["-v", "--randomly-seed=15"]
 
-    out = ourtestdir.runpytest(*args)
+    out = ourtester.runpytest(*args)
 
     out.assert_outcomes(passed=4, failed=0)
     assert out.outlines[8:12] == [
@@ -408,8 +413,8 @@ def test_test_functions_reordered_when_randomness_in_module(ourtestdir):
     ]
 
 
-def test_doctests_reordered(ourtestdir):
-    ourtestdir.makepyfile(
+def test_doctests_reordered(ourtester):
+    ourtester.makepyfile(
         test_one="""
         def foo():
             '''
@@ -428,7 +433,7 @@ def test_doctests_reordered(ourtestdir):
     )
     args = ["-v", "--doctest-modules", "--randomly-seed=1"]
 
-    out = ourtestdir.runpytest(*args)
+    out = ourtester.runpytest(*args)
     out.assert_outcomes(passed=2)
     assert out.outlines[8:10] == [
         "test_one.py::test_one.bar PASSED",
@@ -436,8 +441,8 @@ def test_doctests_reordered(ourtestdir):
     ]
 
 
-def test_it_works_with_the_simplest_test_items(ourtestdir):
-    ourtestdir.makepyfile(
+def test_it_works_with_the_simplest_test_items(ourtester):
+    ourtester.makepyfile(
         conftest="""
         import sys
 
@@ -490,26 +495,25 @@ def test_it_works_with_the_simplest_test_items(ourtestdir):
     )
     args = ["-v"]
 
-    out = ourtestdir.runpytest(*args)
+    out = ourtester.runpytest(*args)
     out.assert_outcomes(passed=3)
 
 
-def test_doctests_in_txt_files_reordered(ourtestdir):
-    ourtestdir.tmpdir.join("test.txt").write(
-        """\
-        >>> 2 + 2
-        4
-        """
-    )
-    ourtestdir.tmpdir.join("test2.txt").write(
-        """\
-        >>> 2 - 2
-        0
-        """
+def test_doctests_in_txt_files_reordered(ourtester):
+    ourtester.makefile(
+        ".txt",
+        test="""
+            >>> 2 + 2
+            4
+            """,
+        test2="""
+            >>> 2 - 2
+            0
+            """,
     )
     args = ["-v", "--randomly-seed=2"]
 
-    out = ourtestdir.runpytest(*args)
+    out = ourtester.runpytest(*args)
     out.assert_outcomes(passed=2)
     assert out.outlines[8:10] == [
         "test2.txt::test2.txt PASSED",
@@ -517,8 +521,8 @@ def test_doctests_in_txt_files_reordered(ourtestdir):
     ]
 
 
-def test_it_runs_before_stepwise(ourtestdir):
-    ourtestdir.makepyfile(
+def test_it_runs_before_stepwise(ourtester):
+    ourtester.makepyfile(
         test_one="""
         def test_a():
             assert 0
@@ -528,11 +532,11 @@ def test_it_runs_before_stepwise(ourtestdir):
             assert 0
         """
     )
-    out = ourtestdir.runpytest("-v", "--randomly-seed=1", "--stepwise")
+    out = ourtester.runpytest("-v", "--randomly-seed=1", "--stepwise")
     out.assert_outcomes(failed=1)
 
     # Now make test_b pass
-    ourtestdir.makepyfile(
+    ourtester.makepyfile(
         test_one="""
         def test_a():
             assert 0
@@ -542,15 +546,15 @@ def test_it_runs_before_stepwise(ourtestdir):
             assert 1
         """
     )
-    ourtestdir.tmpdir.join("__pycache__").remove()
-    out = ourtestdir.runpytest("-v", "--randomly-seed=1", "--stepwise")
+    shutil.rmtree(ourtester.path / "__pycache__")
+    out = ourtester.runpytest("-v", "--randomly-seed=1", "--stepwise")
     out.assert_outcomes(passed=1, failed=1)
-    out = ourtestdir.runpytest("-v", "--randomly-seed=1", "--stepwise")
+    out = ourtester.runpytest("-v", "--randomly-seed=1", "--stepwise")
     out.assert_outcomes(failed=1)
 
 
-def test_fixtures_get_different_random_state_to_tests(ourtestdir):
-    ourtestdir.makepyfile(
+def test_fixtures_get_different_random_state_to_tests(ourtester):
+    ourtester.makepyfile(
         test_one="""
         import random
 
@@ -566,12 +570,12 @@ def test_fixtures_get_different_random_state_to_tests(ourtestdir):
             assert myfixture != random.getstate()
         """
     )
-    out = ourtestdir.runpytest()
+    out = ourtester.runpytest()
     out.assert_outcomes(passed=1)
 
 
-def test_fixtures_dont_interfere_with_tests_getting_same_random_state(ourtestdir):
-    ourtestdir.makepyfile(
+def test_fixtures_dont_interfere_with_tests_getting_same_random_state(ourtester):
+    ourtester.makepyfile(
         test_one="""
         import random
 
@@ -599,21 +603,21 @@ def test_fixtures_dont_interfere_with_tests_getting_same_random_state(ourtestdir
     )
     args = ["--randomly-seed=2"]
 
-    out = ourtestdir.runpytest(*args)
+    out = ourtester.runpytest(*args)
     out.assert_outcomes(passed=2)
 
-    out = ourtestdir.runpytest("-m", "one", *args)
+    out = ourtester.runpytest("-m", "one", *args)
     out.assert_outcomes(passed=1)
-    out = ourtestdir.runpytest("-m", "two", *args)
+    out = ourtester.runpytest("-m", "two", *args)
     out.assert_outcomes(passed=1)
 
 
-def test_factory_boy(ourtestdir):
+def test_factory_boy(ourtester):
     """
     Rather than set up factories etc., just check the random generator it uses
     is set between two tests to output the same number.
     """
-    ourtestdir.makepyfile(
+    ourtester.makepyfile(
         test_one="""
         from factory.random import randgen
 
@@ -629,12 +633,12 @@ def test_factory_boy(ourtestdir):
         """
     )
 
-    out = ourtestdir.runpytest("--randomly-seed=1")
+    out = ourtester.runpytest("--randomly-seed=1")
     out.assert_outcomes(passed=2)
 
 
-def test_faker(ourtestdir):
-    ourtestdir.makepyfile(
+def test_faker(ourtester):
+    ourtester.makepyfile(
         test_one="""
         from faker import Faker
 
@@ -648,12 +652,12 @@ def test_faker(ourtestdir):
         """
     )
 
-    out = ourtestdir.runpytest("--randomly-seed=1")
+    out = ourtester.runpytest("--randomly-seed=1")
     out.assert_outcomes(passed=2)
 
 
-def test_faker_fixture(ourtestdir):
-    ourtestdir.makepyfile(
+def test_faker_fixture(ourtester):
+    ourtester.makepyfile(
         test_one="""
         def test_one(faker):
             assert faker.name() == 'Ryan Gallagher'
@@ -663,12 +667,12 @@ def test_faker_fixture(ourtestdir):
         """
     )
 
-    out = ourtestdir.runpytest("--randomly-seed=1")
+    out = ourtester.runpytest("--randomly-seed=1")
     out.assert_outcomes(passed=2)
 
 
-def test_numpy(ourtestdir):
-    ourtestdir.makepyfile(
+def test_numpy(ourtester):
+    ourtester.makepyfile(
         test_one="""
         import numpy as np
 
@@ -680,12 +684,12 @@ def test_numpy(ourtestdir):
         """
     )
 
-    out = ourtestdir.runpytest("--randomly-seed=1")
+    out = ourtester.runpytest("--randomly-seed=1")
     out.assert_outcomes(passed=2)
 
 
-def test_numpy_doesnt_crash_with_large_seed(ourtestdir):
-    ourtestdir.makepyfile(
+def test_numpy_doesnt_crash_with_large_seed(ourtester):
+    ourtester.makepyfile(
         test_one="""
         import numpy as np
 
@@ -694,7 +698,7 @@ def test_numpy_doesnt_crash_with_large_seed(ourtestdir):
         """
     )
 
-    out = ourtestdir.runpytest("--randomly-seed=7106521602475165645")
+    out = ourtester.runpytest("--randomly-seed=7106521602475165645")
     out.assert_outcomes(passed=1)
 
 
@@ -773,18 +777,18 @@ def test_entrypoint_missing(pytester, monkeypatch):
     assert result.ret == 0
 
 
-def test_works_without_xdist(simpletestdir):
-    out = simpletestdir.runpytest("-p", "no:xdist")
+def test_works_without_xdist(simpletester):
+    out = simpletester.runpytest("-p", "no:xdist")
     out.assert_outcomes(passed=1)
 
 
 @pytest.mark.parametrize("n", list(range(5)))
-def test_xdist(n, ourtestdir):
+def test_xdist(n, ourtester):
     """
     This test does not expose the original bug (non-shared default seeds) with
     a very high probability, hence multiple runs.
     """
-    ourtestdir.makepyfile(
+    ourtester.makepyfile(
         test_one="def test_a(): pass",
         test_two="def test_a(): pass",
         test_three="def test_a(): pass",
@@ -793,7 +797,7 @@ def test_xdist(n, ourtestdir):
         test_six="def test_a(): pass",
     )
 
-    out = ourtestdir.runpytest("-n", "6", "-v", "--dist=loadfile")
+    out = ourtester.runpytest("-n", "6", "-v", "--dist=loadfile")
     out.assert_outcomes(passed=6)
 
     # Can't make any assertion on the order, since output comes back from
