@@ -10,10 +10,6 @@ import pytest_randomly
 pytest_plugins = ["pytester"]
 
 
-# See https://github.com/pytest-dev/pytest-randomly/issues/539
-LINE_START = 9 if pytest.version_tuple >= (7, 3) else 8
-
-
 @pytest.fixture(autouse=True)
 def reset_entrypoints_cache():
     yield
@@ -255,7 +251,7 @@ def test_files_reordered(ourtester):
     out = ourtester.runpytest(*args)
 
     out.assert_outcomes(passed=4, failed=0)
-    assert out.outlines[LINE_START : LINE_START + 4] == [
+    assert out.outlines[9:13] == [
         "test_b.py::test_it PASSED",
         "test_a.py::test_it PASSED",
         "test_d.py::test_it PASSED",
@@ -275,7 +271,7 @@ def test_files_reordered_when_seed_not_reset(ourtester):
     out = ourtester.runpytest(*args)
 
     out.assert_outcomes(passed=4, failed=0)
-    assert out.outlines[LINE_START : LINE_START + 4] == [
+    assert out.outlines[9:13] == [
         "test_b.py::test_it PASSED",
         "test_a.py::test_it PASSED",
         "test_d.py::test_it PASSED",
@@ -314,7 +310,7 @@ def test_classes_reordered(ourtester):
     out = ourtester.runpytest(*args)
 
     out.assert_outcomes(passed=4, failed=0)
-    assert out.outlines[LINE_START : LINE_START + 4] == [
+    assert out.outlines[9:13] == [
         "test_one.py::D::test_d PASSED",
         "test_one.py::B::test_b PASSED",
         "test_one.py::C::test_c PASSED",
@@ -346,7 +342,7 @@ def test_class_test_methods_reordered(ourtester):
     out = ourtester.runpytest(*args)
 
     out.assert_outcomes(passed=4, failed=0)
-    assert out.outlines[LINE_START : LINE_START + 4] == [
+    assert out.outlines[9:13] == [
         "test_one.py::T::test_c PASSED",
         "test_one.py::T::test_b PASSED",
         "test_one.py::T::test_a PASSED",
@@ -375,7 +371,7 @@ def test_test_functions_reordered(ourtester):
     out = ourtester.runpytest(*args)
 
     out.assert_outcomes(passed=4, failed=0)
-    assert out.outlines[LINE_START : LINE_START + 4] == [
+    assert out.outlines[9:13] == [
         "test_one.py::test_c PASSED",
         "test_one.py::test_a PASSED",
         "test_one.py::test_b PASSED",
@@ -409,7 +405,7 @@ def test_test_functions_reordered_when_randomness_in_module(ourtester):
     out = ourtester.runpytest(*args)
 
     out.assert_outcomes(passed=4, failed=0)
-    assert out.outlines[LINE_START : LINE_START + 4] == [
+    assert out.outlines[9:13] == [
         "test_one.py::test_c PASSED",
         "test_one.py::test_a PASSED",
         "test_one.py::test_b PASSED",
@@ -439,7 +435,7 @@ def test_doctests_reordered(ourtester):
 
     out = ourtester.runpytest(*args)
     out.assert_outcomes(passed=2)
-    assert out.outlines[LINE_START : LINE_START + 2] == [
+    assert out.outlines[9:11] == [
         "test_one.py::test_one.bar PASSED",
         "test_one.py::test_one.foo PASSED",
     ]
@@ -519,7 +515,7 @@ def test_doctests_in_txt_files_reordered(ourtester):
 
     out = ourtester.runpytest(*args)
     out.assert_outcomes(passed=2)
-    assert out.outlines[LINE_START : LINE_START + 2] == [
+    assert out.outlines[9:11] == [
         "test2.txt::test2.txt PASSED",
         "test.txt::test.txt PASSED",
     ]
