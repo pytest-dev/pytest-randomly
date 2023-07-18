@@ -7,3 +7,7 @@
 /dist/
 /docs/_build/
 /example/.venv/
+venv
+.python-version
+.pytest_cache
+.mypy_cache

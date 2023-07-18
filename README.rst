@@ -178,6 +178,11 @@ For example in your ``setup.cfg``:
 
 Then implement ``reseed(new_seed)``.
 
+Contributing
+===========
+
+See `CONTRIBUTING.md <https://github.com/pytest-dev/pytest-randomly/blob/main/CONTRIBUTING.rst>`__ for local setup and testing instructions.
+
 References
 ==========
 
