@@ -59,6 +59,14 @@ try:
 except ImportError:  # pragma: no cover
     have_numpy = False
 
+# baker
+try:
+    from baker.random_gen import baker_random
+
+    have_baker = True
+except ImportError:  # pragma: no cover
+    have_baker = False
+
 
 default_seed = random.Random().getrandbits(32)
 
@@ -168,6 +176,9 @@ def _reseed(config: Config, offset: int = 0) -> int:
             np_random_states[numpy_seed] = np_random.get_state()
         else:
             np_random.set_state(np_random_states[numpy_seed])
+
+    if have_baker:  # pragma: no branch
+        baker_random.setstate(random_states[seed])
 
     if entrypoint_reseeds is None:
         eps = entry_points(group="pytest_randomly.random_seeder")

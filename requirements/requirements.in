@@ -1,3 +1,4 @@
+model_bakery>=1.13.0
 coverage
 factory_boy
 faker

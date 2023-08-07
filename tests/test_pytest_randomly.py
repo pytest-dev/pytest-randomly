@@ -702,6 +702,27 @@ def test_numpy_doesnt_crash_with_large_seed(ourtester):
     out.assert_outcomes(passed=1)
 
 
+def test_baker(ourtester):
+    ourtester.makepyfile(
+        test_one="""
+        from baker.random_gen import baker_random
+
+        def test_a():
+            test_a.num = baker_random.random()
+            if hasattr(test_b, 'num'):
+                assert test_a.num == test_b.num
+
+        def test_b():
+            test_b.num = baker_random.random()
+            if hasattr(test_a, 'num'):
+                assert test_b.num == test_a.num
+        """
+    )
+
+    out = ourtester.runpytest("--randomly-seed=1")
+    out.assert_outcomes(passed=2)
+
+
 def test_failing_import(testdir):
     """Test with pytest raising CollectError or ImportError.
 
