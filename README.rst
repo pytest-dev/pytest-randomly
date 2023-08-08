@@ -178,13 +178,6 @@ For example in your ``setup.cfg``:
     pytest_randomly.random_seeder =
         mypackage = mypackage.reseed
 
-or your ``pyproject.toml``:
-
-.. code-block:: toml
-
-    [tool.project.plugins."pytest_randomly.random_seeder"]
-    project = "project:randomly_reseed"
-
 Then implement ``reseed(new_seed)``.
 
 References
