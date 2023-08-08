@@ -2,6 +2,11 @@
 Changelog
 =========
 
+3.14.0 (TBD)
+-------------------
+
+* Reset the random state for Model Bakery.
+
 3.13.0 (2023-07-10)
 -------------------
 

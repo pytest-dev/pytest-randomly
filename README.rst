@@ -39,6 +39,11 @@ All of these features are on by default but can be disabled with flags.
   randomness-induced failure.
 
 * If
+  `model bakery <https://model-bakery.readthedocs.io/en/latest/>`_
+  is installed, its random state is reset at the start of every test. This
+  allows for repeatable use of its random fixture field values.
+
+* If
   `factory boy <https://factoryboy.readthedocs.io/en/latest/reference.html>`_
   is installed, its random state is reset at the start of every test. This
   allows for repeatable use of its random 'fuzzy' features.
