@@ -615,7 +615,7 @@ def test_fixtures_dont_interfere_with_tests_getting_same_random_state(ourtester)
 def test_baker(ourtester):
     ourtester.makepyfile(
         test_one="""
-        from model_bakery.baker.random_gen import baker_random
+        from model_bakery.random_gen import baker_random
 
         def test_a():
             test_a.num = baker_random.random()

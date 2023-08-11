@@ -31,7 +31,7 @@ except ImportError:  # pragma: no cover
 
 # baker
 try:
-    from model_bakery.baker.random_gen import baker_random
+    from model_bakery.random_gen import baker_random
 
     have_baker = True
 except ImportError:  # pragma: no cover
