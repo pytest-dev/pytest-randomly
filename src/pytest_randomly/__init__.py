@@ -29,14 +29,6 @@ try:
 except ImportError:  # pragma: no cover
     xdist = None
 
-# baker
-try:
-    from model_bakery.random_gen import baker_random
-
-    have_baker = True
-except ImportError:  # pragma: no cover
-    have_baker = False
-
 # factory-boy
 try:
     from factory.random import set_random_state as factory_set_random_state
@@ -58,6 +50,14 @@ try:
     have_faker = True
 except ImportError:  # pragma: no cover
     have_faker = False
+
+# model_bakery
+try:
+    from model_bakery.random_gen import baker_random
+
+    have_model_bakery = True
+except ImportError:  # pragma: no cover
+    have_model_bakery = False
 
 # numpy
 try:
@@ -163,14 +163,14 @@ def _reseed(config: Config, offset: int = 0) -> int:
     else:
         random.setstate(random_states[seed])
 
-    if have_baker:  # pragma: no branch
-        baker_random.setstate(random_states[seed])
-
     if have_factory_boy:  # pragma: no branch
         factory_set_random_state(random_states[seed])
 
     if have_faker:  # pragma: no branch
         faker_random.setstate(random_states[seed])
+
+    if have_model_bakery:  # pragma: no branch
+        baker_random.setstate(random_states[seed])
 
     if have_numpy:  # pragma: no branch
         numpy_seed = _truncate_seed_for_numpy(seed)
