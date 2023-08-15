@@ -107,7 +107,7 @@ Install with:
 
     python -m pip install pytest-randomly
 
-Python 3.8 to 3.11 supported.
+Python 3.8 to 3.12 supported.
 
 ----
 
