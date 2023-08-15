@@ -96,7 +96,7 @@ model-bakery==1.13.0 \
     --hash=sha256:0f54a4548722ecee0183d82eabe1adf8f74303e6ce08705cfe228a96ef3bb7d9 \
     --hash=sha256:dba7444c9593261b12dcb21f8f9e1ba668fafc70804f15dfd6aa208b9e3f558f
     # via -r requirements.in
-numpy==1.25.2 \
+numpy==1.25.2 ; python_version < "3.12" \
     --hash=sha256:0d60fbae8e0019865fc4784745814cff1c421df5afee233db6d88ab4f14655a2 \
     --hash=sha256:1a1329e26f46230bf77b02cc19e900db9b52f398d6722ca853349a782d4cff55 \
     --hash=sha256:1b9735c27cea5d995496f46a8b1cd7b408b3f34b6d50459d9ac8fe3a20cc17bf \
