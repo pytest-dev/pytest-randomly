@@ -671,6 +671,31 @@ def test_faker_fixture(ourtester):
     out.assert_outcomes(passed=2)
 
 
+def test_model_bakery(ourtester):
+    """
+    Rather than set up models, just check the random generator it uses is set
+    between two tests to output the same number.
+    """
+    ourtester.makepyfile(
+        test_one="""
+        from model_bakery.random_gen import baker_random
+
+        def test_a():
+            test_a.num = baker_random.random()
+            if hasattr(test_b, 'num'):
+                assert test_a.num == test_b.num
+
+        def test_b():
+            test_b.num = baker_random.random()
+            if hasattr(test_a, 'num'):
+                assert test_b.num == test_a.num
+        """
+    )
+
+    out = ourtester.runpytest("--randomly-seed=1")
+    out.assert_outcomes(passed=2)
+
+
 def test_numpy(ourtester):
     ourtester.makepyfile(
         test_one="""
