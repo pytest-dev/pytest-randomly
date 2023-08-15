@@ -39,11 +39,6 @@ All of these features are on by default but can be disabled with flags.
   randomness-induced failure.
 
 * If
-  `Model Bakery <https://model-bakery.readthedocs.io/en/latest/>`_
-  is installed, its random state is reset at the start of every test. This
-  allows for repeatable use of its random fixture field values.
-
-* If
   `factory boy <https://factoryboy.readthedocs.io/en/latest/reference.html>`_
   is installed, its random state is reset at the start of every test. This
   allows for repeatable use of its random 'fuzzy' features.
@@ -54,6 +49,11 @@ All of these features are on by default but can be disabled with flags.
   if you're using the ``faker`` pytest fixture, by defining the ``faker_seed``
   fixture
   (`docs <https://faker.readthedocs.io/en/master/pytest-fixtures.html#seeding-configuration>`__).
+
+* If
+  `Model Bakery <https://model-bakery.readthedocs.io/en/latest/>`_
+  is installed, its random state is reset at the start of every test. This
+  allows for repeatable use of its random fixture field values.
 
 * If `numpy <http://www.numpy.org/>`_ is installed, its legacy global random state in |numpy.random|__ is reset at the start of every test.
 
