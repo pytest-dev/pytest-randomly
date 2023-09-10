@@ -220,7 +220,7 @@ def pytest_runtest_teardown(item: Item) -> None:
 
 
 # pytest missing type hints for @hookimpl
-@hookimpl(tryfirst=True)  # type: ignore [misc]
+@hookimpl(tryfirst=True)
 def pytest_collection_modifyitems(config: Config, items: list[Item]) -> None:
     if not config.getoption("randomly_reorganize"):
         return
