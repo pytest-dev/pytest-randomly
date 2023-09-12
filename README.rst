@@ -160,6 +160,15 @@ You can disable behaviours you don't like with the following flags:
   the start of every test
 * ``--randomly-dont-reorganize`` - turn off the shuffling of the order of tests
 
+Or you can selectively disable the shuffling of the test order with the
+``randomly_dont_reorganize`` marker:
+
+* ``pytestmark = pytest.mark.randomly_dont_reorganize`` - disable shuffling for
+  all tests in a module
+* ``@pytest.mark.randomly_dont_reorganize`` - disable shuffling for a class or function
+Note: if using the marker on individual tests, all functions inside a module must be marked,
+due to how the plugin shuffles test execution order
+
 The plugin appears to Pytest with the name 'randomly'. To disable it
 altogether, you can use the ``-p`` argument, for example:
 

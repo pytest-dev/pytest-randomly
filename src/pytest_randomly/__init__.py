@@ -229,12 +229,15 @@ def pytest_collection_modifyitems(config: Config, items: list[Item]) -> None:
 
     modules_items: list[tuple[ModuleType | None, list[Item]]] = []
     for module, group in groupby(items, _get_module):
-        modules_items.append(
-            (
-                module,
-                _shuffle_by_class(list(group), seed),
-            )
-        )
+        module_items = list(group)
+
+        for item in module_items:
+            marker_finder = getattr(item, "get_closest_marker", getattr(item, "get_marker", None))
+            if not marker_finder("randomly_dont_reorganize"):
+                module_items = _shuffle_by_class(module_items, seed)
+                break
+
+        modules_items.append((module, module_items))
 
     def _module_key(module_item: tuple[ModuleType | None, list[Item]]) -> bytes:
         module, _items = module_item
@@ -262,7 +265,13 @@ def _shuffle_by_class(items: list[Item], seed: int) -> list[Item]:
 
     for klass, group in groupby(items, _get_cls):
         klass_items = list(group)
-        klass_items.sort(key=_item_key)
+
+        for item in klass_items:
+            marker_finder = getattr(item, "get_closest_marker", getattr(item, "get_marker", None))
+            if not marker_finder("randomly_dont_reorganize"):
+                klass_items.sort(key=_item_key)
+                break
+
         klasses_items.append((klass, klass_items))
 
     def _cls_key(klass_items: tuple[type[Any] | None, list[Item]]) -> bytes:

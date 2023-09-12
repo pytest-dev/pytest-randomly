@@ -12,6 +12,9 @@ addopts = """\
     --strict-config
     --strict-markers
     """
+markers = [
+    "randomly_dont_reorganize: Do not shuffle marked class or module",
+]
 
 [tool.mypy]
 mypy_path = "src/"

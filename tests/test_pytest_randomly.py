@@ -350,6 +350,107 @@ def test_class_test_methods_reordered(ourtester):
     ]
 
 
+def test_class_test_methods_not_reordered_if_marked(ourtester):
+    ourtester.makepyfile(
+        test_one="""
+        import pytest
+
+        from unittest import TestCase
+
+        @pytest.mark.randomly_dont_reorganize
+        class T(TestCase):
+            def test_a(self):
+                pass
+
+            def test_b(self):
+                pass
+
+            def test_c(self):
+                pass
+
+            def test_d(self):
+                pass
+        """
+    )
+    args = ["-v", "--randomly-seed=15"]
+
+    out = ourtester.runpytest(*args)
+
+    out.assert_outcomes(passed=4, failed=0)
+    assert out.outlines[9:13] == [
+        "test_one.py::T::test_a PASSED",
+        "test_one.py::T::test_b PASSED",
+        "test_one.py::T::test_c PASSED",
+        "test_one.py::T::test_d PASSED",
+    ]
+
+
+def test_classes_reordered_unless_marked(ourtester):
+    ourtester.makepyfile(
+        test_one="""
+        import pytest
+
+        from unittest import TestCase
+
+
+        class A(TestCase):
+            def test_aa(self):
+                pass
+            def test_ab(self):
+                pass
+            def test_ac(self):
+                pass
+
+
+        class B(TestCase):
+            def test_ba(self):
+                pass
+            def test_bb(self):
+                pass
+            def test_bc(self):
+                pass
+
+
+        @pytest.mark.randomly_dont_reorganize
+        class C(TestCase):
+            def test_ca(self):
+                pass
+            def test_cb(self):
+                pass
+            def test_cc(self):
+                pass
+
+
+        class D(TestCase):
+            def test_da(self):
+                pass
+            def test_db(self):
+                pass
+            def test_dc(self):
+                pass
+        """
+    )
+    args = ["-v", "--randomly-seed=1"]
+
+    out = ourtester.runpytest(*args)
+
+    out.assert_outcomes(passed=12, failed=0)
+    assert out.outlines[9:21] == [
+        "test_one.py::A::test_ab PASSED",
+        "test_one.py::A::test_aa PASSED",
+        "test_one.py::A::test_ac PASSED",
+        "test_one.py::C::test_ca PASSED",
+        "test_one.py::C::test_cb PASSED",
+        "test_one.py::C::test_cc PASSED",
+        "test_one.py::B::test_bb PASSED",
+        "test_one.py::B::test_ba PASSED",
+        "test_one.py::B::test_bc PASSED",
+        "test_one.py::D::test_da PASSED",
+        "test_one.py::D::test_dc PASSED",
+        "test_one.py::D::test_db PASSED",
+    ]
+
+
 def test_test_functions_reordered(ourtester):
     ourtester.makepyfile(
         test_one="""
@@ -376,6 +477,151 @@ def test_test_functions_reordered(ourtester):
         "test_one.py::test_a PASSED",
         "test_one.py::test_b PASSED",
         "test_one.py::test_d PASSED",
+    ]
+
+
+def test_test_functions_not_reordered_if_marked(ourtester):
+    ourtester.makepyfile(
+        test_one="""
+        import pytest
+
+        pytestmark = pytest.mark.randomly_dont_reorganize
+
+
+        def test_a():
+            pass
+
+        def test_b():
+            pass
+
+        def test_c():
+            pass
+
+        def test_d():
+            pass
+        """
+    )
+    args = ["-v", "--randomly-seed=15"]
+
+    out = ourtester.runpytest(*args)
+
+    out.assert_outcomes(passed=4, failed=0)
+    assert out.outlines[9:13] == [
+        "test_one.py::test_a PASSED",
+        "test_one.py::test_b PASSED",
+        "test_one.py::test_c PASSED",
+        "test_one.py::test_d PASSED",
+    ]
+
+
+def test_test_functions_reordered_if_individual_function_is_marked(ourtester):
+    ourtester.makepyfile(
+        test_one="""
+        import pytest
+
+
+        def test_a():
+            pass
+
+        @pytest.mark.randomly_dont_reorganize
+        def test_b():
+            pass
+
+        def test_c():
+            pass
+
+        def test_d():
+            pass
+        """
+    )
+    args = ["-v", "--randomly-seed=15"]
+
+    out = ourtester.runpytest(*args)
+
+    out.assert_outcomes(passed=4, failed=0)
+    assert out.outlines[9:13] == [
+        "test_one.py::test_c PASSED",
+        "test_one.py::test_a PASSED",
+        "test_one.py::test_b PASSED",
+        "test_one.py::test_d PASSED",
+    ]
+
+
+def test_test_functions_not_reordered_if_all_functions_are_marked(ourtester):
+    ourtester.makepyfile(
+        test_one="""
+        import pytest
+
+
+        @pytest.mark.randomly_dont_reorganize
+        def test_a():
+            pass
+
+        @pytest.mark.randomly_dont_reorganize
+        def test_b():
+            pass
+
+        @pytest.mark.randomly_dont_reorganize
+        def test_c():
+            pass
+
+        @pytest.mark.randomly_dont_reorganize
+        def test_d():
+            pass
+        """
+    )
+    args = ["-v", "--randomly-seed=15"]
+
+    out = ourtester.runpytest(*args)
+
+    out.assert_outcomes(passed=4, failed=0)
+    assert out.outlines[9:13] == [
+        "test_one.py::test_a PASSED",
+        "test_one.py::test_b PASSED",
+        "test_one.py::test_c PASSED",
+        "test_one.py::test_d PASSED",
+    ]
+
+
+def test_test_files_reordered_unless_marked(ourtester):
+    code = """
+        def test_1():
+            pass
+
+        def test_2():
+            pass
+
+        def test_3():
+            pass
+    """
+    ourtester.makepyfile(test_a=code,
+                         test_b=code,
+                         test_c=f"""
+        import pytest
+
+        pytestmark = pytest.mark.randomly_dont_reorganize
+
+        {code}
+        """,
+                         test_d=code)
+    args = ["-v", "--randomly-seed=15"]
+
+    out = ourtester.runpytest(*args)
+
+    out.assert_outcomes(passed=12, failed=0)
+    assert out.outlines[9:21] == [
+        "test_b.py::test_3 PASSED",
+        "test_b.py::test_1 PASSED",
+        "test_b.py::test_2 PASSED",
+        "test_a.py::test_3 PASSED",
+        "test_a.py::test_2 PASSED",
+        "test_a.py::test_1 PASSED",
+        "test_d.py::test_3 PASSED",
+        "test_d.py::test_1 PASSED",
+        "test_d.py::test_2 PASSED",
+        "test_c.py::test_1 PASSED",
+        "test_c.py::test_2 PASSED",
+        "test_c.py::test_3 PASSED",
     ]
 
 
