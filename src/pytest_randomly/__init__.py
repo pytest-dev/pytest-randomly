@@ -232,7 +232,9 @@ def pytest_collection_modifyitems(config: Config, items: list[Item]) -> None:
         module_items = list(group)
 
         for item in module_items:
-            marker_finder = getattr(item, "get_closest_marker", getattr(item, "get_marker", None))
+            marker_finder = getattr(
+                item, "get_closest_marker", getattr(item, "get_marker", None)
+            )
             if not marker_finder("randomly_dont_reorganize"):
                 module_items = _shuffle_by_class(module_items, seed)
                 break
@@ -267,7 +269,9 @@ def _shuffle_by_class(items: list[Item], seed: int) -> list[Item]:
         klass_items = list(group)
 
         for item in klass_items:
-            marker_finder = getattr(item, "get_closest_marker", getattr(item, "get_marker", None))
+            marker_finder = getattr(
+                item, "get_closest_marker", getattr(item, "get_marker", None)
+            )
             if not marker_finder("randomly_dont_reorganize"):
                 klass_items.sort(key=_item_key)
                 break

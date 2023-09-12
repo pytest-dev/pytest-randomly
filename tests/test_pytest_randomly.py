@@ -594,16 +594,18 @@ def test_test_files_reordered_unless_marked(ourtester):
         def test_3():
             pass
     """
-    ourtester.makepyfile(test_a=code,
-                         test_b=code,
-                         test_c=f"""
+    ourtester.makepyfile(
+        test_a=code,
+        test_b=code,
+        test_c=f"""
         import pytest
 
         pytestmark = pytest.mark.randomly_dont_reorganize
 
         {code}
         """,
-                         test_d=code)
+        test_d=code,
+    )
     args = ["-v", "--randomly-seed=15"]
 
     out = ourtester.runpytest(*args)
