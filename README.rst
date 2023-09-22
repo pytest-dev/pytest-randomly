@@ -167,6 +167,12 @@ altogether, you can use the ``-p`` argument, for example:
 
     pytest -p no:randomly
 
+Avoid reordering some tests
+---------------------------
+
+To fix the order of some tests, use the ``pytest-order`` plugin.
+See its `documentation section <https://pytest-order.readthedocs.io/en/latest/other_plugins.html#pytest-randomly>`__ on usage with pytest-randomly.
+
 Entry Point
 ===========
 
