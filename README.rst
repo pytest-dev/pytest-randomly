@@ -24,6 +24,13 @@ pytest-randomly
 
 Pytest plugin to randomly order tests and control ``random.seed``.
 
+----
+
+**Testing a Django project?**
+Check out my book `Speed Up Your Django Tests <https://adamchainz.gumroad.com/l/suydt>`__ which covers loads of ways to write faster, more accurate tests.
+
+----
+
 Features
 ========
 
@@ -108,13 +115,6 @@ Install with:
     python -m pip install pytest-randomly
 
 Python 3.8 to 3.12 supported.
-
-----
-
-**Testing a Django project?**
-Check out my book `Speed Up Your Django Tests <https://adamchainz.gumroad.com/l/suydt>`__ which covers loads of ways to write faster, more accurate tests.
-
-----
 
 Usage
 =====
