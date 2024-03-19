@@ -44,9 +44,6 @@ Repository = "https://github.com/pytest-dev/pytest-randomly"
 [project.entry-points.pytest11]
 randomly = "pytest_randomly"
 
-[tool.black]
-target-version = ['py38']
-
 [tool.isort]
 add_imports = [
     "from __future__ import annotations"
