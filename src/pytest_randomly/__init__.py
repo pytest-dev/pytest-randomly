@@ -199,7 +199,7 @@ def _reseed(config: Config, offset: int = 0) -> int:
     if have_tensorflow:  # pragma: no branch
         tf.random.set_seed(seed)
         # TensorFlow 1.x compatibility
-        if hasattr(tf, 'compat'):
+        if hasattr(tf, "compat"):
             tf.compat.v1.set_random_seed(seed)
 
     if have_pytorch:  # pragma: no branch
