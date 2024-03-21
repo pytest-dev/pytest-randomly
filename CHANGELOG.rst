@@ -2,6 +2,10 @@
 Changelog
 =========
 
+* Reset the random state for PyTorch and TensorFlow.
+
+  Thanks to Linghao Zhang in `PR #612 <https://github.com/pytest-dev/pytest-randomly/pull/612>`__.
+
 3.15.0 (2023-08-15)
 -------------------
 
