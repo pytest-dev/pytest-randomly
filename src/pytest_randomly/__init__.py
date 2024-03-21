@@ -67,14 +67,6 @@ try:
 except ImportError:  # pragma: no cover
     have_numpy = False
 
-# tensorflow
-try:
-    import tensorflow as tf
-
-    have_tensorflow = True
-except ImportError:  # pragma: no cover
-    have_tensorflow = False
-
 # pytorch
 try:
     import torch
@@ -82,6 +74,14 @@ try:
     have_pytorch = True
 except ImportError:  # pragma: no cover
     have_pytorch = False
+
+# tensorflow
+try:
+    import tensorflow as tf
+
+    have_tensorflow = True
+except ImportError:  # pragma: no cover
+    have_tensorflow = False
 
 
 default_seed = random.Random().getrandbits(32)
@@ -196,16 +196,16 @@ def _reseed(config: Config, offset: int = 0) -> int:
         else:
             np_random.set_state(np_random_states[numpy_seed])
 
+    if have_pytorch:  # pragma: no branch
+        torch.manual_seed(seed)
+        if torch.cuda.is_available():  # Also seed CUDA if available
+            torch.cuda.manual_seed_all(seed)
+
     if have_tensorflow:  # pragma: no branch
         tf.random.set_seed(seed)
         # TensorFlow 1.x compatibility
         if hasattr(tf, "compat"):
             tf.compat.v1.set_random_seed(seed)
-
-    if have_pytorch:  # pragma: no branch
-        torch.manual_seed(seed)
-        if torch.cuda.is_available():  # Also seed CUDA if available
-            torch.cuda.manual_seed_all(seed)
 
     if entrypoint_reseeds is None:
         eps = entry_points(group="pytest_randomly.random_seeder")
