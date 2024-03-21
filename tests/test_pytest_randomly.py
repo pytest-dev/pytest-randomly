@@ -727,6 +727,40 @@ def test_numpy_doesnt_crash_with_large_seed(ourtester):
     out.assert_outcomes(passed=1)
 
 
+def test_tensorflow(ourtester):
+    ourtester.makepyfile(
+        test_one="""
+        import tensorflow as tf
+
+        def test_one():
+            assert tf.random.uniform([]) == tf.constant(0.16513085, dtype=tf.float32)
+
+        def test_two():
+            assert tf.random.uniform([]) == tf.constant(0.16513085, dtype=tf.float32)
+        """
+    )
+
+    out = ourtester.runpytest("--randomly-seed=1")
+    out.assert_outcomes(passed=2)
+
+
+def test_pytorch(ourtester):
+    ourtester.makepyfile(
+        test_one="""
+        import torch
+
+        def test_one():
+            assert torch.rand(1) == torch.tensor([0.757631599903106689453125])
+
+        def test_two():
+            assert torch.rand(1) == torch.tensor([0.757631599903106689453125])
+        """
+    )
+
+    out = ourtester.runpytest("--randomly-seed=1")
+    out.assert_outcomes(passed=2)
+
+
 def test_failing_import(testdir):
     """Test with pytest raising CollectError or ImportError.
 

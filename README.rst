@@ -67,6 +67,10 @@ All of these features are on by default but can be disabled with flags.
   .. |numpy.random| replace:: ``numpy.random``
   __ https://numpy.org/doc/stable/reference/random/index.html
 
+* If `TensorFlow <https://www.tensorflow.org/>`_ is installed, its random seed in ``tensorflow.random`` is reset at the start of every test.
+
+* If `PyTorch <https://pytorch.org/>`_ is installed, its random seed is reset at the start of every test. The random seed of each test is recorded, and can play a role in detecting flaky tests.
+
 * If additional random generators are used, they can be registered under the
   ``pytest_randomly.random_seeder``
   `entry point <https://packaging.python.org/specifications/entry-points/>`_ and
