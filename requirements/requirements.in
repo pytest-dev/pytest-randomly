@@ -7,3 +7,5 @@ numpy; python_version < "3.12"
 numpy>=1.26.0b1; python_version >= "3.12"
 pytest
 pytest-xdist
+tensorflow
+torch
