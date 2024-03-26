@@ -4,9 +4,9 @@
 #
 #    requirements/compile.py
 #
-asgiref==3.7.2 \
-    --hash=sha256:89b2ef2247e3b562a16eef663bc0e2e703ec6468e2fa8a5cd61cd449786d4f6e \
-    --hash=sha256:9e0ce3aa93a819ba5b45120216b23878cf6e8525eb3848653452b4192b92afed
+asgiref==3.8.1 \
+    --hash=sha256:3e1e3ecc849832fe52ccf2cb6686b7a55f82bb1d6aee72a58826471390335e47 \
+    --hash=sha256:c343bd80a0bec947a9860adb4c432ffa7db769836c64238fc34bdc3fec84d590
     # via django
 coverage[toml]==7.4.4 \
     --hash=sha256:00838a35b882694afda09f85e469c96367daa3f3f2b097d846a7216993d37f4c \
@@ -78,9 +78,9 @@ factory-boy==3.3.0 \
     --hash=sha256:a2cdbdb63228177aa4f1c52f4b6d83fab2b8623bf602c7dedd7eb83c0f69c04c \
     --hash=sha256:bc76d97d1a65bbd9842a6d722882098eb549ec8ee1081f9fb2e8ff29f0c300f1
     # via -r requirements.in
-faker==24.2.0 \
-    --hash=sha256:87d5e7730426e7b36817921679c4eaf3d810cedb8c81194f47adc3df2122ca18 \
-    --hash=sha256:dce4754921f9fa7e2003c26834093361b8f45072e0f46f172d6ca1234774ecd4
+faker==24.4.0 \
+    --hash=sha256:998c29ee7d64429bd59204abffa9ba11f784fb26c7b9df4def78d1a70feb36a7 \
+    --hash=sha256:a5ddccbe97ab691fad6bd8036c31f5697cfaa550e62e000078d1935fa8a7ec2e
     # via
     #   -r requirements.in
     #   factory-boy

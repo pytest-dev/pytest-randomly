@@ -4,9 +4,9 @@
 #
 #    requirements/compile.py
 #
-asgiref==3.7.2 \
-    --hash=sha256:89b2ef2247e3b562a16eef663bc0e2e703ec6468e2fa8a5cd61cd449786d4f6e \
-    --hash=sha256:9e0ce3aa93a819ba5b45120216b23878cf6e8525eb3848653452b4192b92afed
+asgiref==3.8.1 \
+    --hash=sha256:3e1e3ecc849832fe52ccf2cb6686b7a55f82bb1d6aee72a58826471390335e47 \
+    --hash=sha256:c343bd80a0bec947a9860adb4c432ffa7db769836c64238fc34bdc3fec84d590
     # via django
 backports-zoneinfo==0.2.1 \
     --hash=sha256:17746bd546106fa389c51dbea67c8b7c8f0d14b5526a579ca6ccf5ed72c526cf \
@@ -96,15 +96,15 @@ factory-boy==3.3.0 \
     --hash=sha256:a2cdbdb63228177aa4f1c52f4b6d83fab2b8623bf602c7dedd7eb83c0f69c04c \
     --hash=sha256:bc76d97d1a65bbd9842a6d722882098eb549ec8ee1081f9fb2e8ff29f0c300f1
     # via -r requirements.in
-faker==24.2.0 \
-    --hash=sha256:87d5e7730426e7b36817921679c4eaf3d810cedb8c81194f47adc3df2122ca18 \
-    --hash=sha256:dce4754921f9fa7e2003c26834093361b8f45072e0f46f172d6ca1234774ecd4
+faker==24.4.0 \
+    --hash=sha256:998c29ee7d64429bd59204abffa9ba11f784fb26c7b9df4def78d1a70feb36a7 \
+    --hash=sha256:a5ddccbe97ab691fad6bd8036c31f5697cfaa550e62e000078d1935fa8a7ec2e
     # via
     #   -r requirements.in
     #   factory-boy
-importlib-metadata==7.0.2 ; python_version < "3.10" \
-    --hash=sha256:198f568f3230878cb1b44fbd7975f87906c22336dba2e4a7f05278c281fbd792 \
-    --hash=sha256:f4bc4c0c070c490abf4ce96d715f68e95923320370efb66143df00199bb6c100
+importlib-metadata==7.1.0 ; python_version < "3.10" \
+    --hash=sha256:30962b96c0c223483ed6cc7280e7f0199feb01a0e40cfae4d4450fc6fab1f570 \
+    --hash=sha256:b78938b926ee8d5f020fc4772d487045805a55ddbad2ecf21c6d60938dc7fcd2
     # via -r requirements.in
 iniconfig==2.0.0 \
     --hash=sha256:2d91e135bf72d31a410b17c16da610a82cb55f6b0477d1a902134b24a455b8b3 \
