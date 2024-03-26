@@ -14,7 +14,6 @@ if __name__ == "__main__":
         "-m",
         "piptools",
         "compile",
-        "--generate-hashes",
         "--allow-unsafe",
     ] + sys.argv[1:]
     subprocess.run(
@@ -42,3 +41,7 @@ if __name__ == "__main__":
         check=True,
         capture_output=True,
     )
+    for path in Path(".").glob("py*.txt"):
+        text = path.read_text()
+        text += "\n# Packages that can’t be pinned\ntensorflow\n"
+        path.write_text(text)
