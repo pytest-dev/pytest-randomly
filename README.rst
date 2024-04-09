@@ -2,7 +2,7 @@
 pytest-randomly
 ===============
 
-.. image:: https://img.shields.io/github/actions/workflow/status/pytest-dev/pytest-randomly/main.yml?branch=main&style=for-the-badge
+.. image:: https://img.shields.io/github/actions/workflow/status/pytest-dev/pytest-randomly/main.yml.svg?branch=main&style=for-the-badge
    :target: https://github.com/pytest-dev/pytest-randomly/actions?workflow=CI
 
 .. image:: https://img.shields.io/badge/Coverage-100%25-success?style=for-the-badge
