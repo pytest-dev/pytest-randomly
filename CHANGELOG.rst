@@ -2,6 +2,14 @@
 Changelog
 =========
 
+3.17.0
+-------------------
+
+* Change default seed to be different per test. Add the option ``--randomly-use-same-seed-per-test`` to enable the old behavior.
+
+  Resolves `Issue #600 <https://github.com/pytest-dev/pytest-randomly/issues/600>`__
+
+
 3.16.0 (2024-10-25)
 -------------------
 

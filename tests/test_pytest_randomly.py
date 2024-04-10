@@ -78,7 +78,33 @@ def test_it_reuses_the_same_random_seed_per_test(ourtester):
                 assert test_b.num == test_a.num
         """
     )
-    out = ourtester.runpytest("--randomly-dont-reorganize")
+    out = ourtester.runpytest(
+        "--randomly-dont-reorganize", "--randomly-use-same-seed-per-test"
+    )
+    out.assert_outcomes(passed=2, failed=0)
+
+
+def test_it_uses_different_random_seed_per_test(ourtester):
+    """
+    Run a pair of tests that generate a number and assert they produce
+    different numbers.
+    """
+    ourtester.makepyfile(
+        test_one="""
+        import random
+
+        def test_a():
+            test_a.num = random.random()
+            if hasattr(test_b, 'num'):
+                assert test_a.num != test_b.num
+
+        def test_b():
+            test_b.num = random.random()
+            if hasattr(test_a, 'num'):
+                assert test_b.num != test_a.num
+        """
+    )
+    out = ourtester.runpytest()
     out.assert_outcomes(passed=2, failed=0)
 
 
@@ -601,7 +627,7 @@ def test_fixtures_dont_interfere_with_tests_getting_same_random_state(ourtester)
             assert random.getstate() == state_at_seed_two
         """
     )
-    args = ["--randomly-seed=2"]
+    args = ["--randomly-seed=2", "--randomly-use-same-seed-per-test"]
 
     out = ourtester.runpytest(*args)
     out.assert_outcomes(passed=2)
@@ -633,7 +659,7 @@ def test_factory_boy(ourtester):
         """
     )
 
-    out = ourtester.runpytest("--randomly-seed=1")
+    out = ourtester.runpytest("--randomly-seed=1", "--randomly-use-same-seed-per-test")
     out.assert_outcomes(passed=2)
 
 
@@ -645,10 +671,10 @@ def test_faker(ourtester):
         fake = Faker()
 
         def test_one():
-            assert fake.name() == 'Ryan Gallagher'
+            assert fake.name() == 'Justin Richard'
 
         def test_two():
-            assert fake.name() == 'Ryan Gallagher'
+            assert fake.name() == 'Tiffany Williams'
         """
     )
 
@@ -692,7 +718,7 @@ def test_model_bakery(ourtester):
         """
     )
 
-    out = ourtester.runpytest("--randomly-seed=1")
+    out = ourtester.runpytest("--randomly-seed=1", "--randomly-use-same-seed-per-test")
     out.assert_outcomes(passed=2)
 
 
@@ -702,10 +728,10 @@ def test_numpy(ourtester):
         import numpy as np
 
         def test_one():
-            assert np.random.rand() == 0.417022004702574
+            assert np.random.rand() == 0.46479378116435255
 
         def test_two():
-            assert np.random.rand() == 0.417022004702574
+            assert np.random.rand() == 0.6413112443155088
         """
     )
 
@@ -765,7 +791,9 @@ def test_entrypoint_injection(pytester, monkeypatch):
     entry_points.append(_FakeEntryPoint("test_seeder", reseed))
 
     # Need to run in-process so that monkeypatching works
-    pytester.runpytest_inprocess("--randomly-seed=1")
+    pytester.runpytest_inprocess(
+        "--randomly-seed=1", "--randomly-use-same-seed-per-test"
+    )
     assert reseed.mock_calls == [
         mock.call(1),
         mock.call(1),
@@ -775,7 +803,9 @@ def test_entrypoint_injection(pytester, monkeypatch):
     ]
 
     reseed.mock_calls[:] = []
-    pytester.runpytest_inprocess("--randomly-seed=424242")
+    pytester.runpytest_inprocess(
+        "--randomly-seed=424242", "--randomly-use-same-seed-per-test"
+    )
     assert reseed.mock_calls == [
         mock.call(424242),
         mock.call(424242),
