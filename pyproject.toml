@@ -43,6 +43,7 @@ urls.Changelog = "https://github.com/pytest-dev/pytest-randomly/blob/main/CHANGE
 urls.Funding = "https://adamj.eu/books/"
 urls.Repository = "https://github.com/pytest-dev/pytest-randomly"
 entry-points.pytest11.randomly = "pytest_randomly"
+
 [tool.isort]
 add_imports = [
   "from __future__ import annotations",
