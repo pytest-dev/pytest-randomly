@@ -8,7 +8,7 @@ requires = [
 name = "pytest-randomly"
 version = "3.15.0"
 description = "Pytest plugin to randomly order tests and control random.seed."
-readme = {file = "README.rst", content-type = "text/x-rst"}
+readme = { file = "README.rst", content-type = "text/x-rst" }
 keywords = [
   "pytest",
   "random",
@@ -16,8 +16,10 @@ keywords = [
   "randomize",
   "randomly",
 ]
-license = {text = "MIT"}
-authors = [{name = "Adam Johnson", email = "me@adamj.eu"}]
+license = { text = "MIT" }
+authors = [
+  { name = "Adam Johnson", email = "me@adamj.eu" },
+]
 requires-python = ">=3.8"
 classifiers = [
   "Development Status :: 5 - Production/Stable",
@@ -34,19 +36,17 @@ classifiers = [
   "Typing :: Typed",
 ]
 dependencies = [
-  'importlib-metadata>=3.6; python_version < "3.10"',
+  "importlib-metadata>=3.6; python_version<'3.10'",
   "pytest",
 ]
-[project.urls]
-Changelog = "https://github.com/pytest-dev/pytest-randomly/blob/main/CHANGELOG.rst"
-Funding = "https://adamj.eu/books/"
-Repository = "https://github.com/pytest-dev/pytest-randomly"
-[project.entry-points.pytest11]
-randomly = "pytest_randomly"
+urls.Changelog = "https://github.com/pytest-dev/pytest-randomly/blob/main/CHANGELOG.rst"
+urls.Funding = "https://adamj.eu/books/"
+urls.Repository = "https://github.com/pytest-dev/pytest-randomly"
+entry-points.pytest11.randomly = "pytest_randomly"
 
 [tool.isort]
 add_imports = [
-    "from __future__ import annotations"
+  "from __future__ import annotations",
 ]
 force_single_line = true
 profile = "black"
@@ -61,14 +61,14 @@ addopts = """\
 branch = true
 parallel = true
 source = [
-    "pytest_randomly",
-    "tests",
+  "pytest_randomly",
+  "tests",
 ]
 
 [tool.coverage.paths]
 source = [
-    "src",
-    ".tox/**/site-packages",
+  "src",
+  ".tox/**/site-packages",
 ]
 
 [tool.coverage.report]
