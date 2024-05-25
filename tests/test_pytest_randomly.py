@@ -468,25 +468,25 @@ def test_it_works_with_the_simplest_test_items(ourtester):
                 pass
 
 
-        def pytest_collect_file(path, parent):
-            if not str(path).endswith('.py'):
+        def pytest_collect_file(file_path, parent):
+            if not str(file_path).endswith('.py'):
                 return
             return MyCollector.from_parent(
                 parent=parent,
-                fspath=str(path),
+                fspath=str(file_path),
                 items=[
                     NoOpItem.from_parent(
-                        name=str(path) + "1",
+                        name=str(file_path) + "1",
                         parent=parent,
                         module=sys.modules[__name__],
                     ),
                     NoOpItem.from_parent(
-                        name=str(path) + "1",
+                        name=str(file_path) + "1",
                         parent=parent,
                         module=sys.modules[__name__],
                     ),
                     NoOpItem.from_parent(
-                        name=str(path) + "2",
+                        name=str(file_path) + "2",
                         parent=parent,
                     ),
                 ],
