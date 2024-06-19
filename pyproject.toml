@@ -8,7 +8,7 @@ requires = [
 name = "pytest-randomly"
 version = "3.15.0"
 description = "Pytest plugin to randomly order tests and control random.seed."
-readme = { file = "README.rst", content-type = "text/x-rst" }
+readme = "README.rst"
 keywords = [
   "pytest",
   "random",
@@ -16,7 +16,6 @@ keywords = [
   "randomize",
   "randomly",
 ]
-license = { text = "MIT" }
 authors = [
   { name = "Adam Johnson", email = "me@adamj.eu" },
 ]
