@@ -2,6 +2,10 @@
 Changelog
 =========
 
+* Add the option ``--randomly-seed-per-test`` to use a different seed for each test.
+
+  Resolves `Issue #600 <https://github.com/pytest-dev/pytest-randomly/issues/600>`__
+
 3.15.0 (2023-08-15)
 -------------------
 
