@@ -17,8 +17,6 @@ from pytest import Collector
 from pytest import fixture
 from pytest import hookimpl
 
-from pytest_randomly.compat import md5
-
 if sys.version_info < (3, 10):
     from importlib_metadata import entry_points
 else:
@@ -291,7 +289,7 @@ def reduce_list_of_lists(lists: list[list[T]]) -> list[T]:
 
 
 def _md5(string: str) -> bytes:
-    hasher = md5()
+    hasher = hashlib.md5(usedforsecurity=False)
     hasher.update(string.encode())
     return hasher.digest()
 
