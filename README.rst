@@ -18,10 +18,6 @@ pytest-randomly
    :target: https://github.com/pre-commit/pre-commit
    :alt: pre-commit
 
-.. figure:: https://raw.githubusercontent.com/pytest-dev/pytest-randomly/main/logo.png
-   :scale: 50%
-   :alt: Randomness power.
-
 Pytest plugin to randomly order tests and control ``random.seed``.
 
 ----
