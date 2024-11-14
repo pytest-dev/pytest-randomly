@@ -663,7 +663,7 @@ def test_faker_fixture(ourtester):
             assert faker.name() == 'Ryan Gallagher'
 
         def test_two(faker):
-            assert faker.name() == 'Ryan Gallagher'
+            assert faker.name() == 'Jon Cole'
         """
     )
 
