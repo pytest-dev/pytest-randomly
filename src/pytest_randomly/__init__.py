@@ -296,7 +296,7 @@ def _md5(string: str) -> bytes:
 
 if have_faker:  # pragma: no branch
 
-    @fixture(autouse=True)
+    @fixture(autouse=True, scope="session")
     def faker_seed(pytestconfig: Config) -> int:
         result: int = pytestconfig.getoption("randomly_seed")
         return result
