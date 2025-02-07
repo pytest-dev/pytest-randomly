@@ -109,6 +109,13 @@ def pytest_addoption(parser: Parser) -> None:
         default=True,
         help="Stop pytest-randomly from randomly reorganizing the test order.",
     )
+    group._addoption(
+        "--randomly-seeder",
+        action="append",
+        dest="randomly_seeders",
+        help="""Give the name of a pytest_randomly.random_seeder entry point to use.
+                Multiple entry points can be set by defining this option multiple times""",
+    )
 
 
 def pytest_configure(config: Config) -> None:
@@ -179,8 +186,10 @@ def _reseed(config: Config, offset: int = 0) -> int:
             np_random.set_state(np_random_states[numpy_seed])
 
     if entrypoint_reseeds is None:
+        seeders: list[str] = config.getoption("randomly_seeders")
         eps = entry_points(group="pytest_randomly.random_seeder")
-        entrypoint_reseeds = [e.load() for e in eps]
+        seeders = [] if seeders is None else seeders
+        entrypoint_reseeds = [e.load() for e in eps if e.name in seeders]
     for reseed in entrypoint_reseeds:
         reseed(seed)
 
