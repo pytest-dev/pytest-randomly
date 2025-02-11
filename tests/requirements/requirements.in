@@ -1,8 +1,0 @@
-coverage[toml]
-factory_boy
-faker
-importlib-metadata >= 3.6.0 ; python_version < "3.10"
-model_bakery>=1.13.0
-numpy
-pytest
-pytest-xdist

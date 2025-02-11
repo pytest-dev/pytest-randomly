@@ -43,6 +43,18 @@ urls.Funding = "https://adamj.eu/books/"
 urls.Repository = "https://github.com/pytest-dev/pytest-randomly"
 entry-points.pytest11.randomly = "pytest_randomly"
 
+[dependency-groups]
+test = [
+  "coverage[toml]",
+  "factory-boy",
+  "faker",
+  "importlib-metadata>=3.6; python_version<'3.10'",
+  "model-bakery>=1.13",
+  "numpy",
+  "pytest",
+  "pytest-xdist",
+]
+
 [tool.isort]
 add_imports = [
   "from __future__ import annotations",
