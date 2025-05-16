@@ -203,7 +203,7 @@ Changelog
 1.2.2 (2017-11-03)
 ------------------
 
-* Fix collection to not sometimes crash when encoutering pytest ``Item``\s
+* Fix collection to not sometimes crash when encountering pytest ``Item``\s
   without a module.
 
 1.2.1 (2017-06-17)
