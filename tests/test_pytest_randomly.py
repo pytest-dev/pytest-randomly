@@ -738,7 +738,7 @@ def test_failing_import(testdir):
 
     modcol = testdir.getmodulecol("pytest_plugins='xasdlkj',")
     with pytest.raises(ImportError):
-        modcol.obj
+        modcol.obj  # noqa: B018
 
 
 def test_entrypoint_injection(pytester, monkeypatch):
