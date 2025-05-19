@@ -6,16 +6,12 @@ import random
 import sys
 from itertools import groupby
 from types import ModuleType
-from typing import Any
-from typing import Callable
-from typing import TypeVar
+from typing import Any, Callable, TypeVar
 
 from _pytest.config import Config
 from _pytest.config.argparsing import Parser
 from _pytest.nodes import Item
-from pytest import Collector
-from pytest import fixture
-from pytest import hookimpl
+from pytest import Collector, fixture, hookimpl
 
 if sys.version_info < (3, 10):
     from importlib_metadata import entry_points
@@ -117,9 +113,9 @@ def pytest_configure(config: Config) -> None:
 
     seed_value = config.getoption("randomly_seed")
     if seed_value == "last":
-        assert hasattr(
-            config, "cache"
-        ), "The cacheprovider plugin is required to use 'last'"
+        assert hasattr(config, "cache"), (
+            "The cacheprovider plugin is required to use 'last'"
+        )
         assert config.cache is not None
         seed = config.cache.get("randomly_seed", default_seed)
     elif seed_value == "default":
