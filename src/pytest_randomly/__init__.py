@@ -203,9 +203,13 @@ def pytest_runtest_setup(item: Item) -> None:
         _reseed(item.config, -1)
 
 
+def seed_from_string(string: str) -> int:
+    return int(hashlib.md5(string.encode()).hexdigest(), 16)
+
+
 def pytest_runtest_call(item: Item) -> None:
     if item.config.getoption("randomly_reset_seed"):
-        _reseed(item.config)
+        _reseed(item.config, offset=seed_from_string(item.nodeid) + 100)
 
 
 def pytest_runtest_teardown(item: Item) -> None:
