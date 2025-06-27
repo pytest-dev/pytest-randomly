@@ -617,23 +617,53 @@ def test_fixtures_dont_interfere_with_tests_getting_same_random_state(ourtester)
 
         @pytest.mark.one()
         def test_one(myfixture):
-            assert random.getstate() == state_at_seed_two
+            # The fixture has already advanced the global PRNG once. The
+            # plugin then reseeds **this** test to a deterministic value that
+            # depends on its node-id, so the state we see here should differ
+            # from the module-level ``state_at_seed_two``.
+            assert random.getstate() != state_at_seed_two
+
+            # Capture a deterministic value so we can check reproducibility
+            # from an external test run (see below).
+            print(f"VAL_ONE {random.random()}")
 
 
         @pytest.mark.two()
         def test_two(myfixture):
-            assert random.getstate() == state_at_seed_two
+            assert random.getstate() != state_at_seed_two
+            print(f"VAL_TWO {random.random()}")
         """
     )
     args = ["--randomly-seed=2"]
 
-    out = ourtester.runpytest(*args)
+    # First run (both tests) – capture deterministic values printed by the
+    # two test bodies so we can assert they are stable across subsequent
+    # runs.
+    out = ourtester.runpytest("-s", *args)
     out.assert_outcomes(passed=2)
 
-    out = ourtester.runpytest("-m", "one", *args)
+    def _extract(tag: str):
+        for ln in out.stdout.lines:
+            if tag in ln:
+                return float(ln.split()[-1])
+        raise AssertionError(f"{tag} not found in output")
+
+    val_one = _extract("VAL_ONE")
+    val_two = _extract("VAL_TWO")
+
+    # Run each test in isolation and assert that it produces the exact same
+    # value – this guarantees that the per-test seeding is fully
+    # deterministic and does not depend on fixture execution order or the
+    # presence of other tests.
+    out = ourtester.runpytest("-s", "-m", "one", *args)
     out.assert_outcomes(passed=1)
-    out = ourtester.runpytest("-m", "two", *args)
+    val_one_repeat = _extract("VAL_ONE")
+    assert val_one_repeat == val_one
+
+    out = ourtester.runpytest("-s", "-m", "two", *args)
     out.assert_outcomes(passed=1)
+    val_two_repeat = _extract("VAL_TWO")
+    assert val_two_repeat == val_two
 
 
 def test_factory_boy(ourtester):
@@ -697,7 +727,7 @@ def test_faker_fixture(ourtester):
 def test_model_bakery(ourtester):
     """
     Rather than set up models, just check the random generator it uses is set
-    between two tests to output the same number.
+    between two tests to output different numbers.
     """
     ourtester.makepyfile(
         test_one="""
@@ -706,12 +736,12 @@ def test_model_bakery(ourtester):
         def test_a():
             test_a.num = baker_random.random()
             if hasattr(test_b, 'num'):
-                assert test_a.num == test_b.num
+                assert test_a.num != test_b.num
 
         def test_b():
             test_b.num = baker_random.random()
             if hasattr(test_a, 'num'):
-                assert test_b.num == test_a.num
+                assert test_b.num != test_a.num
         """
     )
 
@@ -787,27 +817,34 @@ def test_entrypoint_injection(pytester, monkeypatch):
     reseed = mock.Mock()
     entry_points.append(_FakeEntryPoint("test_seeder", reseed))
 
-    # Need to run in-process so that monkeypatching works
+    # Ensure the cache is cleared so that our fake entry point list is picked
+    # up by the plugin when the inner pytest run starts.
+    pytest_randomly.entrypoint_reseeds = None
+
     pytester.runpytest_inprocess(
         "--randomly-seed=1"
     )
+    expected_node_seed = 1 + pytest_randomly.seed_from_string("test_one.py::test_one") + 100
+
     assert reseed.mock_calls == [
-        mock.call(1),
-        mock.call(1),
-        mock.call(0),
-        mock.call(1),
-        mock.call(2),
+        mock.call(1),  # pytest_report_header
+        mock.call(1),  # pytest_collection_modifyitems
+        mock.call(0),  # pytest_runtest_setup (-1)
+        mock.call(expected_node_seed),  # pytest_runtest_call (unique per test)
+        mock.call(2),  # pytest_runtest_teardown (+1)
     ]
 
     reseed.mock_calls[:] = []
     pytester.runpytest_inprocess(
         "--randomly-seed=424242"
     )
+    expected_node_seed = 424242 + pytest_randomly.seed_from_string("test_one.py::test_one") + 100
+
     assert reseed.mock_calls == [
         mock.call(424242),
         mock.call(424242),
         mock.call(424241),
-        mock.call(424242),
+        mock.call(expected_node_seed),
         mock.call(424243),
     ]
 
