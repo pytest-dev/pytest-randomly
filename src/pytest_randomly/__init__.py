@@ -105,13 +105,6 @@ def pytest_addoption(parser: Parser) -> None:
         default=True,
         help="Stop pytest-randomly from randomly reorganizing the test order.",
     )
-    group._addoption(
-        "--randomly-use-same-seed-per-test",
-        action="store_false",
-        dest="same_seed_per_test",
-        default=False,
-        help="""Use a the same random seed for each test. Reproduces legacy behavior of pytest-randomly.""",
-    )
 
 
 def pytest_configure(config: Config) -> None:
@@ -216,11 +209,7 @@ def seed_from_string(string: str) -> int:
 
 def pytest_runtest_call(item: Item) -> None:
     if item.config.getoption("randomly_reset_seed"):
-        if item.config.getoption("same_seed_per_test"):
-            test_offset = 0
-        else:
-            test_offset = seed_from_string(item.nodeid) + 100
-        _reseed(item.config, offset=test_offset)
+        _reseed(item.config, offset=seed_from_string(item.nodeid) + 100)
 
 
 def pytest_runtest_teardown(item: Item) -> None:
