@@ -821,10 +821,10 @@ def test_entrypoint_injection(pytester, monkeypatch):
     # up by the plugin when the inner pytest run starts.
     pytest_randomly.entrypoint_reseeds = None
 
-    pytester.runpytest_inprocess(
-        "--randomly-seed=1"
+    pytester.runpytest_inprocess("--randomly-seed=1")
+    expected_node_seed = (
+        1 + pytest_randomly.seed_from_string("test_one.py::test_one") + 100
     )
-    expected_node_seed = 1 + pytest_randomly.seed_from_string("test_one.py::test_one") + 100
 
     assert reseed.mock_calls == [
         mock.call(1),  # pytest_report_header
@@ -835,10 +835,10 @@ def test_entrypoint_injection(pytester, monkeypatch):
     ]
 
     reseed.mock_calls[:] = []
-    pytester.runpytest_inprocess(
-        "--randomly-seed=424242"
+    pytester.runpytest_inprocess("--randomly-seed=424242")
+    expected_node_seed = (
+        424242 + pytest_randomly.seed_from_string("test_one.py::test_one") + 100
     )
-    expected_node_seed = 424242 + pytest_randomly.seed_from_string("test_one.py::test_one") + 100
 
     assert reseed.mock_calls == [
         mock.call(424242),
