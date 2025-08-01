@@ -155,6 +155,9 @@ You can disable behaviours you don't like with the following flags:
 * ``--randomly-dont-reset-seed`` - turn off the reset of ``random.seed()`` at
   the start of every test
 * ``--randomly-dont-reorganize`` - turn off the shuffling of the order of tests
+* ``--randomly-dont-seed-per-test`` - turn off each test having a unique seed.
+  Each test will be seeded with the same seed.
+
 
 The plugin appears to Pytest with the name 'randomly'. To disable it
 altogether, you can use the ``-p`` argument, for example:
