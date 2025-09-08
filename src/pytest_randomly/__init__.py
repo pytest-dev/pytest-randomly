@@ -18,11 +18,6 @@ if sys.version_info < (3, 10):
 else:
     from importlib.metadata import entry_points
 
-try:
-    import xdist
-except ImportError:  # pragma: no cover
-    xdist = None
-
 # factory-boy
 try:
     from factory.random import set_random_state as factory_set_random_state
