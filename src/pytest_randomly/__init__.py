@@ -57,7 +57,8 @@ except ImportError:  # pragma: no cover
     have_numpy = False
 
 
-default_seed = random.Random().getrandbits(32)
+def make_seed() -> int:
+    return random.Random().getrandbits(32)
 
 
 def seed_type(string: str) -> str | int:
@@ -112,13 +113,13 @@ def pytest_configure(config: Config) -> None:
             "The cacheprovider plugin is required to use 'last'"
         )
         assert config.cache is not None
-        seed = config.cache.get("randomly_seed", default_seed)
+        seed = config.cache.get("randomly_seed", make_seed())
     elif seed_value == "default":
         if hasattr(config, "workerinput"):  # pragma: no cover
             # pytest-xdist: use seed generated on main.
             seed = config.workerinput["randomly_seed"]
         else:
-            seed = default_seed
+            seed = make_seed()
     else:
         seed = seed_value
     if hasattr(config, "cache"):
