@@ -248,10 +248,10 @@ def test_files_reordered(ourtester):
 
     out.assert_outcomes(passed=4, failed=0)
     assert out.outlines[9:13] == [
-        "test_b.py::test_it PASSED",
-        "test_a.py::test_it PASSED",
-        "test_d.py::test_it PASSED",
         "test_c.py::test_it PASSED",
+        "test_b.py::test_it PASSED",
+        "test_d.py::test_it PASSED",
+        "test_a.py::test_it PASSED",
     ]
 
 
@@ -268,10 +268,10 @@ def test_files_reordered_when_seed_not_reset(ourtester):
 
     out.assert_outcomes(passed=4, failed=0)
     assert out.outlines[9:13] == [
-        "test_b.py::test_it PASSED",
-        "test_a.py::test_it PASSED",
-        "test_d.py::test_it PASSED",
         "test_c.py::test_it PASSED",
+        "test_b.py::test_it PASSED",
+        "test_d.py::test_it PASSED",
+        "test_a.py::test_it PASSED",
     ]
 
 
@@ -308,9 +308,9 @@ def test_classes_reordered(ourtester):
     out.assert_outcomes(passed=4, failed=0)
     assert out.outlines[9:13] == [
         "test_one.py::D::test_d PASSED",
-        "test_one.py::B::test_b PASSED",
-        "test_one.py::C::test_c PASSED",
         "test_one.py::A::test_a PASSED",
+        "test_one.py::C::test_c PASSED",
+        "test_one.py::B::test_b PASSED",
     ]
 
 
@@ -341,8 +341,8 @@ def test_class_test_methods_reordered(ourtester):
     assert out.outlines[9:13] == [
         "test_one.py::T::test_c PASSED",
         "test_one.py::T::test_b PASSED",
-        "test_one.py::T::test_a PASSED",
         "test_one.py::T::test_d PASSED",
+        "test_one.py::T::test_a PASSED",
     ]
 
 
@@ -368,10 +368,10 @@ def test_test_functions_reordered(ourtester):
 
     out.assert_outcomes(passed=4, failed=0)
     assert out.outlines[9:13] == [
-        "test_one.py::test_c PASSED",
-        "test_one.py::test_a PASSED",
-        "test_one.py::test_b PASSED",
         "test_one.py::test_d PASSED",
+        "test_one.py::test_a PASSED",
+        "test_one.py::test_c PASSED",
+        "test_one.py::test_b PASSED",
     ]
 
 
@@ -402,10 +402,10 @@ def test_test_functions_reordered_when_randomness_in_module(ourtester):
 
     out.assert_outcomes(passed=4, failed=0)
     assert out.outlines[9:13] == [
-        "test_one.py::test_c PASSED",
-        "test_one.py::test_a PASSED",
-        "test_one.py::test_b PASSED",
         "test_one.py::test_d PASSED",
+        "test_one.py::test_a PASSED",
+        "test_one.py::test_c PASSED",
+        "test_one.py::test_b PASSED",
     ]
 
 
@@ -528,7 +528,15 @@ def test_it_runs_before_stepwise(ourtester):
             assert 0
         """
     )
-    out = ourtester.runpytest("-v", "--randomly-seed=1", "--stepwise")
+    out = ourtester.runpytest("-v", "--randomly-seed=8")
+    out.assert_outcomes(failed=2)
+    # Ensure test_b runs first
+    assert out.outlines[9:11] == [
+        "test_one.py::test_b FAILED",
+        "test_one.py::test_a FAILED",
+    ]
+
+    out = ourtester.runpytest("--randomly-seed=8", "--stepwise")
     out.assert_outcomes(failed=1)
 
     # Now make test_b pass
@@ -543,9 +551,9 @@ def test_it_runs_before_stepwise(ourtester):
         """
     )
     shutil.rmtree(ourtester.path / "__pycache__")
-    out = ourtester.runpytest("-v", "--randomly-seed=1", "--stepwise")
+    out = ourtester.runpytest("--randomly-seed=8", "--stepwise")
     out.assert_outcomes(passed=1, failed=1)
-    out = ourtester.runpytest("-v", "--randomly-seed=1", "--stepwise")
+    out = ourtester.runpytest("--randomly-seed=8", "--stepwise")
     out.assert_outcomes(failed=1)
 
 
@@ -579,11 +587,11 @@ def test_factory_boy(ourtester):
         from factory.random import randgen
 
         def test_a():
-            assert randgen.random() == 0.9988532989147809
+            assert randgen.random() == 0.17867277194477893
 
 
         def test_b():
-            assert randgen.random() == 0.18032546798434612
+            assert randgen.random() == 0.8026272812225962
         """
     )
 
@@ -599,10 +607,10 @@ def test_faker(ourtester):
         fake = Faker()
 
         def test_one():
-            assert fake.name() == 'Mrs. Lisa Ryan'
+            assert fake.name() == 'Kimberly Powell'
 
         def test_two():
-            assert fake.name() == 'Kaitlyn Mitchell'
+            assert fake.name() == 'Thomas Moyer PhD'
         """
     )
 
@@ -614,10 +622,10 @@ def test_faker_fixture(ourtester):
     ourtester.makepyfile(
         test_one="""
         def test_one(faker):
-            assert faker.name() == 'Mrs. Lisa Ryan'
+            assert faker.name() == 'Kimberly Powell'
 
         def test_two(faker):
-            assert faker.name() == 'Kaitlyn Mitchell'
+            assert faker.name() == 'Thomas Moyer PhD'
         """
     )
 
@@ -634,10 +642,10 @@ def test_model_bakery(ourtester):
         from model_bakery.random_gen import gen_slug
 
         def test_a():
-            assert gen_slug(10) == 'XjpU5br7ej'
+            assert gen_slug(10) == 'whwhAKeQYE'
 
         def test_b():
-            assert gen_slug(10) == 'xJHS-PD_WT'
+            assert gen_slug(10) == 'o2N4p5UAXd'
         """
     )
 
@@ -651,10 +659,10 @@ def test_numpy(ourtester):
         import numpy as np
 
         def test_one():
-            assert np.random.rand() == 0.36687834264514585
+            assert np.random.rand() == 0.1610140063074521
 
         def test_two():
-            assert np.random.rand() == 0.7050715833365834
+            assert np.random.rand() == 0.6896867238957805
         """
     )
 
@@ -718,9 +726,9 @@ def test_entrypoint_injection(pytester, monkeypatch):
     assert reseed.mock_calls == [
         mock.call(1),
         mock.call(1),
-        mock.call(116362448262735926321257785636175308268),
-        mock.call(116362448262735926321257785636175308269),
-        mock.call(116362448262735926321257785636175308270),
+        mock.call(2964001072),
+        mock.call(2964001073),
+        mock.call(2964001074),
     ]
 
     reseed.mock_calls[:] = []
@@ -728,9 +736,9 @@ def test_entrypoint_injection(pytester, monkeypatch):
     assert reseed.mock_calls == [
         mock.call(424242),
         mock.call(424242),
-        mock.call(116362448262735926321257785636175732509),
-        mock.call(116362448262735926321257785636175732510),
-        mock.call(116362448262735926321257785636175732511),
+        mock.call(2964425313),
+        mock.call(2964425314),
+        mock.call(2964425315),
     ]
 
 
