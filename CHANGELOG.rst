@@ -14,6 +14,10 @@ Unreleased
   `PR #687 <https://github.com/pytest-dev/pytest-randomly/issues/687>`__.
   Thanks to Bryce Drennan for the suggestion in `Issue #600 <https://github.com/pytest-dev/pytest-randomly/issues/600>`__ and initial implementation in `PR #617 <https://github.com/pytest-dev/pytest-randomly/pull/617>`__.
 
+* Move from MD5 to CRC32 for hashing test IDs, as it’s 5x faster and we don’t need cryptographic security.
+
+  `Issue #686 <https://github.com/pytest-dev/pytest-randomly/issues/686>`__.
+
 3.16.0 (2024-10-25)
 -------------------
 
