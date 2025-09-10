@@ -6,7 +6,7 @@ requires = [
 
 [project]
 name = "pytest-randomly"
-version = "3.16.0"
+version = "4.0.0"
 description = "Pytest plugin to randomly order tests and control random.seed."
 readme = "README.rst"
 keywords = [
