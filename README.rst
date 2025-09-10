@@ -36,32 +36,33 @@ All of these features are on by default but can be disabled with flags.
   modules, then at the level of test classes (if you have them), then at the
   order of functions. This also works with things like doctests.
 
-* Resets the global ``random.seed()`` at the start of every test case and test
-  to a fixed number - this defaults to ``time.time()`` from the start of your
-  test run, but you can pass in ``--randomly-seed`` to repeat a
-  randomness-induced failure.
+* Generates a base random seed or accepts one for reproduction with ``--randomly-seed``.
+  The base random seed is printed at the start of the test run, and can be passed in to repeat a failure caused by test ordering or random data.
 
-* If
-  `factory boy <https://factoryboy.readthedocs.io/en/latest/reference.html>`_
-  is installed, its random state is reset at the start of every test. This
-  allows for repeatable use of its random 'fuzzy' features.
+* At the start of the test run, and before each test setup, run, and teardown, it resets Python’s global random seed to a fixed value, using |random.seed()|__.
+  The fixed value is derived from the base random seed, the pytest test ID, and an offset for setup or teardown.
+  This ensures each test gets a different but repeatable random seed.
 
-* If `faker <https://pypi.org/project/faker>`_ is installed, its random
-  state is reset at the start of every test. This is also for repeatable fuzzy
-  data in tests - factory boy uses faker for lots of data. This is also done
-  if you're using the ``faker`` pytest fixture, by defining the ``faker_seed``
-  fixture
-  (`docs <https://faker.readthedocs.io/en/master/pytest-fixtures.html#seeding-configuration>`__).
+  .. |random.seed()| replace:: ``random.seed()``
+  __ https://docs.python.org/3/library/random.html#random.seed
 
-* If
-  `Model Bakery <https://model-bakery.readthedocs.io/en/latest/>`_
-  is installed, its random state is reset at the start of every test. This
-  allows for repeatable use of its random fixture field values.
+* pytest-randomly also resets several libraries’ random states at the start of
+  every test, if they are installed:
 
-* If `numpy <http://www.numpy.org/>`_ is installed, its legacy global random state in |numpy.random|__ is reset at the start of every test.
+  * `factory boy <https://factoryboy.readthedocs.io/en/latest/reference.html>`__
 
-  .. |numpy.random| replace:: ``numpy.random``
-  __ https://numpy.org/doc/stable/reference/random/index.html
+  * `Faker <https://pypi.org/project/faker>`__
+
+    The ``faker`` pytest fixture is also affected, as pytest-randomly defines |the faker_seed fixture|__.
+
+    .. |the faker_seed fixture| replace:: the ``faker_seed`` fixture
+    __ https://faker.readthedocs.io/en/master/pytest-fixtures.html#seeding-configuration
+
+  * `Model Bakery <https://model-bakery.readthedocs.io/en/latest/>`__
+
+  * `NumPy <https://www.numpy.org/>`_
+
+    Only its `legacy random state <https://numpy.org/doc/stable/reference/random/legacy.html>`__ is affected.
 
 * If additional random generators are used, they can be registered under the
   ``pytest_randomly.random_seeder``

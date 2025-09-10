@@ -58,7 +58,7 @@ def test_it_reports_a_header_when_set(simpletester):
     assert lines == ["Using --randomly-seed=10"]
 
 
-def test_it_reuses_the_same_random_seed_per_test(ourtester):
+def test_it_uses_different_random_seeds_per_test(ourtester):
     """
     Run a pair of tests that generate the a number and then assert they got
     what the other did.
@@ -67,18 +67,16 @@ def test_it_reuses_the_same_random_seed_per_test(ourtester):
         test_one="""
         import random
 
+
         def test_a():
-            test_a.num = random.random()
-            if hasattr(test_b, 'num'):
-                assert test_a.num == test_b.num
+            global num
+            num = random.random()
 
         def test_b():
-            test_b.num = random.random()
-            if hasattr(test_a, 'num'):
-                assert test_b.num == test_a.num
+            assert random.random() != num
         """
     )
-    out = ourtester.runpytest("--randomly-dont-reorganize")
+    out = ourtester.runpytest("--randomly-dont-reorganize", "--randomly-seed=1")
     out.assert_outcomes(passed=2, failed=0)
 
 
@@ -157,9 +155,8 @@ def test_it_resets_the_random_seed_at_the_start_of_test_classes(ourtester):
 
             @classmethod
             def setUpClass(cls):
-                super(A, cls).setUpClass()
+                super().setUpClass()
                 cls.suc_num = random.random()
-                assert cls.suc_num == getattr(B, 'suc_num', cls.suc_num)
 
             def test_fake(self):
                 assert True
@@ -169,15 +166,15 @@ def test_it_resets_the_random_seed_at_the_start_of_test_classes(ourtester):
 
             @classmethod
             def setUpClass(cls):
-                super(B, cls).setUpClass()
+                super().setUpClass()
                 cls.suc_num = random.random()
-                assert cls.suc_num == getattr(A, 'suc_num', cls.suc_num)
+                assert cls.suc_num != A.suc_num
 
             def test_fake(self):
                 assert True
         """
     )
-    out = ourtester.runpytest()
+    out = ourtester.runpytest("--randomly-seed=1")
     out.assert_outcomes(passed=2, failed=0)
 
 
@@ -195,9 +192,8 @@ def test_it_resets_the_random_seed_at_the_end_of_test_classes(ourtester):
 
             @classmethod
             def tearDownClass(cls):
-                super(A, cls).tearDownClass()
+                super().tearDownClass()
                 cls.suc_num = random.random()
-                assert cls.suc_num == getattr(B, 'suc_num', cls.suc_num)
 
 
         class B(TestCase):
@@ -207,12 +203,12 @@ def test_it_resets_the_random_seed_at_the_end_of_test_classes(ourtester):
 
             @classmethod
             def tearDownClass(cls):
-                super(B, cls).tearDownClass()
+                super().tearDownClass()
                 cls.suc_num = random.random()
-                assert cls.suc_num == getattr(A, 'suc_num', cls.suc_num)
+                assert cls.suc_num != A.suc_num
         """
     )
-    out = ourtester.runpytest()
+    out = ourtester.runpytest("--randomly-seed=1")
     out.assert_outcomes(passed=2, failed=0)
 
 
@@ -574,62 +570,20 @@ def test_fixtures_get_different_random_state_to_tests(ourtester):
     out.assert_outcomes(passed=1)
 
 
-def test_fixtures_dont_interfere_with_tests_getting_same_random_state(ourtester):
-    ourtester.makepyfile(
-        test_one="""
-        import random
-
-        import pytest
-
-
-        random.seed(2)
-        state_at_seed_two = random.getstate()
-
-
-        @pytest.fixture(scope='module')
-        def myfixture():
-            return random.random()
-
-
-        @pytest.mark.one()
-        def test_one(myfixture):
-            assert random.getstate() == state_at_seed_two
-
-
-        @pytest.mark.two()
-        def test_two(myfixture):
-            assert random.getstate() == state_at_seed_two
-        """
-    )
-    args = ["--randomly-seed=2"]
-
-    out = ourtester.runpytest(*args)
-    out.assert_outcomes(passed=2)
-
-    out = ourtester.runpytest("-m", "one", *args)
-    out.assert_outcomes(passed=1)
-    out = ourtester.runpytest("-m", "two", *args)
-    out.assert_outcomes(passed=1)
-
-
 def test_factory_boy(ourtester):
     """
-    Rather than set up factories etc., just check the random generator it uses
-    is set between two tests to output the same number.
+    Check that the random generator factory boy uses is different between two tests.
     """
     ourtester.makepyfile(
         test_one="""
         from factory.random import randgen
 
         def test_a():
-            test_a.num = randgen.random()
-            if hasattr(test_b, 'num'):
-                assert test_a.num == test_b.num
+            assert randgen.random() == 0.9988532989147809
+
 
         def test_b():
-            test_b.num = randgen.random()
-            if hasattr(test_a, 'num'):
-                assert test_b.num == test_a.num
+            assert randgen.random() == 0.18032546798434612
         """
     )
 
@@ -645,10 +599,10 @@ def test_faker(ourtester):
         fake = Faker()
 
         def test_one():
-            assert fake.name() == 'Ryan Gallagher'
+            assert fake.name() == 'Mrs. Lisa Ryan'
 
         def test_two():
-            assert fake.name() == 'Ryan Gallagher'
+            assert fake.name() == 'Kaitlyn Mitchell'
         """
     )
 
@@ -660,10 +614,10 @@ def test_faker_fixture(ourtester):
     ourtester.makepyfile(
         test_one="""
         def test_one(faker):
-            assert faker.name() == 'Ryan Gallagher'
+            assert faker.name() == 'Mrs. Lisa Ryan'
 
         def test_two(faker):
-            assert faker.name() == 'Ryan Gallagher'
+            assert faker.name() == 'Kaitlyn Mitchell'
         """
     )
 
@@ -673,22 +627,17 @@ def test_faker_fixture(ourtester):
 
 def test_model_bakery(ourtester):
     """
-    Rather than set up models, just check the random generator it uses is set
-    between two tests to output the same number.
+    Check the Model Bakery random generator is reset between tests.
     """
     ourtester.makepyfile(
         test_one="""
-        from model_bakery.random_gen import baker_random
+        from model_bakery.random_gen import gen_slug
 
         def test_a():
-            test_a.num = baker_random.random()
-            if hasattr(test_b, 'num'):
-                assert test_a.num == test_b.num
+            assert gen_slug(10) == 'XjpU5br7ej'
 
         def test_b():
-            test_b.num = baker_random.random()
-            if hasattr(test_a, 'num'):
-                assert test_b.num == test_a.num
+            assert gen_slug(10) == 'xJHS-PD_WT'
         """
     )
 
@@ -702,10 +651,10 @@ def test_numpy(ourtester):
         import numpy as np
 
         def test_one():
-            assert np.random.rand() == 0.417022004702574
+            assert np.random.rand() == 0.36687834264514585
 
         def test_two():
-            assert np.random.rand() == 0.417022004702574
+            assert np.random.rand() == 0.7050715833365834
         """
     )
 
@@ -769,9 +718,9 @@ def test_entrypoint_injection(pytester, monkeypatch):
     assert reseed.mock_calls == [
         mock.call(1),
         mock.call(1),
-        mock.call(0),
-        mock.call(1),
-        mock.call(2),
+        mock.call(116362448262735926321257785636175308268),
+        mock.call(116362448262735926321257785636175308269),
+        mock.call(116362448262735926321257785636175308270),
     ]
 
     reseed.mock_calls[:] = []
@@ -779,9 +728,9 @@ def test_entrypoint_injection(pytester, monkeypatch):
     assert reseed.mock_calls == [
         mock.call(424242),
         mock.call(424242),
-        mock.call(424241),
-        mock.call(424242),
-        mock.call(424243),
+        mock.call(116362448262735926321257785636175732509),
+        mock.call(116362448262735926321257785636175732510),
+        mock.call(116362448262735926321257785636175732511),
     ]
 
 

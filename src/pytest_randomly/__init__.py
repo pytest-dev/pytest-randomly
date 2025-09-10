@@ -4,12 +4,14 @@ import argparse
 import hashlib
 import random
 import sys
+from functools import lru_cache
 from itertools import groupby
 from types import ModuleType
 from typing import Any, Callable, TypeVar
 
 from _pytest.config import Config
 from _pytest.config.argparsing import Parser
+from _pytest.fixtures import SubRequest
 from _pytest.nodes import Item
 from pytest import Collector, fixture, hookimpl
 
@@ -196,17 +198,17 @@ def pytest_report_header(config: Config) -> str:
 
 def pytest_runtest_setup(item: Item) -> None:
     if item.config.getoption("randomly_reset_seed"):
-        _reseed(item.config, -1)
+        _reseed(item.config, int.from_bytes(_md5(item.nodeid), "big") - 1)
 
 
 def pytest_runtest_call(item: Item) -> None:
     if item.config.getoption("randomly_reset_seed"):
-        _reseed(item.config)
+        _reseed(item.config, int.from_bytes(_md5(item.nodeid), "big"))
 
 
 def pytest_runtest_teardown(item: Item) -> None:
     if item.config.getoption("randomly_reset_seed"):
-        _reseed(item.config, 1)
+        _reseed(item.config, int.from_bytes(_md5(item.nodeid), "big") + 1)
 
 
 @hookimpl(tryfirst=True)
@@ -279,6 +281,7 @@ def reduce_list_of_lists(lists: list[list[T]]) -> list[T]:
     return new_list
 
 
+@lru_cache
 def _md5(string: str) -> bytes:
     hasher = hashlib.md5(usedforsecurity=False)
     hasher.update(string.encode())
@@ -288,6 +291,10 @@ def _md5(string: str) -> bytes:
 if have_faker:  # pragma: no branch
 
     @fixture(autouse=True)
-    def faker_seed(pytestconfig: Config) -> int:
-        result: int = pytestconfig.getoption("randomly_seed")
+    def faker_seed(pytestconfig: Config, request: SubRequest) -> int:
+        print(type(request))
+        result: int = pytestconfig.getoption("randomly_seed") + int.from_bytes(
+            _md5(request.node.nodeid),
+            "big",
+        )
         return result
