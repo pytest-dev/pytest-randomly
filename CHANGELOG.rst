@@ -7,6 +7,13 @@ Unreleased
 
 * Support Python 3.14.
 
+* Use a different random seed per test, based on the test ID.
+
+  This change should mean that tests exercise more random data values in a given run, and that any randomly-generated identifiers have a lower chance of collision when stored in a shared resource like a database.
+
+  `PR #687 <https://github.com/pytest-dev/pytest-randomly/issues/687>`__.
+  Thanks to Bryce Drennan for the suggestion in `Issue #600 <https://github.com/pytest-dev/pytest-randomly/issues/600>`__ and initial implementation in `PR #617 <https://github.com/pytest-dev/pytest-randomly/pull/617>`__.
+
 3.16.0 (2024-10-25)
 -------------------
 
