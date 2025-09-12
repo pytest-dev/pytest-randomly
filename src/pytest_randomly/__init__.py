@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 import random
 import sys
 from functools import lru_cache
@@ -160,8 +159,7 @@ def _reseed(config: Config, offset: int = 0) -> int:
         baker_random.setstate(random_state)
 
     if have_numpy:  # pragma: no branch
-        numpy_seed = _truncate_seed_for_numpy(seed)
-        np_random.seed(numpy_seed)
+        np_random.seed(seed % 2**32)
 
     if entrypoint_reseeds is None:
         eps = entry_points(group="pytest_randomly.random_seeder")
@@ -172,15 +170,6 @@ def _reseed(config: Config, offset: int = 0) -> int:
     return seed
 
 
-def _truncate_seed_for_numpy(seed: int) -> int:
-    seed = abs(seed)
-    if seed <= 2**32 - 1:
-        return seed
-
-    seed_bytes = seed.to_bytes(seed.bit_length(), "big")
-    return int.from_bytes(hashlib.sha512(seed_bytes).digest()[: 32 // 8], "big")
-
-
 def pytest_report_header(config: Config) -> str:
     seed = config.getoption("randomly_seed")
     _reseed(config)
@@ -189,7 +178,7 @@ def pytest_report_header(config: Config) -> str:
 
 def pytest_runtest_setup(item: Item) -> None:
     if item.config.getoption("randomly_reset_seed"):
-        _reseed(item.config, _crc32(item.nodeid) - 1)
+        _reseed(item.config, (_crc32(item.nodeid) - 1) % 2**32)
 
 
 def pytest_runtest_call(item: Item) -> None:
@@ -199,7 +188,7 @@ def pytest_runtest_call(item: Item) -> None:
 
 def pytest_runtest_teardown(item: Item) -> None:
     if item.config.getoption("randomly_reset_seed"):
-        _reseed(item.config, _crc32(item.nodeid) + 1)
+        _reseed(item.config, (_crc32(item.nodeid) + 1) % 2**32)
 
 
 @hookimpl(tryfirst=True)

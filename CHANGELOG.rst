@@ -5,10 +5,16 @@ Changelog
 Unreleased
 ----------
 
-* Removed the random state caching, which would grow without bound, leaking memory in long test runs.
+* Remove the random state caching, which would grow without bound, leaking memory in long test runs.
   The caching was added to slightly speed up re-using the same (final) seed, but since the final seed is now different for each test, it has no effect.
 
   `PR #690 <https://github.com/pytest-dev/pytest-randomly/issues/687>`__.
+
+* Modify Numpy seed restriction, replacing hashing with a modulo operation.
+  The extra work to hash is unnecessary now that we generate a final seed per test with CRC32.
+  This change saves ~500ns per test when Numpy is installed.
+
+  `PR #691 <https://github.com/pytest-dev/pytest-randomly/issues/691>`__.
 
 4.0.0 (2025-09-10)
 ------------------
