@@ -2,6 +2,14 @@
 Changelog
 =========
 
+Unreleased
+----------
+
+* Removed the random state caching, which would grow without bound, leaking memory in long test runs.
+  The caching was added to slightly speed up re-using the same (final) seed, but since the final seed is now different for each test, it has no effect.
+
+  `PR #690 <https://github.com/pytest-dev/pytest-randomly/issues/687>`__.
+
 4.0.0 (2025-09-10)
 ------------------
 
