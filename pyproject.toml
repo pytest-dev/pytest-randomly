@@ -21,14 +21,13 @@ license-files = [ "LICENSE" ]
 authors = [
   { name = "Adam Johnson", email = "me@adamj.eu" },
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 classifiers = [
   "Development Status :: 5 - Production/Stable",
   "Framework :: Pytest",
   "Intended Audience :: Developers",
   "Natural Language :: English",
   "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
@@ -37,7 +36,6 @@ classifiers = [
   "Typing :: Typed",
 ]
 dependencies = [
-  "importlib-metadata>=3.6; python_version<'3.10'",
   "pytest",
 ]
 urls.Changelog = "https://github.com/pytest-dev/pytest-randomly/blob/main/CHANGELOG.rst"
@@ -50,7 +48,6 @@ test = [
   "coverage[toml]",
   "factory-boy",
   "faker",
-  "importlib-metadata>=3.6; python_version<'3.10'",
   "model-bakery>=1.13",
   "numpy",
   "pytest",
