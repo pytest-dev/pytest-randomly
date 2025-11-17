@@ -2,11 +2,12 @@ from __future__ import annotations
 
 import argparse
 import random
-import sys
+from collections.abc import Callable
 from functools import lru_cache
+from importlib.metadata import entry_points
 from itertools import groupby
 from types import ModuleType
-from typing import Any, Callable, TypeVar
+from typing import Any, TypeVar
 from zlib import crc32
 
 from _pytest.config import Config
@@ -14,11 +15,6 @@ from _pytest.config.argparsing import Parser
 from _pytest.fixtures import SubRequest
 from _pytest.nodes import Item
 from pytest import Collector, fixture, hookimpl
-
-if sys.version_info < (3, 10):
-    from importlib_metadata import entry_points
-else:
-    from importlib.metadata import entry_points
 
 # factory-boy
 try:
