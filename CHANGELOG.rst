@@ -2,6 +2,10 @@
 Changelog
 =========
 
+* Fix a crash with Faker installed when explicitly enabling and disabling the plugin (via ``-p randomly -p no:randomly``).
+
+  Thanks to mojosan77 for the report in `Issue #718 <https://github.com/pytest-dev/pytest-randomly/issues/718>`__.
+
 * Drop Python 3.9 support.
 
 4.0.1 (2025-09-12)

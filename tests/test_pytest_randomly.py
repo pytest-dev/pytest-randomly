@@ -633,6 +633,18 @@ def test_faker_fixture(ourtester):
     out.assert_outcomes(passed=2)
 
 
+def test_faker_enabled_disabled(monkeypatch, ourtester):
+    ourtester.makepyfile(
+        test_one="""
+        def test_one(faker):
+            assert faker.name() == 'Norma Fisher'
+        """
+    )
+
+    out = ourtester.runpytest("-p", "randomly", "-p", "no:randomly")
+    out.assert_outcomes(passed=1)
+
+
 def test_model_bakery(ourtester):
     """
     Check the Model Bakery random generator is reset between tests.

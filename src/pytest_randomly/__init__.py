@@ -265,8 +265,15 @@ def _crc32(string: str) -> int:
 if have_faker:  # pragma: no branch
 
     @fixture(autouse=True)
-    def faker_seed(pytestconfig: Config, request: SubRequest) -> int:
-        result: int = pytestconfig.getoption("randomly_seed") + _crc32(
-            request.node.nodeid
-        )
-        return result
+    def faker_seed(pytestconfig: Config, request: SubRequest) -> Any:
+        from faker.contrib.pytest.plugin import DEFAULT_SEED
+
+        seed = pytestconfig.getoption("randomly_seed")
+        if seed in ("default", "last"):
+            # pytest-randomly has been imported but disabled, so
+            # pytest_configure hasn't run to set the seed. Fall back to
+            # Faker's default seed.
+            return DEFAULT_SEED
+        else:
+            result: int = seed + _crc32(request.node.nodeid)
+            return result
