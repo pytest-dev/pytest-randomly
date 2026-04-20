@@ -2,6 +2,9 @@
 Changelog
 =========
 
+4.1.0 (2026-04-20)
+------------------
+
 * Fix a crash with Faker installed when explicitly enabling and disabling the plugin (via ``-p randomly -p no:randomly``).
 
   Thanks to mojosan77 for the report in `Issue #718 <https://github.com/pytest-dev/pytest-randomly/issues/718>`__.
