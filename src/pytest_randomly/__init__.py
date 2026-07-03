@@ -66,8 +66,8 @@ def seed_type(string: str) -> str | int:
         return int(string)
     except ValueError:
         raise argparse.ArgumentTypeError(
-            f"{repr(string)} is not an integer or the string 'last'"
-        )
+            f"{string!r} is not an integer or the string 'last'",
+        ) from None
 
 
 def pytest_addoption(parser: Parser) -> None:
@@ -200,7 +200,7 @@ def pytest_collection_modifyitems(config: Config, items: list[Item]) -> None:
             (
                 module,
                 _shuffle_by_class(list(group), seed),
-            )
+            ),
         )
 
     def _module_key(module_item: tuple[ModuleType | None, list[Item]]) -> int:
@@ -274,6 +274,5 @@ if have_faker:  # pragma: no branch
             # pytest_configure hasn't run to set the seed. Fall back to
             # Faker's default seed.
             return DEFAULT_SEED
-        else:
-            result: int = seed + _crc32(request.node.nodeid)
-            return result
+        result: int = seed + _crc32(request.node.nodeid)
+        return result
