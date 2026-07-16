@@ -50,6 +50,7 @@ test = [
   "faker",
   "model-bakery>=1.13",
   "numpy",
+  "polyfactory",
   "pytest>=9",
   "pytest-xdist",
 ]

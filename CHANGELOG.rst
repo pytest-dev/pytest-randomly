@@ -2,6 +2,10 @@
 Changelog
 =========
 
+* Reset `Polyfactory <https://polyfactory.litestar.dev/>`__’s default random state at the start of every test, if it is installed.
+
+  Thanks to davidszotten for the request in `Issue #720 <https://github.com/pytest-dev/pytest-randomly/issues/720>`__.
+
 4.1.0 (2026-04-20)
 ------------------
 

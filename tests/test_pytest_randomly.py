@@ -696,6 +696,39 @@ def test_numpy_doesnt_crash_with_large_seed(ourtester):
     out.assert_outcomes(passed=1)
 
 
+def test_polyfactory(ourtester):
+    """
+    Check that Polyfactory's default random generator is reset between tests.
+    """
+    ourtester.makepyfile(
+        test_one="""
+        from dataclasses import dataclass
+
+        from polyfactory.factories import DataclassFactory
+
+
+        @dataclass
+        class Foo:
+            x: int
+
+
+        class FooFactory(DataclassFactory[Foo]):
+            __model__ = Foo
+
+
+        def test_a():
+            assert FooFactory.build().x == 2927
+
+
+        def test_b():
+            assert FooFactory.build().x == 1908
+        """
+    )
+
+    out = ourtester.runpytest("--randomly-seed=1")
+    out.assert_outcomes(passed=2)
+
+
 def test_failing_import(testdir):
     """Test with pytest raising CollectError or ImportError.
 

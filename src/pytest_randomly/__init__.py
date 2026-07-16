@@ -54,6 +54,14 @@ try:
 except ImportError:  # pragma: no cover
     have_numpy = False
 
+# polyfactory
+try:
+    from polyfactory.constants import DEFAULT_RANDOM as polyfactory_random
+
+    have_polyfactory = True
+except ImportError:  # pragma: no cover
+    have_polyfactory = False
+
 
 def make_seed() -> int:
     return random.Random().getrandbits(32)
@@ -156,6 +164,9 @@ def _reseed(config: Config, offset: int = 0) -> int:
 
     if have_numpy:  # pragma: no branch
         np_random.seed(seed % 2**32)
+
+    if have_polyfactory:  # pragma: no branch
+        polyfactory_random.setstate(random_state)
 
     if entrypoint_reseeds is None:
         eps = entry_points(group="pytest_randomly.random_seeder")
