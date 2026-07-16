@@ -699,17 +699,24 @@ def test_numpy_doesnt_crash_with_large_seed(ourtester):
 def test_polyfactory(ourtester):
     """
     Check that Polyfactory's default random generator is reset between tests.
+
+    Uses a Union-typed field so the assertion depends on
+    DEFAULT_RANDOM.choice() picking which type to generate. A plain ``int``
+    field wouldn't do: Polyfactory generates those via its Faker instance,
+    whose random generator pytest-randomly already reseeds separately, so
+    such a test would pass even without resetting DEFAULT_RANDOM.
     """
     ourtester.makepyfile(
         test_one="""
         from dataclasses import dataclass
+        from typing import Union
 
         from polyfactory.factories import DataclassFactory
 
 
         @dataclass
         class Foo:
-            x: int
+            x: Union[int, str, float, bytes]
 
 
         class FooFactory(DataclassFactory[Foo]):
@@ -717,11 +724,15 @@ def test_polyfactory(ourtester):
 
 
         def test_a():
-            assert FooFactory.build().x == 2927
+            value = FooFactory.build().x
+            assert isinstance(value, str)
+            assert value == 'jKdWckZoDYuPmqHSsjBh'
 
 
         def test_b():
-            assert FooFactory.build().x == 1908
+            value = FooFactory.build().x
+            assert isinstance(value, int)
+            assert value == 1908
         """
     )
 
