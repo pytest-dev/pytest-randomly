@@ -7,6 +7,10 @@ Unreleased
 
 * Support Python 3.15.
 
+* Reset `Polyfactory <https://polyfactory.litestar.dev/>`__\’s default random state at the start of every test, if it is installed.
+
+  Thanks to Rahul Kumar in `PR #735 <https://github.com/pytest-dev/pytest-randomly/issues/735>`__.
+
 * Switch package build backend from setuptools to `uv_build <https://docs.astral.sh/uv/concepts/build-backend/>`__.
   This makes builds with uv about nine times faster, since uv runs the backend natively, without creating a build environment or spawning a Python process.
   Additionally, source distributions no longer include test files, which setuptools previously included incompletely, missing the files needed to actually run them.
