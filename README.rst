@@ -100,7 +100,7 @@ including how it started life as the nose plugin
 `nose-randomly <https://github.com/adamchainz/nose-randomly>`__.
 
 Additionally, I appeared on the Test and Code podcast to `talk about
-pytest-randomly <https://testandcode.com/128>`__.
+pytest-randomly <https://pythontest.com/testandcode/episodes/128-pytest-randomly-adam-johnson/>`__.
 
 Installation
 ============
