@@ -11,6 +11,8 @@ Unreleased
 
   Thanks to milssky for the report in `Issue #701 <https://github.com/pytest-dev/pytest-randomly/issues/701>`__.
 
+* Require pytest 8+, the first version to require a version of pluggy that supports hook wrappers, as used by the above fix.
+
 * Support Python 3.15.
 
 * Reset `Polyfactory <https://polyfactory.litestar.dev/>`__\’s default random state at the start of every test, if it is installed.

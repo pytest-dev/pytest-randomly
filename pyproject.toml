@@ -37,7 +37,7 @@ classifiers = [
   "Typing :: Typed",
 ]
 dependencies = [
-  "pytest",
+  "pytest>=8",
 ]
 urls.Changelog = "https://github.com/pytest-dev/pytest-randomly/blob/main/CHANGELOG.rst"
 urls.Funding = "https://adamj.eu/books/"
