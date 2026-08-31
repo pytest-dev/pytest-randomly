@@ -64,6 +64,11 @@ All of these features are on by default but can be disabled with flags.
 
     Only its `legacy random state <https://numpy.org/doc/stable/reference/random/legacy.html>`__ is affected.
 
+  * `Polyfactory <https://polyfactory.litestar.dev/>`__
+
+    Only the default random generator is affected.
+    Factories that have called ``seed_random()`` with their own seed are unaffected.
+
 * If additional random generators are used, they can be registered under the
   ``pytest_randomly.random_seeder``
   `entry point <https://packaging.python.org/specifications/entry-points/>`_ and
