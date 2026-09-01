@@ -7,15 +7,16 @@ Changelog
 
 * Support Python 3.15.
 
-* Shuffle tests before other plugins’ ``pytest_collection_modifyitems`` hooks run.
+* Shuffle tests in a wrapper around the ``pytest_collection_modifyitems`` hook, guaranteeing that the shuffle runs before all other plugins’ implementations of the hook.
 
-  Previously, pytest-randomly used a plain ``tryfirst`` hook, so another plugin using ``tryfirst``, such as pytest-django, could reorder tests before or after pytest-randomly’s shuffle, depending on the plugin registration order.
-  Since that order can vary between environments, this would make the final test order non-repeatable.
+  Previously, pytest-randomly shuffled in a plain ``tryfirst`` hook implementation.
+  When another plugin also implemented the hook with ``tryfirst``, as pytest-django does, whichever plugin pytest happened to register later ran first.
+  Registration order comes from package metadata on disk, which can differ between seemingly identical environments — even two containers built from the same ``Dockerfile``, or the same virtual environment after reinstalling a package.
+  As a result, the same seed could yield different test orders in different environments.
+  Worse, in environments where pytest-randomly ended up shuffling last, it silently destroyed the other plugin’s ordering — for pytest-django, the grouping of database tests that mirrors Django’s test runner (non-transactional database tests, then transactional ones, then the rest).
 
-  Now, pytest-randomly marks its hook as a hook wrapper, making it run before any other plugin’s ``pytest_collection_modifyitems`` hooks, regardless of registration order.
-  Plugins that group tests with a stable sort can apply their grouping on top of the shuffled order, making the final test order reproducible from the seed.
-
-  This is a low-impact breaking change because it you may not be able to reprduce a test order from the last pytest-randomly version by reusing a ``--randomly-seed`` value.
+  Now the shuffle always runs first, and plugins that group tests with a stable sort apply their grouping on top of the shuffled order, so the final order is reproducible from the seed alone.
+  In environments that previously hit the reversed hook order, upgrading changes the test order for a given seed — restoring both reproducibility and other plugins’ grouping.
 
   `PR #746 <https://github.com/pytest-dev/pytest-randomly/pull/746>`__.
   Thanks to milssky for the report in `Issue #701 <https://github.com/pytest-dev/pytest-randomly/issues/701>`__.
