@@ -409,6 +409,50 @@ def test_test_functions_reordered_when_randomness_in_module(ourtester):
     ]
 
 
+def test_reordered_before_other_tryfirst_hook(ourtester):
+    """
+    The reorganization should run before other plugins’
+    pytest_collection_modifyitems hooks, even tryfirst ones registered after
+    pytest-randomly, so plugins that group tests with a stable sort, like
+    pytest-django, preserve the shuffled order within their groups.
+    """
+    ourtester.makeconftest(
+        """
+        import pytest
+
+        @pytest.hookimpl(tryfirst=True)
+        def pytest_collection_modifyitems(items):
+            items.sort(key=lambda item: 0 if "db" in item.name else 1)
+        """
+    )
+    ourtester.makepyfile(
+        test_one="""
+        def test_db_a():
+            pass
+
+        def test_db_b():
+            pass
+
+        def test_plain_c():
+            pass
+
+        def test_plain_d():
+            pass
+        """
+    )
+    args = ["-v", "--randomly-seed=15"]
+
+    out = ourtester.runpytest(*args)
+
+    out.assert_outcomes(passed=4, failed=0)
+    assert out.outlines[9:13] == [
+        "test_one.py::test_db_a PASSED",
+        "test_one.py::test_db_b PASSED",
+        "test_one.py::test_plain_d PASSED",
+        "test_one.py::test_plain_c PASSED",
+    ]
+
+
 def test_doctests_reordered(ourtester):
     ourtester.makepyfile(
         test_one="""

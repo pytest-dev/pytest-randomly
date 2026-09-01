@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import argparse
 import random
-from collections.abc import Callable
+from collections.abc import Callable, Generator
 from functools import lru_cache
 from importlib.metadata import entry_points
 from itertools import groupby
@@ -205,11 +205,21 @@ def pytest_runtest_teardown(item: Item) -> None:
         _reseed(item.config, (_crc32(item.nodeid) + 1) % 2**32)
 
 
-@hookimpl(tryfirst=True)
-def pytest_collection_modifyitems(config: Config, items: list[Item]) -> None:
-    if not config.getoption("randomly_reorganize"):
-        return
+@hookimpl(wrapper=True, tryfirst=True)
+def pytest_collection_modifyitems(
+    config: Config, items: list[Item]
+) -> Generator[None, None, None]:
+    # Reorganize within this wrapper, before the yield, so it runs before all
+    # non-wrapper implementations of this hook, regardless of plugin
+    # registration order. Plugins that group tests with a stable sort, like
+    # pytest-django, then apply their grouping on top of the shuffled order,
+    # making the final order reproducible from the seed.
+    if config.getoption("randomly_reorganize"):
+        _reorganize_items(config, items)
+    return (yield)
 
+
+def _reorganize_items(config: Config, items: list[Item]) -> None:
     seed = _reseed(config)
 
     modules_items: list[tuple[ModuleType | None, list[Item]]] = []
