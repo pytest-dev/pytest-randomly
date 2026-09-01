@@ -7,6 +7,23 @@ Unreleased
 
 * Support Python 3.15.
 
+* Shuffle tests before other plugins’ ``pytest_collection_modifyitems`` hooks run.
+
+  Previously, pytest-randomly used a plain ``tryfirst`` hook, so another plugin using ``tryfirst``, such as pytest-django, could reorder tests before or after pytest-randomly’s shuffle, depending on the plugin registration order.
+  Since that order can vary between environments, this would make the final test order non-repeatable.
+
+  Now, pytest-randomly marks its hook as a hook wrapper, making it run before any other plugin’s ``pytest_collection_modifyitems`` hooks, regardless of registration order.
+  Plugins that group tests with a stable sort can apply their grouping on top of the shuffled order, making the final test order reproducible from the seed.
+
+  This is a low-impact breaking change because it you may not be able to reprduce a test order from the last pytest-randomly version by reusing a ``--randomly-seed`` value.
+
+  `PR #746 <https://github.com/pytest-dev/pytest-randomly/pull/746>`__.
+  Thanks to milssky for the report in `Issue #701 <https://github.com/pytest-dev/pytest-randomly/issues/701>`__.
+
+* Require pytest 8+, the first version to require a version of pluggy that supports hook wrappers, as used by the above fix.
+
+  `PR #746 <https://github.com/pytest-dev/pytest-randomly/pull/746>`__.
+
 * Reset `Polyfactory <https://polyfactory.litestar.dev/>`__\’s default random state at the start of every test, if it is installed.
 
   Thanks to Rahul Kumar in `PR #735 <https://github.com/pytest-dev/pytest-randomly/issues/735>`__.
