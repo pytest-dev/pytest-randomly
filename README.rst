@@ -116,7 +116,7 @@ Install with:
 
     python -m pip install pytest-randomly
 
-Python 3.10 to 3.15 supported.
+Python 3.11 to 3.15 supported.
 
 Usage
 =====
