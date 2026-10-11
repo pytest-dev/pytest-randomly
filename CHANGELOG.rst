@@ -5,6 +5,9 @@ Changelog
 Unreleased
 ----------
 
+* Avoid crashing when test node IDs contain surrogate characters from undecodable filesystem names.
+  In that situation, pytest’s independent cache serialization limitation still requires ``-p no:cacheprovider``.
+
 * Drop Python 3.10 support.
 
 5.0.0 (2026-09-01)

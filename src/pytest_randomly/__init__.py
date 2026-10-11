@@ -287,7 +287,7 @@ def reduce_list_of_lists(lists: list[list[T]]) -> list[T]:
 
 @lru_cache
 def _crc32(string: str) -> int:
-    return crc32(string.encode())
+    return crc32(string.encode(errors="surrogatepass"))
 
 
 if have_faker:  # pragma: no branch
