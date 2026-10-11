@@ -5,6 +5,9 @@ Changelog
 Unreleased
 ----------
 
+* Avoid crashing when test node IDs contain surrogate characters from undecodable filesystem names.
+  In that situation, pytest’s independent cache serialization limitation still requires ``-p no:cacheprovider``.
+
 * Drop Python 3.10 support.
 
 * Fix ``--randomly-seed=last`` with pytest-xdist, where workers could each pick a different seed after ``--cache-clear``, failing with “Different tests were collected”.

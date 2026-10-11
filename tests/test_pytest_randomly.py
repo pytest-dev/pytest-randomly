@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import shutil
+import sys
 from unittest import mock
 
 import pytest
@@ -89,6 +90,23 @@ def test_without_cacheprovider(ourtester):
     )
     out = ourtester.runpytest("-p", "no:cacheprovider")
     out.assert_outcomes(passed=1, failed=0)
+
+
+@pytest.mark.skipif(
+    sys.platform == "win32", reason="Requires byte-based filesystem names"
+)
+def test_undecodable_filename(ourtester):
+    path = ourtester.path / "test_\udcff.py"
+    path.write_text("def test_one():\n    assert True\n", encoding="utf-8")
+
+    result = ourtester.runpytest(
+        "--randomly-seed=1",
+        # Upstream issue: the cache provider cannot persist surrogate-containing node IDs
+        "-p",
+        "no:cacheprovider",
+    )
+
+    result.assert_outcomes(passed=1)
 
 
 def test_using_last_seed(ourtester):
