@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import shutil
+import sys
 from unittest import mock
 
 import pytest
@@ -884,3 +885,16 @@ def test_xdist(n, ourtester):
 
     # Can't make any assertion on the order, since output comes back from
     # workers non-deterministically
+
+
+@pytest.mark.skipif(
+    sys.platform == "win32", reason="Requires byte-based filesystem names"
+)
+def test_undecodable_filename(ourtester):
+    path = ourtester.path / "test_\udcff.py"
+    path.write_text("def test_one():\n    assert True\n", encoding="utf-8")
+
+    # The cache provider independently cannot persist surrogate-containing node IDs.
+    result = ourtester.runpytest("-p", "no:cacheprovider", "--randomly-seed=1")
+
+    result.assert_outcomes(passed=1)
