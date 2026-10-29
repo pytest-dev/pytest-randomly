@@ -16,6 +16,10 @@ Unreleased
 
   Thanks to Huanyi Xie in `PR #751 <https://github.com/pytest-dev/pytest-randomly/pull/751>`__.
 
+* Initialize the configured seed when the report header is disabled, including quiet output and runs without the terminal plugin.
+
+  Thanks to Rupayon Haldar in `PR #753 <https://github.com/pytest-dev/pytest-randomly/pull/753>`__.
+
 5.0.0 (2026-09-01)
 ------------------
 
