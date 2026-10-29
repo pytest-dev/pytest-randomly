@@ -7,6 +7,8 @@ Unreleased
 
 * Drop Python 3.10 support.
 
+* Initialize the configured seed when the report header is disabled, including quiet output and runs without the terminal plugin.
+
 5.0.0 (2026-09-01)
 ------------------
 

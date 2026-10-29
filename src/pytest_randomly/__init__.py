@@ -14,7 +14,7 @@ from _pytest.config import Config
 from _pytest.config.argparsing import Parser
 from _pytest.fixtures import SubRequest
 from _pytest.nodes import Item
-from pytest import Collector, fixture, hookimpl
+from pytest import Collector, Session, fixture, hookimpl
 
 # factory-boy
 try:
@@ -184,9 +184,12 @@ def _reseed(config: Config, offset: int = 0) -> int:
     return seed
 
 
+def pytest_sessionstart(session: Session) -> None:
+    _reseed(session.config)
+
+
 def pytest_report_header(config: Config) -> str:
     seed = config.getoption("randomly_seed")
-    _reseed(config)
     return f"Using --randomly-seed={seed}"
 
 

@@ -58,6 +58,32 @@ def test_it_reports_a_header_when_set(simpletester):
     assert lines == ["Using --randomly-seed=10"]
 
 
+@pytest.mark.parametrize(
+    "output_args", [(), ("-q",), ("-qq",), ("--no-header",), ("-p", "no:terminal")]
+)
+def test_initial_seed_does_not_require_a_report_header(ourtester, output_args):
+    ourtester.makepyfile(
+        test_one="""
+        import random
+
+        expected = random.Random(123)
+
+        def test_a():
+            assert random.random() == expected.random()
+
+        def test_b():
+            assert random.random() == expected.random()
+        """
+    )
+    out = ourtester.runpytest_subprocess(
+        "--randomly-seed=123",
+        "--randomly-dont-reorganize",
+        "--randomly-dont-reset-seed",
+        *output_args,
+    )
+    assert out.ret == 0
+
+
 def test_it_uses_different_random_seeds_per_test(ourtester):
     """
     Run a pair of tests that generate the a number and then assert they got
