@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 import shutil
-import sys
 from unittest import mock
+from zlib import crc32
 
 import pytest
 
@@ -92,12 +92,12 @@ def test_without_cacheprovider(ourtester):
     out.assert_outcomes(passed=1, failed=0)
 
 
-@pytest.mark.skipif(
-    sys.platform == "win32", reason="Requires byte-based filesystem names"
-)
 def test_undecodable_filename(ourtester):
     path = ourtester.path / "test_\udcff.py"
-    path.write_text("def test_one():\n    assert True\n", encoding="utf-8")
+    try:
+        path.write_text("def test_one():\n    assert True\n", encoding="utf-8")
+    except OSError:
+        pytest.skip("Filesystem does not allow undecodable filenames")
 
     result = ourtester.runpytest(
         "--randomly-seed=1",
@@ -931,3 +931,11 @@ def test_xdist_last_seed_with_cache_clear(ourtester):
     seed = header[0].removeprefix("Using --randomly-seed=")
     worker_seeds = {p.read_text() for p in ourtester.path.glob("seed-*.txt")}
     assert worker_seeds == {seed}
+
+
+def test_crc32_surrogates():
+    """
+    Lone surrogates, as found in node IDs from undecodable filenames, hash as
+    their UTF-8 surrogatepass bytes instead of raising UnicodeEncodeError.
+    """
+    assert pytest_randomly._crc32("a\udcffb") == crc32(b"a\xed\xb3\xbfb")
