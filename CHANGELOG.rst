@@ -7,8 +7,8 @@ Unreleased
 
 * Drop Python 3.10 support.
 
-* Fix pytest-xdist workers resolving ``--randomly-seed=last`` again from their own cache, rather than using the seed resolved on the main process.
-  With ``--cache-clear``, workers could each pick a different random seed, failing with “Different tests were collected”.
+* Fix ``--randomly-seed=last`` with pytest-xdist, where workers could each pick a different seed after ``--cache-clear``, failing with “Different tests were collected”.
+  Workers now always use the seed resolved on the main process.
 
   Thanks to Abhishek Verma in `PR #755 <https://github.com/pytest-dev/pytest-randomly/pull/755>`__.
 
