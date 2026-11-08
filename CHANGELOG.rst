@@ -12,6 +12,10 @@ Unreleased
 
   Thanks to Abhishek Verma in `PR #755 <https://github.com/pytest-dev/pytest-randomly/pull/755>`__.
 
+* Fix crash when test node IDs contain surrogate characters from undecodable filenames.
+
+  Thanks to Huanyi Xie in `PR #751 <https://github.com/pytest-dev/pytest-randomly/pull/751>`__.
+
 5.0.0 (2026-09-01)
 ------------------
 
