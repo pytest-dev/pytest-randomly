@@ -185,6 +185,7 @@ def _reseed(config: Config, offset: int = 0) -> int:
     return seed
 
 
+@hookimpl(tryfirst=True)
 def pytest_sessionstart(session: Session) -> None:
     _reseed(session.config)
 
