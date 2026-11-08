@@ -120,11 +120,13 @@ def pytest_configure(config: Config) -> None:
     if config.pluginmanager.hasplugin("xdist"):
         config.pluginmanager.register(XdistHooks())
 
-    seed_value = config.getoption("randomly_seed")
     if hasattr(config, "workerinput"):  # pragma: no cover
-        # pytest-xdist: use seed resolved on main.
-        seed = config.workerinput["randomly_seed"]
-    elif seed_value == "last":
+        # pytest-xdist: use seed resolved on main, which also wrote the cache.
+        config.option.randomly_seed = config.workerinput["randomly_seed"]
+        return
+
+    seed_value = config.getoption("randomly_seed")
+    if seed_value == "last":
         assert hasattr(config, "cache"), (
             "The cacheprovider plugin is required to use 'last'"
         )
