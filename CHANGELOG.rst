@@ -5,15 +5,17 @@ Changelog
 Unreleased
 ----------
 
-* Avoid crashing when test node IDs contain surrogate characters from undecodable filesystem names.
-  In that situation, pytest’s independent cache serialization limitation still requires ``-p no:cacheprovider``.
-
 * Drop Python 3.10 support.
 
 * Fix ``--randomly-seed=last`` with pytest-xdist, where workers could each pick a different seed after ``--cache-clear``, failing with “Different tests were collected”.
   Workers now always use the seed resolved on the main process.
 
   Thanks to Abhishek Verma in `PR #755 <https://github.com/pytest-dev/pytest-randomly/pull/755>`__.
+
+* Avoid crashing when test node IDs contain surrogate characters from undecodable filesystem names.
+  In that situation, pytest’s independent cache serialization limitation still requires ``-p no:cacheprovider``.
+
+  Thanks to Huanyi Xie in `PR #751 <https://github.com/pytest-dev/pytest-randomly/pull/751>`__.
 
 5.0.0 (2026-09-01)
 ------------------
