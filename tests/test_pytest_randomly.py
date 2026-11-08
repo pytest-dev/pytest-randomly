@@ -96,7 +96,7 @@ def test_undecodable_filename(ourtester):
     path = ourtester.path / "test_\udcff.py"
     try:
         path.write_text("def test_one():\n    assert True\n", encoding="utf-8")
-    except OSError:
+    except OSError:  # pragma: no cover
         pytest.skip("Filesystem does not allow undecodable filenames")
 
     result = ourtester.runpytest(
