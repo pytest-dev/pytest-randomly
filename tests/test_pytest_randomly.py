@@ -884,3 +884,32 @@ def test_xdist(n, ourtester):
 
     # Can't make any assertion on the order, since output comes back from
     # workers non-deterministically
+
+
+def test_xdist_last_seed_with_cache_clear(ourtester):
+    """
+    Workers should use the seed resolved on main, rather than resolving
+    'last' again from a cache that --cache-clear has emptied.
+    """
+    ourtester.makepyfile(
+        **{
+            f"test_{i}": """
+            import os
+
+            def test_a(pytestconfig):
+                worker = os.environ["PYTEST_XDIST_WORKER"]
+                seed = pytestconfig.getoption("randomly_seed")
+                with open(f"seed-{worker}.txt", "w") as f:
+                    f.write(str(seed))
+            """
+            for i in range(6)
+        }
+    )
+
+    out = ourtester.runpytest("-n", "2", "--randomly-seed=last", "--cache-clear")
+    out.assert_outcomes(passed=6)
+
+    header = [x for x in out.outlines if x.startswith("Using --randomly-seed=")]
+    seed = header[0].removeprefix("Using --randomly-seed=")
+    worker_seeds = {p.read_text() for p in ourtester.path.glob("seed-*.txt")}
+    assert worker_seeds == {seed}
