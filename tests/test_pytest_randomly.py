@@ -453,6 +453,233 @@ def test_test_functions_reordered_when_randomness_in_module(ourtester):
     ]
 
 
+def test_marker_registered(simpletester):
+    out = simpletester.runpytest("--markers")
+    assert out.ret == 0
+    assert any(
+        line.startswith(
+            "@pytest.mark.randomly_dont_reorganize: Stop pytest-randomly from "
+            "randomly reorganizing tests in a module or class."
+        )
+        for line in out.outlines
+    )
+
+
+def test_module_marked_dont_reorganize(ourtester):
+    ourtester.makepyfile(
+        test_a="""
+        import pytest
+
+        pytestmark = pytest.mark.randomly_dont_reorganize
+
+
+        def test_first():
+            pass
+
+
+        class TestSteps:
+            def test_step_1(self):
+                pass
+
+            def test_step_2(self):
+                pass
+
+
+        def test_last():
+            pass
+        """,
+        test_b="""
+        def test_a():
+            pass
+
+        def test_b():
+            pass
+
+        def test_c():
+            pass
+
+        def test_d():
+            pass
+        """,
+        test_c="""
+        def test_it():
+            pass
+        """,
+        test_d="""
+        def test_it():
+            pass
+        """,
+    )
+
+    out = ourtester.runpytest("-v", "--strict-markers", "--randomly-seed=15")
+
+    out.assert_outcomes(passed=10, failed=0)
+    assert out.outlines[9:19] == [
+        "test_c.py::test_it PASSED",
+        "test_b.py::test_a PASSED",
+        "test_b.py::test_d PASSED",
+        "test_b.py::test_b PASSED",
+        "test_b.py::test_c PASSED",
+        "test_d.py::test_it PASSED",
+        "test_a.py::test_first PASSED",
+        "test_a.py::TestSteps::test_step_1 PASSED",
+        "test_a.py::TestSteps::test_step_2 PASSED",
+        "test_a.py::test_last PASSED",
+    ]
+
+
+def test_class_marked_dont_reorganize(ourtester):
+    ourtester.makepyfile(
+        test_one="""
+        from unittest import TestCase
+
+        import pytest
+
+
+        @pytest.mark.randomly_dont_reorganize
+        class TestA:
+            def test_a(self):
+                pass
+
+            def test_b(self):
+                pass
+
+            def test_c(self):
+                pass
+
+            def test_d(self):
+                pass
+
+
+        class B(TestCase):
+            def test_a(self):
+                pass
+
+            def test_b(self):
+                pass
+
+            def test_c(self):
+                pass
+
+            def test_d(self):
+                pass
+
+
+        @pytest.mark.randomly_dont_reorganize
+        class C(TestCase):
+            def test_a(self):
+                pass
+
+            def test_b(self):
+                pass
+
+            def test_c(self):
+                pass
+
+            def test_d(self):
+                pass
+
+
+        def test_top_a():
+            pass
+
+
+        def test_top_b():
+            pass
+        """
+    )
+
+    out = ourtester.runpytest("-v", "--strict-markers", "--randomly-seed=2")
+
+    out.assert_outcomes(passed=14, failed=0)
+    assert out.outlines[9:23] == [
+        "test_one.py::test_top_a PASSED",
+        "test_one.py::test_top_b PASSED",
+        "test_one.py::C::test_a PASSED",
+        "test_one.py::C::test_b PASSED",
+        "test_one.py::C::test_c PASSED",
+        "test_one.py::C::test_d PASSED",
+        "test_one.py::TestA::test_a PASSED",
+        "test_one.py::TestA::test_b PASSED",
+        "test_one.py::TestA::test_c PASSED",
+        "test_one.py::TestA::test_d PASSED",
+        "test_one.py::B::test_d PASSED",
+        "test_one.py::B::test_a PASSED",
+        "test_one.py::B::test_c PASSED",
+        "test_one.py::B::test_b PASSED",
+    ]
+
+
+@pytest.mark.parametrize("call_args", ["(True)", "(disabled=True)"])
+def test_dont_reorganize_mark_with_arguments_errors(ourtester, call_args):
+    ourtester.makepyfile(
+        test_one=f"""
+        import pytest
+
+        pytestmark = pytest.mark.randomly_dont_reorganize{call_args}
+
+
+        def test_a():
+            pass
+        """
+    )
+
+    out = ourtester.runpytest("--strict-markers")
+
+    assert out.ret != 0
+    out.stderr.fnmatch_lines(
+        ["ERROR: The 'randomly_dont_reorganize' mark does not take any arguments."]
+    )
+
+
+@pytest.mark.parametrize("extra_args", [(), ("--randomly-dont-reorganize",)])
+def test_dont_reorganize_mark_on_function_errors(ourtester, extra_args):
+    ourtester.makepyfile(
+        test_one="""
+        import pytest
+
+
+        @pytest.mark.randomly_dont_reorganize
+        def test_a():
+            pass
+        """
+    )
+
+    out = ourtester.runpytest("--strict-markers", *extra_args)
+
+    assert out.ret != 0
+    out.stderr.fnmatch_lines(
+        [
+            "ERROR: The 'randomly_dont_reorganize' mark can only be applied to "
+            "modules or classes."
+        ]
+    )
+
+
+def test_dont_reorganize_mark_on_method_errors(ourtester):
+    ourtester.makepyfile(
+        test_one="""
+        import pytest
+
+
+        class TestA:
+            @pytest.mark.randomly_dont_reorganize
+            def test_a(self):
+                pass
+        """
+    )
+
+    out = ourtester.runpytest("--strict-markers")
+
+    assert out.ret != 0
+    out.stderr.fnmatch_lines(
+        [
+            "ERROR: The 'randomly_dont_reorganize' mark can only be applied to "
+            "modules or classes."
+        ]
+    )
+
+
 def test_reordered_before_other_tryfirst_hook(ourtester):
     """
     The reorganization should run before other plugins’
@@ -957,6 +1184,49 @@ def test_xdist_last_seed_with_cache_clear(ourtester):
     seed = header[0].removeprefix("Using --randomly-seed=")
     worker_seeds = {p.read_text() for p in ourtester.path.glob("seed-*.txt")}
     assert worker_seeds == {seed}
+
+
+def test_xdist_dont_reorganize_marker_with_strict_markers(ourtester):
+    ourtester.makepyfile(
+        test_mod="""
+        import pytest
+
+        pytestmark = pytest.mark.randomly_dont_reorganize
+
+        steps = []
+
+
+        def test_step_1():
+            assert steps == []
+            steps.append(1)
+
+
+        def test_step_2():
+            assert steps == [1]
+            steps.append(2)
+        """,
+        test_cls="""
+        import pytest
+
+
+        @pytest.mark.randomly_dont_reorganize
+        class TestSteps:
+            steps = []
+
+            def test_step_1(self):
+                assert self.steps == []
+                self.steps.append(1)
+
+            def test_step_2(self):
+                assert self.steps == [1]
+                self.steps.append(2)
+        """,
+    )
+
+    out = ourtester.runpytest(
+        "-n", "2", "--dist=loadscope", "--strict-markers", "--randomly-seed=15"
+    )
+    out.assert_outcomes(passed=4)
 
 
 def test_crc32_surrogates():
