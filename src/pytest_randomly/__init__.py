@@ -14,7 +14,7 @@ from _pytest.config import Config
 from _pytest.config.argparsing import Parser
 from _pytest.fixtures import SubRequest
 from _pytest.nodes import Item
-from pytest import Collector, Session, fixture, hookimpl
+from pytest import Class, Collector, Module, Session, UsageError, fixture, hookimpl
 
 # factory-boy
 try:
@@ -117,6 +117,12 @@ def pytest_addoption(parser: Parser) -> None:
 
 
 def pytest_configure(config: Config) -> None:
+    config.addinivalue_line(
+        "markers",
+        "randomly_dont_reorganize: Stop pytest-randomly from randomly reorganizing "
+        "tests in a module or class.",
+    )
+
     if config.pluginmanager.hasplugin("xdist"):
         config.pluginmanager.register(XdistHooks())
 
@@ -214,6 +220,7 @@ def pytest_runtest_teardown(item: Item) -> None:
 def pytest_collection_modifyitems(
     config: Config, items: list[Item]
 ) -> Generator[None, None, None]:
+    _validate_markers(items)
     # Reorganize within this wrapper, before the yield, so it runs before all
     # non-wrapper implementations of this hook, regardless of plugin
     # registration order. Plugins that group tests with a stable sort, like
@@ -224,17 +231,38 @@ def pytest_collection_modifyitems(
     return (yield)
 
 
+def _validate_markers(items: list[Item]) -> None:
+    for item in items:
+        for node, mark in item.iter_markers_with_node(name="randomly_dont_reorganize"):
+            if mark.args or mark.kwargs:
+                raise UsageError(
+                    "The 'randomly_dont_reorganize' mark does not take any arguments."
+                )
+            if not isinstance(node, (Module, Class)):
+                raise UsageError(
+                    "The 'randomly_dont_reorganize' mark can only be applied to "
+                    "modules or classes."
+                )
+
+
+def _has_dont_reorganize_mark(
+    item: Item, node_type: type[Module] | type[Class]
+) -> bool:
+    return any(
+        isinstance(node, node_type)
+        for node, _ in item.iter_markers_with_node(name="randomly_dont_reorganize")
+    )
+
+
 def _reorganize_items(config: Config, items: list[Item]) -> None:
     seed = _reseed(config)
 
     modules_items: list[tuple[ModuleType | None, list[Item]]] = []
     for module, group in groupby(items, _get_module):
-        modules_items.append(
-            (
-                module,
-                _shuffle_by_class(list(group), seed),
-            )
-        )
+        module_items = list(group)
+        if not _has_dont_reorganize_mark(module_items[0], Module):
+            module_items = _shuffle_by_class(module_items, seed)
+        modules_items.append((module, module_items))
 
     def _module_key(module_item: tuple[ModuleType | None, list[Item]]) -> int:
         module, _items = module_item
@@ -262,7 +290,8 @@ def _shuffle_by_class(items: list[Item], seed: int) -> list[Item]:
 
     for klass, group in groupby(items, _get_cls):
         klass_items = list(group)
-        klass_items.sort(key=_item_key)
+        if not _has_dont_reorganize_mark(klass_items[0], Class):
+            klass_items.sort(key=_item_key)
         klasses_items.append((klass, klass_items))
 
     def _cls_key(klass_items: tuple[type[Any] | None, list[Item]]) -> int:

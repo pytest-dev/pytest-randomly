@@ -172,7 +172,38 @@ altogether, you can use the ``-p`` argument, for example:
 Avoid reordering some tests
 ---------------------------
 
-To fix the order of some tests, use the ``pytest-order`` plugin.
+To disable shuffling within a single test module, apply the ``randomly_dont_reorganize`` mark with ``pytestmark``:
+
+.. code-block:: python
+
+    import pytest
+
+    pytestmark = pytest.mark.randomly_dont_reorganize
+
+
+    def test_step_one(): ...
+
+
+    def test_step_two(): ...
+
+The module as a whole is still shuffled relative to other modules, while all tests and classes inside it keep their defined order.
+
+To disable shuffling of methods within a single test class, decorate the class with ``@pytest.mark.randomly_dont_reorganize``:
+
+.. code-block:: python
+
+    import pytest
+
+
+    @pytest.mark.randomly_dont_reorganize
+    class TestStepByStep:
+        def test_step_one(self): ...
+
+        def test_step_two(self): ...
+
+The class as a whole is still shuffled relative to other classes and functions in the module, while its methods keep their defined order.
+
+To fix a custom order across specific tests, use the ``pytest-order`` plugin.
 See its `documentation section <https://pytest-order.readthedocs.io/en/latest/other_plugins.html#pytest-randomly>`__ on usage with pytest-randomly.
 
 Entry Point
